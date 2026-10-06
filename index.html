@@ -1,40 +1,326 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ad Rotator</title>
-    <style>
-        body { margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: transparent; }
-        #ad-container { width: 100%; display: flex; justify-content: center; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DT POW WOW 文章輪播廣告</title>
+<!--
+  官網文章輪播廣告 v2（2026/10/06，查創意 開發部）
+  ─────────────────────────────────────────────
+  嵌入方式（Kolable 文章內貼 iframe，高度 250）：
+    舊文章：https://designthinking-powwow.github.io/DTADS/            → 一般組合
+    新文章：https://designthinking-powwow.github.io/DTADS/?topic=dt   → 依主題加權
+      topic 可用：dt（設計思考）、career（職涯／主管）、ai（AI 趨勢）、edu（教育）、general
+  測試用：?date=2026-11-02 可模擬日期；?ad=A1 可指定顯示某一則。
+
+  三個功能：
+    1. 主題加權：依 ?topic= 提高相關廣告出現機率
+    2. 廣告內直接訂閱：寬度 ≥ 560px 的訂閱廣告，右側放 Substack 官方訂閱框
+    3. 記得讀者：點過或操作過訂閱廣告的讀者，30 天內不再顯示訂閱廣告；
+       玩過扭蛋島（E）的讀者 14 天內不再顯示 E；同一頁的兩個版位不會出現同一則
+-->
+<style>
+  :root {
+    --ink: #1d1d1f;
+    --muted: #6e6e73;
+    --accent: #e0602f;
+    --pill: rgba(255,255,255,0.75);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    -webkit-font-smoothing: antialiased; color: var(--ink); }
+
+  /* 整塊舞台：250px 高，背景有緩慢移動的光束 */
+  #stage { position: relative; width: 100%; height: 250px; overflow: hidden;
+    display: flex; align-items: center; justify-content: center; text-decoration: none; color: inherit; }
+  a#stage { cursor: pointer; }
+  .beam { position: absolute; top: -20%; height: 140%; width: 55%; left: -60%; z-index: 1;
+    filter: blur(50px); opacity: 0.8; animation: sweep 12s linear infinite; pointer-events: none; }
+  .beam.b1 { background: radial-gradient(circle, #ffd9c7cc 0%, transparent 75%); animation-duration: 14s; }
+  .beam.b2 { background: radial-gradient(circle, #bfe8e4b3 0%, transparent 75%); animation-duration: 10s; animation-delay: -4s; }
+  @keyframes sweep {
+    0%   { left: -60%; transform: scale(0.7) skewX(-20deg); opacity: 0; }
+    15%  { opacity: 0.9; }
+    50%  { transform: scale(1.5) skewX(-15deg); opacity: 0.7; }
+    85%  { opacity: 0.9; }
+    100% { left: 160%; transform: scale(0.7) skewX(-20deg); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .beam { animation: none; left: 10%; opacity: 0.45; }
+    .beam.b2 { left: 55%; }
+  }
+
+  /* 置中版型（一般廣告） */
+  .content { position: relative; z-index: 2; text-align: center; padding: 16px 20px; max-width: 92%;
+    text-shadow: 0 0 18px #fff; }
+  .title { font-size: 28px; font-weight: 800; line-height: 1.25; margin: 0 0 8px; letter-spacing: -0.5px; }
+  .sub { font-size: 16px; color: var(--muted); margin: 0 0 12px; line-height: 1.5; }
+  .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0 0 12px; }
+  .tag { background: var(--pill); border: 1px solid rgba(0,0,0,0.06); padding: 3px 11px; border-radius: 20px;
+    font-size: 12.5px; color: #444; font-weight: 600; }
+  .cta { font-size: 18px; font-weight: 700; color: var(--ink); }
+  .cta::after { content: " \203A"; font-size: 22px; vertical-align: -1px; color: var(--accent); }
+  a#stage:hover .cta, a#stage:focus-visible .cta { color: var(--accent); }
+
+  /* 扭蛋小圖示 */
+  .capsule { width: 34px; height: 34px; display: block; margin: 0 auto 6px; animation: wobble 2.4s ease-in-out infinite; transform-origin: 50% 90%; }
+  @keyframes wobble { 0%, 60%, 100% { transform: rotate(0); } 70% { transform: rotate(-12deg); } 80% { transform: rotate(10deg); } 90% { transform: rotate(-5deg); } }
+  @media (prefers-reduced-motion: reduce) { .capsule { animation: none; } }
+
+  /* 左右版型（訂閱廣告＋Substack 訂閱框） */
+  .split { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 340px; gap: 24px;
+    align-items: center; width: 100%; padding: 0 28px; }
+  .split .content { text-align: left; padding: 0; max-width: none; }
+  .split .tags { justify-content: flex-start; margin-bottom: 0; }
+  .split .title { font-size: 24px; }
+  .split .sub { font-size: 15px; margin-bottom: 10px; }
+  .embed-card { background: #fff; border-radius: 14px; box-shadow: 0 6px 24px rgba(0,0,0,0.08); overflow: hidden; height: 150px; }
+  .embed-card iframe { display: block; width: 340px; height: 150px; border: 0; background: #fff; }
+  .embed-note { font-size: 12.5px; color: var(--muted); margin-top: 6px; text-align: center; }
+
+  /* 窄螢幕（手機） */
+  @media (max-width: 480px) {
+    .capsule { width: 26px; height: 26px; margin-bottom: 4px; }
+    .title { font-size: 21px; }
+    .sub { font-size: 14px; margin-bottom: 10px; }
+    .tags { display: none; }
+    .cta { font-size: 16px; }
+    .content { padding: 12px 14px; max-width: 100%; }
+  }
+  @media (max-width: 360px) {
+    .title { font-size: 19px; }
+    .sub { font-size: 13px; }
+  }
+</style>
 </head>
 <body>
-    <div id="ad-container"></div>
-    <script>
-        // 儲存所有廣告程式碼
-        const ads = ["<!DOCTYPE html>\n<html lang=\"zh-TW\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <style>\n        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #fff; font-family: -apple-system, BlinkMacSystemFont, \"SF Pro TC\", sans-serif; -webkit-font-smoothing: antialiased; }\n        #ad-stage { width: 100%; height: 250px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; text-decoration: none; overflow: hidden; }\n        .sunrise-beam { position: absolute; top: -20%; height: 140%; width: 55%; z-index: 1; filter: blur(50px); opacity: 0.8; animation: marquee 12s linear infinite; }\n        .beam-1 { background: radial-gradient(circle, #dfff00b3 0%, transparent 75%); animation-duration: 14s; left: -60%; }\n        .beam-2 { background: radial-gradient(circle, #00f3ff99 0%, transparent 75%); animation-duration: 10s; animation-delay: -4s; left: -60%; }\n        @keyframes marquee {\n            0% { left: -60%; transform: scale(0.7) skewX(-20deg); opacity: 0; }\n            15% { opacity: 0.9; }\n            50% { transform: scale(1.5) skewX(-15deg); opacity: 0.7; }\n            85% { opacity: 0.9; }\n            100% { left: 160%; transform: scale(0.7) skewX(-20deg); opacity: 0; }\n        }\n        #content { position: relative; z-index: 10; text-align: center; padding: 20px; text-shadow: 0 0 20px #fff; max-width: 90%; }\n        .title { font-size: 30px; color: #1d1d1f; font-weight: 800; margin: 0 0 10px; letter-spacing: -1px; line-height: 1.2; }\n        .sub { font-size: 18px; color: #86868b; margin: 0 0 15px; }\n        .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px; }\n        .tag { background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.05); padding: 4px 12px; border-radius: 20px; font-size: 13px; color: #444; font-weight: 600; backdrop-filter: blur(5px); }\n        .footer { font-size: 20px; color: #1d1d1f; font-weight: 700; }\n        .footer::after { content: \" \\203A\"; font-size: 24px; vertical-align: middle; }\n    </style>\n</head>\n<body>\n    <a id=\"ad-stage\" href=\"https://www.designthinking.com.tw/contactus\" target=\"_blank\">\n        <div class=\"sunrise-beam beam-1\"></div><div class=\"sunrise-beam beam-2\"></div>\n        <div id=\"content\">\n            <div class=\"title\">別讓 AI 停留於聊天，讓它成為即戰力！</div>\n            <div class=\"sub\">2026 頂尖企業都在學：用設計思考 × AI 打造落地原型</div>\n            <div class=\"tags\"><span class=\"tag\">#企業內訓</span><span class=\"tag\">#組織轉型</span><span class=\"tag\">#敏捷創新</span></div>\n            <div class=\"footer\">搶先預約了解</div>\n        </div>\n    </a>\n</body>\n</html>","<!DOCTYPE html>\n<html lang=\"zh-TW\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <style>\n        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #fff; font-family: -apple-system, BlinkMacSystemFont, \"SF Pro TC\", sans-serif; -webkit-font-smoothing: antialiased; }\n        #ad-stage { width: 100%; height: 250px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; text-decoration: none; overflow: hidden; }\n        .sunrise-beam { position: absolute; top: -20%; height: 140%; width: 55%; z-index: 1; filter: blur(50px); opacity: 0.8; animation: marquee 12s linear infinite; }\n        .beam-1 { background: radial-gradient(circle, #b1dd8cb3 0%, transparent 75%); animation-duration: 14s; left: -60%; }\n        .beam-2 { background: radial-gradient(circle, #fec70099 0%, transparent 75%); animation-duration: 10s; animation-delay: -4s; left: -60%; }\n        @keyframes marquee {\n            0% { left: -60%; transform: scale(0.7) skewX(-20deg); opacity: 0; }\n            15% { opacity: 0.9; }\n            50% { transform: scale(1.5) skewX(-15deg); opacity: 0.7; }\n            85% { opacity: 0.9; }\n            100% { left: 160%; transform: scale(0.7) skewX(-20deg); opacity: 0; }\n        }\n        #content { position: relative; z-index: 10; text-align: center; padding: 20px; text-shadow: 0 0 20px #fff; max-width: 90%; }\n        .title { font-size: 30px; color: #1d1d1f; font-weight: 800; margin: 0 0 10px; letter-spacing: -1px; line-height: 1.2; }\n        .sub { font-size: 18px; color: #86868b; margin: 0 0 15px; }\n        .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px; }\n        .tag { background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.05); padding: 4px 12px; border-radius: 20px; font-size: 13px; color: #444; font-weight: 600; backdrop-filter: blur(5px); }\n        .footer { font-size: 20px; color: #1d1d1f; font-weight: 700; }\n        .footer::after { content: \" \\203A\"; font-size: 24px; vertical-align: middle; }\n    </style>\n</head>\n<body>\n    <a id=\"ad-stage\" href=\"https://www.designthinking.com.tw/contactus\" target=\"_blank\">\n        <div class=\"sunrise-beam beam-1\"></div><div class=\"sunrise-beam beam-2\"></div>\n        <div id=\"content\">\n            <div class=\"title\">政府與教育創新的下一步：AI 協同設計</div>\n            <div class=\"sub\">翻轉傳統思維，用 human-centric 觀點重新定義公眾與教學體驗</div>\n            <div class=\"tags\"><span class=\"tag\">#政府機關</span><span class=\"tag\">#教育單位</span><span class=\"tag\">#即刻預約</span></div>\n            <div class=\"footer\">立即預約諮詢</div>\n        </div>\n    </a>\n</body>\n</html>","<!DOCTYPE html>\n<html lang=\"zh-TW\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <style>\n        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #fff; font-family: -apple-system, BlinkMacSystemFont, \"SF Pro TC\", sans-serif; -webkit-font-smoothing: antialiased; }\n        #ad-stage { width: 100%; height: 250px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; text-decoration: none; overflow: hidden; }\n        .sunrise-beam { position: absolute; top: -20%; height: 140%; width: 55%; z-index: 1; filter: blur(50px); opacity: 0.8; animation: marquee 12s linear infinite; }\n        .beam-1 { background: radial-gradient(circle, #ed719eb3 0%, transparent 75%); animation-duration: 14s; left: -60%; }\n        .beam-2 { background: radial-gradient(circle, #a8c6fe99 0%, transparent 75%); animation-duration: 10s; animation-delay: -4s; left: -60%; }\n        @keyframes marquee {\n            0% { left: -60%; transform: scale(0.7) skewX(-20deg); opacity: 0; }\n            15% { opacity: 0.9; }\n            50% { transform: scale(1.5) skewX(-15deg); opacity: 0.7; }\n            85% { opacity: 0.9; }\n            100% { left: 160%; transform: scale(0.7) skewX(-20deg); opacity: 0; }\n        }\n        #content { position: relative; z-index: 10; text-align: center; padding: 20px; text-shadow: 0 0 20px #fff; max-width: 90%; }\n        .title { font-size: 30px; color: #1d1d1f; font-weight: 800; margin: 0 0 10px; letter-spacing: -1px; line-height: 1.2; }\n        .sub { font-size: 18px; color: #86868b; margin: 0 0 15px; }\n        .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px; }\n        .tag { background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.05); padding: 4px 12px; border-radius: 20px; font-size: 13px; color: #444; font-weight: 600; backdrop-filter: blur(5px); }\n        .footer { font-size: 20px; color: #1d1d1f; font-weight: 700; }\n        .footer::after { content: \" \\203A\"; font-size: 24px; vertical-align: middle; }\n    </style>\n</head>\n<body>\n    <a id=\"ad-stage\" href=\"https://www.designthinking.com.tw/contactus\" target=\"_blank\">\n        <div class=\"sunrise-beam beam-1\"></div><div class=\"sunrise-beam beam-2\"></div>\n        <div id=\"content\">\n            <div class=\"title\">1天搞定過去 1 個月的原型研發？</div>\n            <div class=\"sub\">2026 精準創新課：設計思考 ✕ AI 讓團隊產出翻倍</div>\n            <div class=\"tags\"><span class=\"tag\">#企業組織</span><span class=\"tag\">#高效賦能</span><span class=\"tag\">#AI轉型</span></div>\n            <div class=\"footer\">了解實戰方案</div>\n        </div>\n    </a>\n</body>\n</html>","<!DOCTYPE html>\n<html lang=\"zh-TW\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <style>\n        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #fff; font-family: -apple-system, BlinkMacSystemFont, \"SF Pro TC\", sans-serif; -webkit-font-smoothing: antialiased; }\n        #ad-stage { width: 100%; height: 250px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; text-decoration: none; overflow: hidden; }\n        .sunrise-beam { position: absolute; top: -20%; height: 140%; width: 55%; z-index: 1; filter: blur(50px); opacity: 0.8; animation: marquee 12s linear infinite; }\n        .beam-1 { background: radial-gradient(circle, #fffc41b3 0%, transparent 75%); animation-duration: 14s; left: -60%; }\n        .beam-2 { background: radial-gradient(circle, #ff6a0099 0%, transparent 75%); animation-duration: 10s; animation-delay: -4s; left: -60%; }\n        @keyframes marquee {\n            0% { left: -60%; transform: scale(0.7) skewX(-20deg); opacity: 0; }\n            15% { opacity: 0.9; }\n            50% { transform: scale(1.5) skewX(-15deg); opacity: 0.7; }\n            85% { opacity: 0.9; }\n            100% { left: 160%; transform: scale(0.7) skewX(-20deg); opacity: 0; }\n        }\n        #content { position: relative; z-index: 10; text-align: center; padding: 20px; text-shadow: 0 0 20px #fff; max-width: 90%; }\n        .title { font-size: 30px; color: #1d1d1f; font-weight: 800; margin: 0 0 10px; letter-spacing: -1px; line-height: 1.2; }\n        .sub { font-size: 18px; color: #86868b; margin: 0 0 15px; }\n        .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px; }\n        .tag { background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.05); padding: 4px 12px; border-radius: 20px; font-size: 13px; color: #444; font-weight: 600; backdrop-filter: blur(5px); }\n        .footer { font-size: 20px; color: #1d1d1f; font-weight: 700; }\n        .footer::after { content: \" \\203A\"; font-size: 24px; vertical-align: middle; }\n    </style>\n</head>\n<body>\n    <a id=\"ad-stage\" href=\"https://www.designthinking.com.tw/contactus\" target=\"_blank\">\n        <div class=\"sunrise-beam beam-1\"></div><div class=\"sunrise-beam beam-2\"></div>\n        <div id=\"content\">\n            <div class=\"title\">@企業主/經理人：團隊的 AI 轉型焦慮，這堂課有解</div>\n            <div class=\"sub\">結合 Stanford d.school 精髓與 AI 工具，重塑組織創新基因</div>\n            <div class=\"tags\"><span class=\"tag\">#企業包班</span><span class=\"tag\">#即刻預約</span></div>\n            <div class=\"footer\">立即了解</div>\n        </div>\n    </a>\n</body>\n</html>","<!DOCTYPE html>\n<html lang=\"zh-TW\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <style>\n        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #fff; font-family: -apple-system, BlinkMacSystemFont, \"SF Pro TC\", sans-serif; -webkit-font-smoothing: antialiased; }\n        #ad-stage { width: 100%; height: 250px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; text-decoration: none; overflow: hidden; }\n        .sunrise-beam { position: absolute; top: -20%; height: 140%; width: 55%; z-index: 1; filter: blur(50px); opacity: 0.8; animation: marquee 12s linear infinite; }\n        .beam-1 { background: radial-gradient(circle, #77bb41b3 0%, transparent 75%); animation-duration: 14s; left: -60%; }\n        .beam-2 { background: radial-gradient(circle, #53d5fd99 0%, transparent 75%); animation-duration: 10s; animation-delay: -4s; left: -60%; }\n        @keyframes marquee {\n            0% { left: -60%; transform: scale(0.7) skewX(-20deg); opacity: 0; }\n            15% { opacity: 0.9; }\n            50% { transform: scale(1.5) skewX(-15deg); opacity: 0.7; }\n            85% { opacity: 0.9; }\n            100% { left: 160%; transform: scale(0.7) skewX(-20deg); opacity: 0; }\n        }\n        #content { position: relative; z-index: 10; text-align: center; padding: 20px; text-shadow: 0 0 20px #fff; max-width: 90%; }\n        .title { font-size: 30px; color: #1d1d1f; font-weight: 800; margin: 0 0 10px; letter-spacing: -1px; line-height: 1.2; }\n        .sub { font-size: 18px; color: #86868b; margin: 0 0 15px; }\n        .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px; }\n        .tag { background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.05); padding: 4px 12px; border-radius: 20px; font-size: 13px; color: #444; font-weight: 600; backdrop-filter: blur(5px); }\n        .footer { font-size: 20px; color: #1d1d1f; font-weight: 700; }\n        .footer::after { content: \" \\203A\"; font-size: 24px; vertical-align: middle; }\n    </style>\n</head>\n<body>\n    <a id=\"ad-stage\" href=\"https://www.designthinking.com.tw/contactus\" target=\"_blank\">\n        <div class=\"sunrise-beam beam-1\"></div><div class=\"sunrise-beam beam-2\"></div>\n        <div id=\"content\">\n            <div class=\"title\">@公務夥伴/教育先進：用設計思維 ✕ AI 點亮新思維</div>\n            <div class=\"sub\">針對組織痛點量身客製，把創新方法帶回團隊靈活運用</div>\n            <div class=\"tags\"><span class=\"tag\">#政府機關</span><span class=\"tag\">#教育單位</span></div>\n            <div class=\"footer\">立即洽詢</div>\n        </div>\n    </a>\n</body>\n</html>","<!DOCTYPE html>\n<html lang=\"zh-TW\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <style>\n        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #fff; font-family: -apple-system, BlinkMacSystemFont, \"SF Pro TC\", sans-serif; -webkit-font-smoothing: antialiased; }\n        #ad-stage { width: 100%; height: 250px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; text-decoration: none; overflow: hidden; }\n        .sunrise-beam { position: absolute; top: -20%; height: 140%; width: 55%; z-index: 1; filter: blur(50px); opacity: 0.8; animation: marquee 12s linear infinite; }\n        .beam-1 { background: radial-gradient(circle, #fec700b3 0%, transparent 75%); animation-duration: 14s; left: -60%; }\n        .beam-2 { background: radial-gradient(circle, #fff99599 0%, transparent 75%); animation-duration: 10s; animation-delay: -4s; left: -60%; }\n        @keyframes marquee {\n            0% { left: -60%; transform: scale(0.7) skewX(-20deg); opacity: 0; }\n            15% { opacity: 0.9; }\n            50% { transform: scale(1.5) skewX(-15deg); opacity: 0.7; }\n            85% { opacity: 0.9; }\n            100% { left: 160%; transform: scale(0.7) skewX(-20deg); opacity: 0; }\n        }\n        #content { position: relative; z-index: 10; text-align: center; padding: 20px; text-shadow: 0 0 20px #fff; max-width: 90%; }\n        .title { font-size: 30px; color: #1d1d1f; font-weight: 800; margin: 0 0 10px; letter-spacing: -1px; line-height: 1.2; }\n        .sub { font-size: 18px; color: #86868b; margin: 0 0 15px; }\n        .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 15px; }\n        .tag { background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.05); padding: 4px 12px; border-radius: 20px; font-size: 13px; color: #444; font-weight: 600; backdrop-filter: blur(5px); }\n        .footer { font-size: 20px; color: #1d1d1f; font-weight: 700; }\n        .footer::after { content: \" \\203A\"; font-size: 24px; vertical-align: middle; }\n    </style>\n</head>\n<body>\n    <a id=\"ad-stage\" href=\"https://www.designthinking.com.tw/contactus\" target=\"_blank\">\n        <div class=\"sunrise-beam beam-1\"></div><div class=\"sunrise-beam beam-2\"></div>\n        <div id=\"content\">\n            <div class=\"title\">2026 必備的創新工作流，你們預約了嗎？</div>\n            <div class=\"sub\">限時開放企業與單位預約，名額有限，搶先佈局下半年競爭力</div>\n            <div class=\"tags\"><span class=\"tag\">#設計思考</span><span class=\"tag\">#創新思考</span><span class=\"tag\">#AI實踐工作坊</span></div>\n            <div class=\"footer\">點我即刻預約</div>\n        </div>\n    </a>\n</body>\n</html>"];
-        
-        if (ads.length > 0) {
-            // 隨機選取一個
-            const randomIndex = Math.floor(Math.random() * ads.length);
-            const selectedAdCode = ads[randomIndex];
-            
-            const container = document.getElementById('ad-container');
-            container.innerHTML = selectedAdCode;
+<div id="root"></div>
+<script>
+(function () {
+  // ===== 需要時才改的設定 =====
+  // 10/14 Podcast 公開後，填入節目頁網址；空字串＝不顯示 Podcast 廣告
+  var PODCAST_URL = "";
+  // PressPlay 課程審核通過後，填入課程頁網址；空字串＝不顯示課程廣告
+  var PRESSPLAY_URL = "";
 
-            // 處理貼入的程式碼中可能含有的 <script> 標籤（innerHTML 不會自動執行 script）
-            const scripts = container.getElementsByTagName('script');
-            for (let i = 0; i < scripts.length; i++) {
-                const newScript = document.createElement('script');
-                if (scripts[i].src) {
-                    newScript.src = scripts[i].src;
-                } else {
-                    newScript.textContent = scripts[i].textContent;
-                }
-                document.body.appendChild(newScript);
-            }
-        }
-    </script>
+  var SUBSCRIBE_URL = "https://chachacreative101.substack.com/subscribe";
+  var EMBED_URL = "https://chachacreative101.substack.com/embed";
+  var CONTACT_URL = "https://www.designthinking.com.tw/contactus";
+  // 扭蛋島遊戲廣告：查查 10/06 指示「先製作好，先不要上」→ 要上線時把 false 改成 true
+  var GAME_ENABLED = false;
+  var GAME_URL = GAME_ENABLED ? "https://designthinking-powwow.github.io/dream-island/" : "";
+  var HIDE_SUBSCRIBE_DAYS = 30;
+  var HIDE_GAME_DAYS = 14;
+
+  // ===== 廣告內容（文案見 03_行銷部/官網輪播廣告規劃_20261006.md）=====
+  var ADS = [
+    { id: "A1", cat: "A", url: SUBSCRIBE_URL, embed: true,
+      title: "每週三早上 7 點，陪你把這週想清楚",
+      sub: "AI 趨勢 × 未來思考 × 創意策略 × 職涯發展，一封信、3 分鐘讀完",
+      tags: ["#未來思考週報", "#免費訂閱"], cta: "免費訂閱《未來思考週報》" },
+    { id: "A2", cat: "A", url: SUBSCRIBE_URL, embed: true,
+      title: "讀到這裡，代表你也在想這些事",
+      sub: "每週精選 3 篇值得讀的研究，加上一件這週就能試的小事",
+      tags: ["#未來思考週報", "#每週三寄出"], cta: "每週三收到一封" },
+    { id: "B", cat: "B", url: PODCAST_URL, from: "2026-10-14",
+      title: "別急著找答案｜跟 Cha Cha 一起思考",
+      sub: "每集一個工作坊現場的故事，陪你換個角度想問題",
+      tags: ["#Podcast", "#創意思考"], cta: "收聽最新一集" },
+    { id: "C1", cat: "C", url: PRESSPLAY_URL, from: "2026-10-21", to: "2026-10-31",
+      title: "別急著找答案，用設計思考，打造你自己的人生藍圖",
+      sub: "11/01 線上開課，先追蹤，開課第一時間通知你",
+      tags: ["#線上課程", "#設計思考"], cta: "搶先追蹤課程" },
+    { id: "C2", cat: "C", url: PRESSPLAY_URL, from: "2026-11-01",
+      title: "別急著找答案，用設計思考，打造你自己的人生藍圖",
+      sub: "線上課程開課了，前 50 位享早鳥優惠",
+      tags: ["#線上課程", "#設計思考"], cta: "看課程介紹" },
+    { id: "E", cat: "E", url: GAME_URL, capsule: true,
+      title: "下班後還在想「這樣下去好嗎」？",
+      sub: "回答 10 個問題，扭蛋機會轉出一隻跟你很像的守護獸",
+      tags: ["#約3分鐘", "#免註冊", "#自我探索遊戲"], cta: "進島玩玩看" },
+    { id: "D1", cat: "D", url: CONTACT_URL,
+      title: "問題還沒定義清楚，再多 AI 也是白忙",
+      sub: "設計思考企業內訓：先找對問題，再讓團隊一起找答案",
+      tags: ["#企業內訓", "#設計思考", "#團隊共創"], cta: "預約內訓諮詢" },
+    { id: "D2", cat: "D", url: CONTACT_URL,
+      title: "讓學生從使用者出發，動手解決真實問題",
+      sub: "為高中職與大學設計的設計思考工作坊，一堂課走完五個步驟",
+      tags: ["#高中職", "#大學", "#設計思考工作坊"], cta: "洽詢學校工作坊" },
+    // 教師研習多在暑假，學校約在 3–6 月規劃，所以只在這段期間出現
+    { id: "D3", cat: "D", url: CONTACT_URL, from: "2027-03-01", to: "2027-06-30",
+      title: "今年暑假的教師研習，把設計思考帶進課堂",
+      sub: "給老師的設計思考工作坊：學方法，也帶走能直接用的課堂活動",
+      tags: ["#教師研習", "#暑期研習", "#設計思考"], cta: "洽詢教師研習" },
+    // 公部門：尚未開發的新市場（查查 10/06：值得開發）
+    { id: "D4", cat: "D", url: CONTACT_URL,
+      title: "公共服務，也可以從民眾的角度重新設計",
+      sub: "為公部門規劃的設計思考工作坊：先聽懂民眾，再找對問題",
+      tags: ["#公部門", "#公共服務", "#設計思考工作坊"], cta: "洽詢公部門課程" }
+  ];
+
+  // 各時段的類別比例（A 訂閱週報、B Podcast、C 線上課程、E 夢遊扭蛋島、D 設計思考內訓），依台北日期自動切換
+  var SCHEDULE = [
+    { from: "2000-01-01", w: { A: 40, B: 0,  C: 0,  E: 25, D: 35 } },
+    { from: "2026-10-14", w: { A: 30, B: 15, C: 10, E: 20, D: 25 } },
+    { from: "2026-11-01", w: { A: 25, B: 10, C: 30, E: 15, D: 20 } },
+    { from: "2026-12-01", w: { A: 30, B: 15, C: 15, E: 15, D: 25 } }
+  ];
+
+  // 功能 1：主題加權（乘數）
+  var TOPIC_BOOST = {
+    dt:     { D1: 3, D2: 3, D3: 3, D4: 3 },
+    career: { A1: 2, A2: 2, C1: 2, C2: 2, E: 2 },
+    ai:     { A1: 2, A2: 2 },
+    edu:    { D2: 3, D3: 3, A1: 1.5, A2: 1.5 },
+    general: { E: 1.3 }
+  };
+
+  // ===== 小工具 =====
+  var params = new URLSearchParams(location.search);
+  function store(key, val) {               // localStorage 可能被封鎖，一律包起來
+    try {
+      if (val === undefined) return JSON.parse(localStorage.getItem(key));
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (e) { return null; }
+  }
+  function taipeiToday() {
+    var d = params.get("date");
+    if (d && /^\d{4}-\d{2}-\d{2}$/.test(d)) return d;
+    return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Taipei", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+  }
+  function withUtm(url, id) {
+    if (!url) return "#";                     // 只會在 ?ad= 測試尚未填網址的廣告時發生
+    var u = new URL(url);
+    u.searchParams.set("utm_source", "website");
+    u.searchParams.set("utm_medium", "dtads");
+    u.searchParams.set("utm_content", id);
+    return u.toString();
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+  // ===== 挑選廣告 =====
+  function pickAd(excludeIds) {
+    var today = taipeiToday();
+    var period = SCHEDULE.filter(function (p) { return p.from <= today; }).pop();
+    var topic = params.get("topic") || "general";
+    var boost = TOPIC_BOOST[topic] || {};
+    var subscribedAt = store("dtads_subscribed");
+    var hideA = subscribedAt && (Date.now() - subscribedAt) < HIDE_SUBSCRIBE_DAYS * 864e5;
+    var playedAt = store("dtads_played");
+    var hideE = playedAt && (Date.now() - playedAt) < HIDE_GAME_DAYS * 864e5;
+
+    var active = ADS.filter(function (ad) {
+      if (!ad.url) return false;                        // 網址還沒填：跳過
+      if (ad.from && today < ad.from) return false;
+      if (ad.to && today > ad.to) return false;
+      if (hideA && ad.cat === "A") return false;        // 功能 3：訂閱過就不再推訂閱
+      if (hideE && ad.cat === "E") return false;        // 玩過扭蛋島，14 天內不再推
+      return (period.w[ad.cat] || 0) > 0;
+    });
+    // 每個類別的比例平均分給該類別目前有效的廣告；停用類別的比例自然分給其他類別
+    var perCat = {};
+    active.forEach(function (ad) { perCat[ad.cat] = (perCat[ad.cat] || 0) + 1; });
+    var pool = active.map(function (ad) {
+      return { ad: ad, w: period.w[ad.cat] / perCat[ad.cat] * (boost[ad.id] || 1) };
+    });
+    var forced = params.get("ad");
+    if (forced) {
+      var f = ADS.filter(function (a) { return a.id === forced; })[0];
+      if (f) return f;
+    }
+    var candidates = pool.filter(function (p) { return excludeIds.indexOf(p.ad.id) < 0; });
+    if (!candidates.length) candidates = pool;          // 可選的太少時，允許重複
+    if (!candidates.length) candidates = [{ ad: ADS.filter(function (a) { return a.id === "D1"; })[0], w: 1 }];
+    var total = candidates.reduce(function (s, p) { return s + p.w; }, 0);
+    var r = Math.random() * total;
+    for (var i = 0; i < candidates.length; i++) { r -= candidates[i].w; if (r <= 0) return candidates[i].ad; }
+    return candidates[candidates.length - 1].ad;
+  }
+
+  // 扭蛋小圖示（E 廣告用）：上半橘、下半白的膠囊，輕輕晃動
+  var CAPSULE_SVG =
+    '<svg class="capsule" viewBox="0 0 40 40" aria-hidden="true">' +
+      '<path d="M5 20a15 15 0 0 1 30 0z" fill="#e0602f"/>' +
+      '<path d="M5 20a15 15 0 0 0 30 0z" fill="#fff" stroke="#e8ddd5" stroke-width="1.5"/>' +
+      '<rect x="4" y="18.5" width="32" height="3" rx="1.5" fill="#1d1d1f" opacity=".18"/>' +
+      '<circle cx="13" cy="12" r="3" fill="#fff" opacity=".55"/>' +
+    '</svg>';
+
+  // ===== 畫出廣告 =====
+  function markSubscribed() { store("dtads_subscribed", Date.now()); }
+
+  function render(ad) {
+    var root = document.getElementById("root");
+    var href = withUtm(ad.url, ad.id);
+    var beams = '<div class="beam b1"></div><div class="beam b2"></div>';
+    var tags = '<div class="tags">' + ad.tags.map(function (t) { return '<span class="tag">' + esc(t) + '</span>'; }).join("") + '</div>';
+    var wide = window.innerWidth >= 560;
+
+    if (ad.embed && wide) {
+      // 功能 2：訂閱廣告直接放 Substack 訂閱框，讀者不用離開文章
+      root.innerHTML =
+        '<div id="stage">' + beams +
+          '<div class="split">' +
+            '<div class="content">' +
+              '<p class="title">' + esc(ad.title) + '</p>' +
+              '<p class="sub">' + esc(ad.sub) + '</p>' + tags +
+            '</div>' +
+            '<div><div class="embed-card"><iframe id="sub-embed" title="訂閱未來思考週報" scrolling="no" src="' + esc(EMBED_URL) + '"></iframe></div>' +
+            '<div class="embed-note">輸入 Email，每週三收到一封，隨時可以取消</div></div>' +
+          '</div>' +
+        '</div>';
+      // 讀者點進訂閱框（框是跨網域，看不到送出結果，以「開始操作」視為有興趣）
+      window.addEventListener("blur", function () {
+        setTimeout(function () {
+          if (document.activeElement && document.activeElement.id === "sub-embed") markSubscribed();
+        }, 0);
+      });
+      return;
+    }
+
+    root.innerHTML =
+      '<a id="stage" href="' + esc(href) + '" target="_blank" rel="noopener">' + beams +
+        '<div class="content">' + (ad.capsule ? CAPSULE_SVG : '') +
+          '<p class="title">' + esc(ad.title) + '</p>' +
+          '<p class="sub">' + esc(ad.sub) + '</p>' + tags +
+          '<div class="cta">' + esc(ad.cta) + '</div>' +
+        '</div>' +
+      '</a>';
+    if (ad.cat === "A") document.getElementById("stage").addEventListener("click", markSubscribed);
+    if (ad.cat === "E") document.getElementById("stage").addEventListener("click", function () { store("dtads_played", Date.now()); });
+  }
+
+  // ===== 同一頁兩個版位不重複 =====
+  // 兩個 iframe 幾乎同時載入：各自登記「我顯示哪一則」到 localStorage。
+  // 若另一個版位剛好選了同一則，號碼較大的那個改選別則（storage 事件會通知另一個 iframe）。
+  var myKey = Math.random();
+  var current = null;
+  function freshSlots() {
+    var page = store("dtads_page");
+    return page && (Date.now() - page.t) < 5000 ? page.slots : [];
+  }
+  function claim(slots, ad) {
+    var others = slots.filter(function (x) { return x.k !== myKey; });
+    store("dtads_page", { t: Date.now(), slots: others.concat([{ k: myKey, id: ad.id }]) });
+  }
+  window.addEventListener("storage", function (e) {
+    if (e.key !== "dtads_page" || !current || params.get("ad")) return;
+    var slots = freshSlots();
+    var clash = slots.some(function (x) { return x.k !== myKey && x.id === current.id && x.k < myKey; });
+    if (!clash) return;
+    var taken = slots.filter(function (x) { return x.k !== myKey; }).map(function (x) { return x.id; });
+    current = pickAd(taken);
+    claim(slots, current);
+    render(current);
+  });
+  setTimeout(function () {
+    var slots = freshSlots();
+    current = pickAd(slots.map(function (x) { return x.id; }));
+    claim(slots, current);
+    render(current);
+  }, Math.floor(Math.random() * 250));
+})();
+</script>
 </body>
 </html>
