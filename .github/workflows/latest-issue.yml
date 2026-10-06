@@ -1,0 +1,56 @@
+# 每天把《未來思考週報》最新一期的標題寫進 latest-issue.json，給官網輪播廣告的「本週搶先看」用
+# Substack 的 RSS 不允許網頁直接跨網域讀取，所以由 GitHub 每天抓一次，存成同一個網站的檔案
+name: latest-issue
+
+on:
+  schedule:
+    - cron: "30 23 * * *"   # 每天 23:30 UTC＝台北 07:30（週三 07:00 寄出後半小時就會更新）
+  workflow_dispatch: {}      # 也可以在 Actions 頁面手動按「Run workflow」
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 抓最新一期
+        run: |
+          python3 - <<'PY'
+          import json, re, urllib.request, xml.etree.ElementTree as ET, os
+          req = urllib.request.Request("https://chachacreative101.substack.com/feed",
+                                       headers={"User-Agent": "Mozilla/5.0 (latest-issue bot)"})
+          xml = urllib.request.urlopen(req, timeout=30).read()
+          items = ET.fromstring(xml).findall("channel/item")
+          # 同一個 RSS 也有 Podcast 集數，只挑標題含「未來思考週報」的最新一期
+          weekly = [i for i in items if "未來思考週報" in (i.findtext("title") or "")]
+          if not weekly:
+              raise SystemExit("feed 裡找不到週報")
+          item = weekly[0]
+          title = (item.findtext("title") or "").strip()
+          link = (item.findtext("link") or "").strip()
+          date = (item.findtext("pubDate") or "").strip()
+          # 顯示用：拿掉「｜未來思考週報 Vol.N」這段
+          display = re.sub(r"\s*[｜|]\s*未來思考週報.*$", "", title).strip()
+          data = {"title": title, "display": display, "link": link, "date": date}
+          old = None
+          if os.path.exists("latest-issue.json"):
+              old = json.load(open("latest-issue.json", encoding="utf-8"))
+          if old != data:
+              json.dump(data, open("latest-issue.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+              print("updated:", display)
+          else:
+              print("no change")
+          PY
+
+      - name: 有變動才存檔
+        run: |
+          if [ -n "$(git status --porcelain latest-issue.json)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add latest-issue.json
+            git commit -m "更新本週週報標題"
+            git push
+          fi
