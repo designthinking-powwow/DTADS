@@ -5,90 +5,208 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DT POW WOW 文章輪播廣告</title>
 <!--
-  官網文章輪播廣告 v2（2026/10/06，查創意 開發部）
+  官網文章輪播廣告 v4 設計版（2026/10/06，查查創意 開發部＋行銷部）
   ─────────────────────────────────────────────
+  設計：照〈插畫風格規範〉——米白底、黑色線條、暖灰，每則廣告只用「一個」鮮豔強調色，
+    不同類別用不同強調色（輪播起來有變化但同一個品牌）；扁平色塊，不用漸層與陰影。
+    每則廣告＝類別標籤＋襯線標題＋一句說明＋一顆實心按鈕＋（真實、具體的）說明短句；
+    寬螢幕左邊放一張說明「這是什麼」的線條插圖。不用橘色當主色（Substack 本身是橘色）。
   嵌入方式（Kolable 文章內貼 iframe，高度 250）：
     舊文章：https://designthinking-powwow.github.io/DTADS/            → 一般組合
     新文章：https://designthinking-powwow.github.io/DTADS/?topic=dt   → 依主題加權
       topic 可用：dt（設計思考）、career（職涯／主管）、ai（AI 趨勢）、edu（教育）、general
   測試用：?date=2026-11-02 可模擬日期；?ad=A1 可指定顯示某一則。
-
-  三個功能：
-    1. 主題加權：依 ?topic= 提高相關廣告出現機率
-    2. 廣告內直接訂閱：寬度 ≥ 560px 的訂閱廣告，右側放 Substack 官方訂閱框
-    3. 記得讀者：點過或操作過訂閱廣告的讀者，30 天內不再顯示訂閱廣告；
-       玩過扭蛋島（E）的讀者 14 天內不再顯示 E；同一頁的兩個版位不會出現同一則
+  功能（與 v2／v3 相同）：主題加權、訂閱廣告內直接訂閱（Substack 官方訂閱框）、記得讀者、
+    同一頁兩個版位不重複、追蹤碼、日期自動切換比例、第一次捲進畫面才播動畫（6 秒保險）。
+  動畫：進場約 2 秒只播一次（插圖像白板筆一樣畫出來、標題逐字浮現、按鈕最後到位），
+    之後只剩背景色塊極慢的漂移與按鈕很淡的呼吸光；「減少動態」時直接顯示完成畫面。
 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #1d1d1f;
-    --muted: #6e6e73;
-    --accent: #e0602f;
-    --pill: rgba(255,255,255,0.75);
+    --paper: #F2EFEB;  --ink: #0F0E0E;  --muted: #6B6257;  --line: #D6CFC4;
+    --accent: #1F4BFF;  --on: #FFFFFF;   /* 每則廣告各自覆寫：強調色、按鈕上的字色 */
+    --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+    --sans: "Noto Sans TC", -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", sans-serif;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #fff;
-    font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-    -webkit-font-smoothing: antialiased; color: var(--ink); }
+  html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: var(--paper);
+    font-family: var(--sans); color: var(--ink); -webkit-font-smoothing: antialiased; }
+  p { margin: 0; }
 
-  /* 整塊舞台：250px 高，背景有緩慢移動的光束 */
-  #stage { position: relative; width: 100%; height: 250px; overflow: hidden;
-    display: flex; align-items: center; justify-content: center; text-decoration: none; color: inherit; }
-  a#stage { cursor: pointer; }
-  .beam { position: absolute; top: -20%; height: 140%; width: 55%; left: -60%; z-index: 1;
-    filter: blur(50px); opacity: 0.8; animation: sweep 12s linear infinite; pointer-events: none; }
-  .beam.b1 { background: radial-gradient(circle, #ffd9c7cc 0%, transparent 75%); animation-duration: 14s; }
-  .beam.b2 { background: radial-gradient(circle, #bfe8e4b3 0%, transparent 75%); animation-duration: 10s; animation-delay: -4s; }
-  @keyframes sweep {
-    0%   { left: -60%; transform: scale(0.7) skewX(-20deg); opacity: 0; }
-    15%  { opacity: 0.9; }
-    50%  { transform: scale(1.5) skewX(-15deg); opacity: 0.7; }
-    85%  { opacity: 0.9; }
-    100% { left: 160%; transform: scale(0.7) skewX(-20deg); opacity: 0; }
-  }
+  /* ===== 舞台：250px 高的米色紙卡 ===== */
+  #stage { position: relative; display: block; width: 100%; height: 250px; overflow: hidden;
+    background: var(--paper); color: inherit; text-decoration: none; }
+  /* 雜誌風上緣：一條黑線＋一小段強調色 */
+  #stage::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--ink); z-index: 5; }
+  #stage::after { content: ""; position: absolute; left: 0; top: 0; width: 72px; height: 6px; background: var(--accent); z-index: 6; }
+
+  /* 背景小動態：底部一條細線，上面一顆強調色小點極慢地來回（扁平、不搶戲） */
+  .rail { position: absolute; left: 26px; right: 26px; bottom: 12px; height: 1px; background: var(--line); z-index: 1; pointer-events: none; }
+  .rail i { position: absolute; top: -3px; left: 0; width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+    animation: glide 16s ease-in-out infinite alternate; }
+  @keyframes glide { from { left: 0; } to { left: calc(100% - 7px); } }
+
+  /* ===== 版型：左插圖＋右文字 ===== */
+  .grid { position: relative; z-index: 2; height: 100%; display: grid; grid-template-columns: 250px 1fr;
+    align-items: center; gap: 28px; padding: 22px 34px 20px 26px; }
+  .grid.no-art { grid-template-columns: 1fr; padding-left: 36px; }
+  .grid.sub-grid { grid-template-columns: 1fr 336px; gap: 26px; padding: 22px 26px 20px 36px; }
+  .art { height: 196px; display: flex; align-items: center; justify-content: center; }
+  .art svg { width: 100%; height: 100%; overflow: visible; }
+  .copy { min-width: 0; }
+
+  .kicker { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700;
+    letter-spacing: .14em; color: var(--ink); margin-bottom: 9px; white-space: nowrap; }
+  .kicker::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+  .title { font-family: var(--serif); font-weight: 900; font-size: 26px; line-height: 1.32; letter-spacing: .01em;
+    margin-bottom: 8px; text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
+  .title .ch { display: inline-block; white-space: pre; }
+  .title .ph { display: inline-block; max-width: 100%; }
+  .sub { font-size: 14.5px; line-height: 1.6; color: var(--muted); margin-bottom: 14px; }
+  .sub .ph { display: inline-block; max-width: 100%; }
+  .row { display: flex; align-items: center; gap: 14px; flex-wrap: nowrap; }
+  .btn { flex: none; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px 0 20px;
+    border-radius: 999px; background: var(--accent); color: var(--on); font-size: 15px; font-weight: 700; letter-spacing: .04em;
+    border: 2px solid var(--ink); transition: background .2s ease, color .2s ease; }
+  .btn .arr { font-size: 18px; line-height: 1; transition: transform .2s ease; }
+  a#stage:hover .btn, a#stage:focus-visible .btn { background: var(--ink); color: #fff; }
+  a#stage:hover .btn .arr, a#stage:focus-visible .btn .arr { transform: translateX(3px); }
+  a#stage:focus-visible { outline: 3px solid var(--ink); outline-offset: -3px; }
+  .proof { font-size: 12px; color: var(--muted); line-height: 1.45; min-width: 0; }
+  .proof b { color: var(--ink); font-weight: 700; }
+
+  /* 訂閱廣告：右側 Substack 訂閱框 */
+  .embed-card { background: #fff; border: 2px solid var(--ink); border-radius: 12px; overflow: hidden; height: 150px; }
+  .embed-card iframe { display: block; width: 100%; height: 150px; border: 0; background: #fff; }
+  .embed-note { font-size: 12px; color: var(--muted); margin-top: 8px; text-align: center; }
+
+  /* 結尾版／本週搶先看 */
+  .proof .issue { color: var(--ink); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+
+  /* D1 小測驗 */
+  button.btn { cursor: pointer; font-family: inherit; }
+  a.btn { text-decoration: none; }
+  .textlink { background: none; border: 0; padding: 0; font: inherit; font-size: 12.5px; color: var(--ink);
+    text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .quiz .textlink { display: inline !important; }
+  .qhead { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .dots { display: flex; gap: 6px; }
+  .dots i { width: 22px; height: 5px; border-radius: 3px; background: var(--line); }
+  .dots i.on { background: var(--accent); }
+  .qnum { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .08em; }
+  .qtitle { font-family: var(--serif); font-weight: 900; font-size: 19px; line-height: 1.35; margin-bottom: 10px; }
+  .qopts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .qopt { min-height: 44px; padding: 6px 12px; border: 2px solid var(--ink); border-radius: 10px; background: #fff;
+    font: inherit; font-size: 13.5px; font-weight: 500; line-height: 1.35; text-align: left; color: var(--ink); cursor: pointer; }
+  .qopt:hover, .qopt:focus-visible { background: var(--accent); color: var(--on); outline: none; }
+  .qopt.picked { background: var(--ink); color: #fff; }
+  #pane.swap { animation: fade .35s ease-out both; }
+
+  /* D2／D3 學習單表單 */
+  .wsline { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .wsform { display: flex; gap: 8px; margin-bottom: 6px; }
+  .wsform input { flex: 1; min-width: 0; height: 40px; border: 2px solid var(--ink); border-radius: 999px; padding: 0 16px;
+    font: inherit; font-size: 14px; background: #fff; color: var(--ink); }
+  .consent { display: flex; gap: 6px; align-items: flex-start; font-size: 11.5px; line-height: 1.45; color: var(--muted); }
+  .consent input { margin: 2px 0 0; flex: none; }
+  .wsmsg { font-size: 12px; font-weight: 700; color: var(--ink); min-height: 16px; margin-top: 2px; }
+  .wsmsg a { color: var(--ink); }
+  .ws .title { font-size: 21px; margin-bottom: 6px; }
+  .ws .kicker { margin-bottom: 6px; }
+
+  /* 插圖共用：白板線條 */
+  .ink { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .acc { fill: var(--accent); }
+  .acc-s { fill: none; stroke: var(--accent); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .paper { fill: #fff; }
+  .lbl { font-family: var(--sans); font-size: 13px; font-weight: 700; fill: var(--ink); text-anchor: middle; }
+  .lbl.on { fill: var(--ink); text-decoration: underline; }
+  .tiny { font-family: var(--sans); font-size: 11px; font-weight: 700; fill: var(--muted); letter-spacing: .08em; }
+  .big { font-family: var(--serif); font-weight: 900; fill: var(--ink); }
+  .draw { stroke-dasharray: var(--len, 600); stroke-dashoffset: 0; }
+
+  /* ===== 進場動畫（只播一次）===== */
+  #stage.pre .kicker, #stage.pre .title .ch, #stage.pre .sub, #stage.pre .btn, #stage.pre .proof,
+  #stage.pre .embed-card, #stage.pre .embed-note, #stage.pre .pop, #stage.pre .fade { opacity: 0; }
+  #stage.pre .draw { stroke-dashoffset: var(--len, 600); }
+  #stage.pre .bar { transform: scaleY(.15); }
+  #stage.pre .chipcard { transform: perspective(300px) rotateX(-90deg); opacity: 0; }
+  #stage.pre .capsule { transform: translateX(-120px) rotate(-300deg); opacity: 0; }
+
+  #stage.go .draw { animation: draw var(--dur, 1s) cubic-bezier(.45,.05,.35,1) both; animation-delay: var(--d, 0s); }
+  #stage.go .pop { animation: pop .45s cubic-bezier(.3,1.5,.5,1) both; animation-delay: var(--d, 0s); }
+  #stage.go .fade { animation: fade .5s ease-out both; animation-delay: var(--d, 0s); }
+  #stage.go .kicker { animation: slideR .5s ease-out both .1s; }
+  #stage.go .title .ch { animation: chIn .5s cubic-bezier(.2,.75,.25,1) both; animation-delay: calc(var(--i) * 28ms + .2s); }
+  #stage.go .sub { animation: fadeUp .5s ease-out both .9s; }
+  #stage.go .btn { animation: fadeUp .5s ease-out both 1.25s, breathe 3.4s ease-in-out 2.4s infinite; }
+  #stage.go .proof { animation: fade .5s ease-out both 1.45s; }
+  #stage.go .embed-card { animation: fadeUp .6s ease-out both .9s; }
+  #stage.go .embed-note { animation: fade .5s ease-out both 1.3s; }
+  #stage.go .bar { animation: bar 1.1s ease-in-out both; animation-delay: var(--d, .3s); }
+  #stage.go .chipcard { animation: flip .8s cubic-bezier(.2,.7,.3,1) both .5s; }
+  #stage.go .capsule { animation: roll .9s cubic-bezier(.25,.8,.3,1) both .15s; }
+  #stage.go .lid { animation: lid .8s ease-in-out both 1.05s; transform-box: fill-box; transform-origin: 100% 100%; }
+  #stage.go .letter { animation: letterUp .8s cubic-bezier(.2,.8,.3,1.1) both .55s; }
+
+  @keyframes draw { from { stroke-dashoffset: var(--len, 600); } to { stroke-dashoffset: 0; } }
+  @keyframes pop { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: none; } }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideR { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @keyframes chIn { from { opacity: 0; transform: translateY(.4em); filter: blur(3px); } to { opacity: 1; transform: none; filter: none; } }
+  @keyframes breathe { 0%, 100% { transform: none; } 50% { transform: translateY(-2px); } }
+  @keyframes bar { 0% { transform: scaleY(.15); } 30% { transform: scaleY(1); } 55% { transform: scaleY(.3); } 80% { transform: scaleY(.85); } 100% { transform: scaleY(var(--h, .6)); } }
+  @keyframes flip { 0% { opacity: 0; transform: perspective(300px) rotateX(-90deg); } 60% { opacity: 1; transform: perspective(300px) rotateX(14deg); } 100% { opacity: 1; transform: none; } }
+  @keyframes roll { from { opacity: 0; transform: translateX(-120px) rotate(-300deg); } to { opacity: 1; transform: none; } }
+  @keyframes lid { 0%, 100% { transform: none; } 45% { transform: translate(4px, -10px) rotate(-24deg); } }
+  @keyframes letterUp { from { transform: translateY(36px); } to { transform: none; } }
+  .bar { transform-box: fill-box; transform-origin: 50% 50%; transform: scaleY(var(--h, .6)); }
+  .chipcard, .capsule { transform-box: fill-box; transform-origin: 50% 50%; }
+
+  /* 減少動態：不播進場、不漂移、不呼吸 */
   @media (prefers-reduced-motion: reduce) {
-    .beam { animation: none; left: 10%; opacity: 0.45; }
-    .beam.b2 { left: 55%; }
+    #stage *, .rail i { animation: none !important; transition: none !important; }
+    .rail i { left: 0; }
   }
 
-  /* 置中版型（一般廣告） */
-  .content { position: relative; z-index: 2; text-align: center; padding: 16px 20px; max-width: 92%;
-    text-shadow: 0 0 18px #fff; }
-  .title { font-size: 28px; font-weight: 800; line-height: 1.25; margin: 0 0 8px; letter-spacing: -0.5px; }
-  .sub { font-size: 16px; color: var(--muted); margin: 0 0 12px; line-height: 1.5; }
-  .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0 0 12px; }
-  .tag { background: var(--pill); border: 1px solid rgba(0,0,0,0.06); padding: 3px 11px; border-radius: 20px;
-    font-size: 12.5px; color: #444; font-weight: 600; }
-  .cta { font-size: 18px; font-weight: 700; color: var(--ink); }
-  .cta::after { content: " \203A"; font-size: 22px; vertical-align: -1px; color: var(--accent); }
-  a#stage:hover .cta, a#stage:focus-visible .cta { color: var(--accent); }
-
-  /* 扭蛋小圖示 */
-  .capsule { width: 34px; height: 34px; display: block; margin: 0 auto 6px; animation: wobble 2.4s ease-in-out infinite; transform-origin: 50% 90%; }
-  @keyframes wobble { 0%, 60%, 100% { transform: rotate(0); } 70% { transform: rotate(-12deg); } 80% { transform: rotate(10deg); } 90% { transform: rotate(-5deg); } }
-  @media (prefers-reduced-motion: reduce) { .capsule { animation: none; } }
-
-  /* 左右版型（訂閱廣告＋Substack 訂閱框） */
-  .split { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 340px; gap: 24px;
-    align-items: center; width: 100%; padding: 0 28px; }
-  .split .content { text-align: left; padding: 0; max-width: none; }
-  .split .tags { justify-content: flex-start; margin-bottom: 0; }
-  .split .title { font-size: 24px; }
-  .split .sub { font-size: 15px; margin-bottom: 10px; }
-  .embed-card { background: #fff; border-radius: 14px; box-shadow: 0 6px 24px rgba(0,0,0,0.08); overflow: hidden; height: 150px; }
-  .embed-card iframe { display: block; width: 340px; height: 150px; border: 0; background: #fff; }
-  .embed-note { font-size: 12.5px; color: var(--muted); margin-top: 6px; text-align: center; }
-
-  /* 窄螢幕（手機） */
-  @media (max-width: 480px) {
-    .capsule { width: 26px; height: 26px; margin-bottom: 4px; }
-    .title { font-size: 21px; }
-    .sub { font-size: 14px; margin-bottom: 10px; }
-    .tags { display: none; }
-    .cta { font-size: 16px; }
-    .content { padding: 12px 14px; max-width: 100%; }
+  /* ===== 中等寬度 ===== */
+  @media (max-width: 760px) {
+    .grid { grid-template-columns: 190px 1fr; gap: 22px; padding: 20px 24px 18px 20px; }
+    .grid.sub-grid { grid-template-columns: 1fr 300px; padding-left: 26px; }
+    .art { height: 170px; }
+    .title { font-size: 23px; }
+    .proof { display: none; }
   }
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 150px 1fr; gap: 18px; }
+    .art { height: 150px; }
+    .grid.sub-grid { grid-template-columns: 1fr 280px; gap: 18px; padding-left: 20px; }
+    .grid.sub-grid .title { font-size: 20px; }
+    .grid.sub-grid .sub { display: none; }
+  }
+  /* ===== 手機：單欄（標籤、標題、說明、按鈕）===== */
+  @media (max-width: 559px) {
+    .grid, .grid.no-art { grid-template-columns: 1fr; padding: 20px 22px 18px; align-content: center; }
+    .art { display: none; }
+    .title { font-size: 21px; line-height: 1.38; }
+    .sub { font-size: 13.5px; margin-bottom: 12px; }
+    .btn { height: 38px; font-size: 14.5px; }
+  }
+  @media (max-width: 559px) {
+    .qtitle { font-size: 16.5px; margin-bottom: 8px; }
+    .qopt { font-size: 12.5px; padding: 5px 9px; }
+    .quiz .sub { font-size: 12.5px; }
+    .ws .title { font-size: 18px; }
+    .wsline { font-size: 13px; }
+    .consent { font-size: 10.5px; }
+  }
+  @media (max-width: 760px) { .quiz .textlink { display: inline !important; } }
   @media (max-width: 360px) {
+    .grid, .grid.no-art { padding: 18px 18px 16px; }
     .title { font-size: 19px; }
     .sub { font-size: 13px; }
   }
@@ -113,50 +231,152 @@
   var HIDE_SUBSCRIBE_DAYS = 30;
   var HIDE_GAME_DAYS = 14;
 
+  // 老師免費學習單（D2／D3）：學習單 PDF 與 Apps Script 準備好之前先關閉，關閉時顯示一般的「洽詢」按鈕
+  // 上線步驟見 README.md：把 PDF 放上雲端、部署「學習單_收名單.gs」，把網址填進下面兩行，再把 false 改成 true
+  var WORKSHEET_ENABLED = false;
+  var WORKSHEET_ENDPOINT = "";   // Apps Script 網頁應用程式網址（…/exec）
+  var WORKSHEET_PDF_URL = "";    // 備用：Apps Script 沒回傳網址時用這個
+
+  // 廣告專用 GA4（和官網的 GA4 分開，避免 iframe 把官網使用者重複計算）；空字串＝完全不載入追蹤程式
+  // 建立方式見 README「建立廣告專用 GA4」，把評估 ID（G-XXXXXXX）貼進來
+  var ADS_GA4_ID = "G-F759ZE2XD3";   // 「官網輪播廣告」專用資源（查查 10/06 建立）
+
+  // 本週週報搶先看：GitHub Actions 每天把 Substack 最新一期寫進 latest-issue.json（同一個網站，沒有跨網域問題）
+  var LATEST_ISSUE_URL = "./latest-issue.json";
+
+  // ===== 依位置、依時段換文案（行銷部可直接改這裡）=====
+  // end＝文章結尾那一格（同一頁第二個載入的版位）；morning 05–11、day 11–17、evening 17–05（台北時間）
+  // 沒寫到的時段就用廣告本身的文案
+  var COPY_VARIANTS = {
+    A: {
+      end:     { title: "讀完了？每週三再幫你挑 3 篇", sub: "每週精選 3 篇值得讀的研究，加上一件這週就能試的小事。" }
+    },
+    A1: {
+      morning: { title: "上班前 3 分鐘，先想清楚一件事", sub: "每週三早上 7 點寄出：AI 趨勢、未來思考、職涯發展，一封信讀完。" },
+      evening: { title: "下班後還在想工作嗎？", sub: "每週三一封信，陪你把這週想清楚。3 分鐘讀完。" }
+    },
+    D5b: {
+      day:     { title: "下午那場會，又只有主管在講？" }
+    },
+    D1: {
+      morning: { title: "今天的會議，有先把問題說清楚嗎？" },
+      evening: { title: "今天開的會，有解決真正的問題嗎？" }
+    }
+  };
+
+  // D1 企業小測驗：「你的團隊卡在設計思考的哪一步？」3 題，每個選項對應一個步驟
+  // 結果＝得票最多的步驟；同票時以第 3 題（團隊最想多一點的）為準
+  var QUIZ = {
+    // 開場用 D1 本身的標題（含依時段換的版本），說明句邀請做測驗
+    intro: { sub: "你的團隊卡在設計思考的哪一步？3 個問題、10 秒鐘就知道。", start: "開始 3 題小測驗" },
+    questions: [
+      { q: "開會討論新點子時，最常發生的是？", opts: [
+        ["很快就有答案，但不確定是不是使用者要的", 0], ["每個人心裡的問題都不一樣", 1],
+        ["想來想去還是那幾個老點子", 2], ["想法很多，但一直停在簡報上", 3] ] },
+      { q: "推出新服務或新流程後，常聽到的是？", opts: [
+        ["「使用者其實不是這樣用的」", 0], ["「我們好像解錯問題了」", 1],
+        ["「這跟去年的做法差不多」", 2], ["「早知道先找幾個人試試看」", 4] ] },
+      { q: "團隊最想多一點的是？", opts: [
+        ["走出去，聽使用者真正的聲音", 0], ["一句大家都同意的問題", 1],
+        ["敢提出不一樣想法的氣氛", 2], ["做出來就拿去給人試的習慣", 4] ] }
+    ],
+    results: [
+      { key: "empathize", step: "同理", title: "先走到使用者身邊", line: "你們很會解決問題，下一步是更靠近使用者。一次真正的訪談，常常就能看見新的答案。" },
+      { key: "define",    step: "定義", title: "先把問題說成同一句話", line: "團隊的想法很多，先花一點時間把問題說成同一句話，後面的討論會快很多。" },
+      { key: "ideate",    step: "發想", title: "給新點子多一點空間", line: "團隊做事很穩，再多一點天馬行空的時間，就能長出新的選項。" },
+      { key: "prototype", step: "原型", title: "把想法做成摸得到的樣子", line: "想法已經很豐富，做成一個摸得到的樣子，討論就會變得具體。" },
+      { key: "test",      step: "測試", title: "早一點交給使用者試", line: "團隊很有行動力，早一點讓使用者試用，就能少走很多彎路。" }
+    ]
+  };
+
   // ===== 廣告內容（文案見 03_行銷部/官網輪播廣告規劃_20261006.md）=====
+  // kicker＝類別標籤；proof＝真實、具體的說明短句〔待查查確認〕（不寫未經確認的數字、客戶名或推薦語）
+  // btn＝實心按鈕文字；accent＝這則的強調色（插畫風格規範），on＝按鈕上的字色（依 WCAG AA 對比選黑或白）
   var ADS = [
-    { id: "A1", cat: "A", url: SUBSCRIBE_URL, embed: true,
+    { id: "A1", cat: "A", url: SUBSCRIBE_URL, embed: true, kicker: "免費電子報", accent: "#1F4BFF", on: "#FFFFFF",
       title: "每週三早上 7 點，陪你把這週想清楚",
-      sub: "AI 趨勢 × 未來思考 × 創意策略 × 職涯發展，一封信、3 分鐘讀完",
-      tags: ["#未來思考週報", "#免費訂閱"], cta: "免費訂閱《未來思考週報》" },
-    { id: "A2", cat: "A", url: SUBSCRIBE_URL, embed: true,
+      sub: "AI 趨勢、未來思考、創意策略、職涯發展，一封信讀完。",
+      proof: "每週三 07:00・3 分鐘讀完・免費", btn: "免費訂閱" },
+    { id: "A2", cat: "A", url: SUBSCRIBE_URL, embed: true, kicker: "免費電子報", accent: "#1F4BFF", on: "#FFFFFF",
       title: "讀到這裡，代表你也在想這些事",
-      sub: "每週精選 3 篇值得讀的研究，加上一件這週就能試的小事",
-      tags: ["#未來思考週報", "#每週三寄出"], cta: "每週三收到一封" },
-    { id: "B", cat: "B", url: PODCAST_URL, from: "2026-10-14",
-      title: "別急著找答案｜跟 Cha Cha 一起思考",
-      sub: "每集一個工作坊現場的故事，陪你換個角度想問題",
-      tags: ["#Podcast", "#創意思考"], cta: "收聽最新一集" },
-    { id: "C1", cat: "C", url: PRESSPLAY_URL, from: "2026-10-21", to: "2026-10-31",
+      sub: "每週精選 3 篇值得讀的研究，加上一件這週就能試的小事。",
+      proof: "每週三 07:00・3 分鐘讀完・免費", btn: "每週三收到一封" },
+    { id: "B", cat: "B", url: PODCAST_URL, from: "2026-10-14", kicker: "PODCAST", accent: "#7B2FF7", on: "#FFFFFF",
+      title: "別急著找答案，先聽一個工作坊現場的故事",
+      sub: "《別急著找答案｜跟 Cha Cha 一起思考》陪你換個角度想問題。",
+      proof: "每週三更新・Spotify、KKBOX、YouTube 都能聽", btn: "收聽最新一集" },
+    { id: "C1", cat: "C", url: PRESSPLAY_URL, from: "2026-10-21", to: "2026-10-31", kicker: "線上課程・11/01 開課", accent: "#FF3B5C", on: "#0F0E0E",
       title: "別急著找答案，用設計思考，打造你自己的人生藍圖",
-      sub: "11/01 線上開課，先追蹤，開課第一時間通知你",
-      tags: ["#線上課程", "#設計思考"], cta: "搶先追蹤課程" },
-    { id: "C2", cat: "C", url: PRESSPLAY_URL, from: "2026-11-01",
+      sub: "先追蹤課程，開課第一時間通知你。",
+      proof: "錄影課＋學習單・隨時開始", btn: "搶先追蹤課程" },
+    { id: "C2", cat: "C", url: PRESSPLAY_URL, from: "2026-11-01", kicker: "線上課程・開課了", accent: "#FF3B5C", on: "#0F0E0E",
       title: "別急著找答案，用設計思考，打造你自己的人生藍圖",
-      sub: "線上課程開課了，前 50 位享早鳥優惠",
-      tags: ["#線上課程", "#設計思考"], cta: "看課程介紹" },
-    { id: "E", cat: "E", url: GAME_URL, capsule: true,
+      sub: "線上課程開課了，前 50 位享早鳥優惠。",
+      proof: "錄影課＋學習單・隨時開始", btn: "看課程介紹" },
+    { id: "E", cat: "E", url: GAME_URL, kicker: "自我探索遊戲", accent: "#E6007E", on: "#FFFFFF",
       title: "下班後還在想「這樣下去好嗎」？",
-      sub: "回答 10 個問題，扭蛋機會轉出一隻跟你很像的守護獸",
-      tags: ["#約3分鐘", "#免註冊", "#自我探索遊戲"], cta: "進島玩玩看" },
-    { id: "D1", cat: "D", url: CONTACT_URL,
+      sub: "回答 10 個問題，扭蛋機會轉出一隻跟你很像的守護獸。",
+      proof: "約 3 分鐘・免註冊", btn: "進島玩玩看" },
+    { id: "D1", cat: "D", url: CONTACT_URL, kicker: "企業內訓", step: 1, accent: "#00A86B", on: "#0F0E0E",
+      seasonProof: { season: ["10-01", "12-15"], proof: "今年還來得及安排一場" },
       title: "問題還沒定義清楚，再多 AI 也是白忙",
-      sub: "設計思考企業內訓：先找對問題，再讓團隊一起找答案",
-      tags: ["#企業內訓", "#設計思考", "#團隊共創"], cta: "預約內訓諮詢" },
-    { id: "D2", cat: "D", url: CONTACT_URL,
+      sub: "設計思考企業內訓：先找對問題，再讓團隊一起找答案。",
+      proof: "全程動手做，工作坊當天就有原型", btn: "預約內訓諮詢" },
+    { id: "D2", cat: "D", url: CONTACT_URL, kicker: "學校工作坊", step: 3, accent: "#FFB800", on: "#0F0E0E",
       title: "讓學生從使用者出發，動手解決真實問題",
-      sub: "為高中職與大學設計的設計思考工作坊，一堂課走完五個步驟",
-      tags: ["#高中職", "#大學", "#設計思考工作坊"], cta: "洽詢學校工作坊" },
+      sub: "從小學到大學的設計思考與創意思考課，學生在課堂直接動手。",
+      proof: "一堂課走完五個步驟，帶走自己的作品", btn: "洽詢學校工作坊", worksheet: true },
     // 教師研習多在暑假，學校約在 3–6 月規劃，所以只在這段期間出現
-    { id: "D3", cat: "D", url: CONTACT_URL, from: "2027-03-01", to: "2027-06-30",
+    { id: "D3", cat: "D", url: CONTACT_URL, from: "2027-03-01", to: "2027-06-30", kicker: "暑期教師研習", step: 2, accent: "#00897B", btnBg: "#00796B", on: "#FFFFFF",
       title: "今年暑假的教師研習，把設計思考帶進課堂",
-      sub: "給老師的設計思考工作坊：學方法，也帶走能直接用的課堂活動",
-      tags: ["#教師研習", "#暑期研習", "#設計思考"], cta: "洽詢教師研習" },
+      sub: "給老師的設計思考與創意思考研習：先自己走一遍，再帶回課堂。",
+      proof: "帶走能直接用在課堂的活動", btn: "洽詢教師研習", worksheet: true },
     // 公部門：尚未開發的新市場（查查 10/06：值得開發）
-    { id: "D4", cat: "D", url: CONTACT_URL,
+    { id: "D4", cat: "D", url: CONTACT_URL, kicker: "公部門課程", step: 0, accent: "#14213D", on: "#FFFFFF",
       title: "公共服務，也可以從民眾的角度重新設計",
-      sub: "為公部門規劃的設計思考工作坊：先聽懂民眾，再找對問題",
-      tags: ["#公部門", "#公共服務", "#設計思考工作坊"], cta: "洽詢公部門課程" }
+      sub: "為公部門規劃的設計思考工作坊，從民眾的真實經驗出發。",
+      proof: "先聽懂民眾，再找對問題", btn: "洽詢公部門課程" },
+    // 企業創意思考工作坊（查查 10/06：除了設計思考，也教創意思考）
+    { id: "D5a", cat: "D", url: CONTACT_URL, kicker: "創意思考工作坊", accent: "#7AC70C", on: "#0F0E0E", bulb: true,
+      title: "卡住的時候，缺的往往不是答案，是換個想法",
+      sub: "企業創意思考工作坊：練習換個角度看問題，讓團隊想得出、也敢說出新點子。",
+      proof: "練過一次的方法，回到工作就能用", btn: "洽詢創意思考工作坊" },
+    { id: "D5b", cat: "D", url: CONTACT_URL, kicker: "創意思考工作坊", accent: "#7AC70C", on: "#0F0E0E", meeting: true,
+      title: "開會只有一個人在講？還是一片安靜？",
+      sub: "企業創意思考工作坊：用幾個好上手的方法，讓每個人都開口，會議真的生出點子。",
+      proof: "工作坊學的方法，下一場會議就能用", btn: "預約動腦會議工作坊" },
+    // 創意思考：各種卡關情境（文案〔待查查確認〕；行銷部可直接改）
+    { id: "D5c", cat: "D", url: CONTACT_URL, kicker: "創意思考工作坊", accent: "#7AC70C", on: "#0F0E0E", odd: true,
+      title: "大家都用 AI 想點子，結果都長得一樣？",
+      sub: "AI 給的常是平均答案。企業創意思考工作坊，練的是團隊自己的原創力。",
+      proof: "練的是人的想法，不是工具的用法", btn: "洽詢創意思考工作坊" },
+    // 年底限定（每年 10/01–12/31）：明年計畫、年底團隊活動
+    { id: "D5d", cat: "D", url: CONTACT_URL, kicker: "創意思考工作坊", accent: "#7AC70C", on: "#0F0E0E", bulb: true,
+      season: ["10-01", "12-31"], seasonBoost: 2,
+      title: "明年的計畫，又跟今年長得一樣？",
+      sub: "年度企劃、活動企劃卡住了？用一場創意思考工作坊，換個想法重新出發。",
+      proof: "今年還來得及安排一場", btn: "洽詢創意思考工作坊" },
+    { id: "D5e", cat: "D", url: CONTACT_URL, kicker: "創意思考工作坊", accent: "#7AC70C", on: "#0F0E0E", meeting: true,
+      season: ["10-01", "12-31"], seasonBoost: 2,
+      title: "年底的團隊活動，想要好玩又有收穫？",
+      sub: "尾牙、共識營、部門活動：一起動腦玩一場，帶走明年用得上的點子。",
+      proof: "12 月前還排得進一場", btn: "洽詢年底團隊工作坊" },
+    { id: "D5f", cat: "D", url: CONTACT_URL, kicker: "創意思考工作坊", accent: "#7AC70C", on: "#0F0E0E", odd: true,
+      title: "新產品、新服務，總是換湯不換藥？",
+      sub: "企業創意思考工作坊：練習從不同角度看需求，長出真正不一樣的選項。",
+      proof: "練過的方法，下一個專案就能用", btn: "洽詢創意思考工作坊" },
+    { id: "D5g", cat: "D", url: CONTACT_URL, kicker: "創意思考工作坊", accent: "#7AC70C", on: "#0F0E0E", bulb: true,
+      title: "提案和行銷，總是想不出新的說法？",
+      sub: "企業創意思考工作坊：換個角度找切角，讓提案和行銷說出新的故事。",
+      proof: "練過的方法，下一次提案就能用", btn: "洽詢創意思考工作坊" },
+    { id: "D5h", cat: "D", url: CONTACT_URL, kicker: "創意思考工作坊", accent: "#7AC70C", on: "#0F0E0E", meeting: true,
+      title: "新人有想法，卻不敢說、也不知道怎麼說？",
+      sub: "企業創意思考工作坊：讓每個人都有機會開口，也知道怎麼把想法說清楚。",
+      proof: "資深和新人一起練，一起把想法說出來", btn: "洽詢創意思考工作坊" },
+    { id: "D5i", cat: "D", url: CONTACT_URL, kicker: "創意思考工作坊", accent: "#7AC70C", on: "#0F0E0E", odd: true,
+      title: "同一個問題一再發生，每次都用同一招？",
+      sub: "企業創意思考工作坊：練習換個方式看老問題，找出新的解法。",
+      proof: "工作坊學的方法，回到工作就能用", btn: "洽詢創意思考工作坊" }
   ];
 
   // 各時段的類別比例（A 訂閱週報、B Podcast、C 線上課程、E 夢遊扭蛋島、D 設計思考內訓），依台北日期自動切換
@@ -170,6 +390,7 @@
   // 功能 1：主題加權（乘數）
   var TOPIC_BOOST = {
     dt:     { D1: 3, D2: 3, D3: 3, D4: 3 },
+    creativity: { D5a: 3, D5b: 3, D5c: 3, D5d: 3, D5e: 3, D5f: 3, D5g: 3, D5h: 3, D5i: 3, D2: 1.5 },
     career: { A1: 2, A2: 2, C1: 2, C2: 2, E: 2 },
     ai:     { A1: 2, A2: 2 },
     edu:    { D2: 3, D3: 3, A1: 1.5, A2: 1.5 },
@@ -199,6 +420,13 @@
   }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
+  // 每年重複的季節（月-日區間），例如年底 ["10-01", "12-31"]
+  function inSeason(range) {
+    if (!range) return true;
+    var md = taipeiToday().slice(5);
+    return range[0] <= range[1] ? (md >= range[0] && md <= range[1]) : (md >= range[0] || md <= range[1]);
+  }
+
   // ===== 挑選廣告 =====
   function pickAd(excludeIds) {
     var today = taipeiToday();
@@ -214,6 +442,7 @@
       if (!ad.url) return false;                        // 網址還沒填：跳過
       if (ad.from && today < ad.from) return false;
       if (ad.to && today > ad.to) return false;
+      if (ad.season && !inSeason(ad.season)) return false;   // 季節限定（例如年底限定）
       if (hideA && ad.cat === "A") return false;        // 功能 3：訂閱過就不再推訂閱
       if (hideE && ad.cat === "E") return false;        // 玩過扭蛋島，14 天內不再推
       return (period.w[ad.cat] || 0) > 0;
@@ -222,7 +451,8 @@
     var perCat = {};
     active.forEach(function (ad) { perCat[ad.cat] = (perCat[ad.cat] || 0) + 1; });
     var pool = active.map(function (ad) {
-      return { ad: ad, w: period.w[ad.cat] / perCat[ad.cat] * (boost[ad.id] || 1) };
+      var seasonal = ad.seasonBoost && inSeason(ad.season) ? ad.seasonBoost : 1;   // 年底限定的廣告在季節內加倍
+      return { ad: ad, w: period.w[ad.cat] / perCat[ad.cat] * (boost[ad.id] || 1) * seasonal };
     });
     var forced = params.get("ad");
     if (forced) {
@@ -238,57 +468,426 @@
     return candidates[candidates.length - 1].ad;
   }
 
-  // 扭蛋小圖示（E 廣告用）：上半橘、下半白的膠囊，輕輕晃動
-  var CAPSULE_SVG =
-    '<svg class="capsule" viewBox="0 0 40 40" aria-hidden="true">' +
-      '<path d="M5 20a15 15 0 0 1 30 0z" fill="#e0602f"/>' +
-      '<path d="M5 20a15 15 0 0 0 30 0z" fill="#fff" stroke="#e8ddd5" stroke-width="1.5"/>' +
-      '<rect x="4" y="18.5" width="32" height="3" rx="1.5" fill="#1d1d1f" opacity=".18"/>' +
-      '<circle cx="13" cy="12" r="3" fill="#fff" opacity=".55"/>' +
+  // ===== 插圖（白板線條風，全部是 SVG，不載入圖片）=====
+  function daysUntil(dateStr) {                       // 台北日期相減，C1 倒數用
+    var a = new Date(taipeiToday() + "T00:00:00Z"), b = new Date(dateStr + "T00:00:00Z");
+    return Math.round((b - a) / 864e5);
+  }
+  var STEPS = ["同理", "定義", "發想", "原型", "測試"];
+  function artD(ad) {                                 // 設計思考五步驟：像白板筆畫出來的一條路
+    var pts = [[24, 112], [74, 78], [125, 114], [176, 80], [226, 110]];
+    var nodes = pts.map(function (p, i) {
+      var on = i === ad.step, d = (0.55 + i * 0.12).toFixed(2) + "s";
+      return '<g class="pop" style="--d:' + d + ';transform-origin:' + p[0] + 'px ' + p[1] + 'px">' +
+        '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + (on ? 16 : 13) + '" class="' + (on ? "acc" : "paper") + '" stroke="#0F0E0E" stroke-width="2.2"/>' +
+        '<text class="tiny" x="' + p[0] + '" y="' + (p[1] + 4) + '" text-anchor="middle" style="fill:' + (on ? ad.on : "#6B6257") + '">' + (i + 1) + '</text></g>' +
+        '<text class="lbl fade' + (on ? " on" : "") + '" style="--d:' + (0.9 + i * 0.1).toFixed(2) + 's" x="' + p[0] + '" y="164">' + STEPS[i] + '</text>';
+    }).join("");
+    var hi = pts[ad.step];
+    return '<svg viewBox="0 0 250 196" aria-hidden="true">' +
+      '<text class="tiny fade" style="--d:.1s" x="6" y="30">DESIGN THINKING</text>' +
+      '<path class="acc-s draw" style="--len:120;--dur:.5s;--d:.25s" d="M6 38 C 40 34, 80 41, 118 36"/>' +
+      '<path class="ink draw" style="--len:330;--dur:1.1s;--d:.2s" d="M24 112 C 42 92, 54 78, 74 78 S 104 116, 125 114 S 154 80, 176 80 S 210 114, 226 110"/>' +
+      '<path class="ink draw" style="--len:30;--dur:.25s;--d:1.25s" d="M232 101 L 240 110 L 230 117"/>' +
+      nodes +
+      '<path class="acc-s draw" style="--len:120;--dur:.6s;--d:1.35s" d="M' + (hi[0] - 21) + ' ' + (hi[1] - 2) + ' a 21 19 0 1 0 6 -13"/>' +
     '</svg>';
+  }
+  function artB() {                                   // Podcast：麥克風＋聲波
+    var hs = [.35, .7, .5, .95, .6, .85, .4, .65];
+    var bars = hs.map(function (h, i) {
+      return '<rect class="bar acc" style="--h:' + h + ';--d:' + (0.3 + i * 0.06).toFixed(2) + 's" x="' + (128 + i * 14) + '" y="60" width="7" height="76" rx="3.5"/>';
+    }).join("");
+    return '<svg viewBox="0 0 250 196" aria-hidden="true">' +
+      '<rect class="ink draw paper" style="--len:240;--dur:.8s;--d:.1s" x="40" y="34" width="46" height="80" rx="23"/>' +
+      '<path class="acc-s draw" style="--len:120;--dur:.5s;--d:.6s" d="M52 56 H74 M52 68 H74 M52 80 H74"/>' +
+      '<path class="ink draw" style="--len:140;--dur:.6s;--d:.5s" d="M28 92 C 28 140, 98 140, 98 92"/>' +
+      '<path class="ink draw" style="--len:80;--dur:.4s;--d:.9s" d="M63 132 V 158 M 42 160 H 84"/>' +
+      bars +
+      '<text class="tiny fade" style="--d:1.1s" x="128" y="160">EVERY WEDNESDAY</text>' +
+    '</svg>';
+  }
+  function artC(ad) {                                 // 線上課程：課程卡＋日期翻牌
+    var d = daysUntil("2026-11-01");
+    var line2 = ad.id === "C1" ? (d > 0 ? "還有 " + d + " 天" : "即將開課") : "開課了";
+    return '<svg viewBox="0 0 250 196" aria-hidden="true">' +
+      '<rect class="ink draw paper" style="--len:700;--dur:1s;--d:.05s" x="14" y="42" width="214" height="140" rx="10"/>' +
+      '<path class="ink draw" style="--len:220;--dur:.5s;--d:.6s" d="M14 70 H 228"/>' +
+      '<circle class="fade acc" style="--d:.5s" cx="30" cy="56" r="4"/><circle class="fade" style="--d:.55s" cx="44" cy="56" r="4" fill="#B9B0A3"/><circle class="fade" style="--d:.6s" cx="58" cy="56" r="4" fill="#B9B0A3"/>' +
+      '<g class="pop" style="--d:.8s;transform-origin:62px 126px"><circle cx="62" cy="126" r="26" class="acc" stroke="#0F0E0E" stroke-width="2.2"/><path d="M55 113 L 75 126 L 55 139 Z" fill="#0F0E0E"/></g>' +
+      '<path class="ink draw" style="--len:120;--dur:.4s;--d:.9s" d="M104 104 H 206"/>' +
+      '<path class="ink draw" style="--len:120;--dur:.4s;--d:1s" d="M104 124 H 190" opacity=".5"/>' +
+      '<path class="ink draw" style="--len:120;--dur:.4s;--d:1.1s" d="M104 144 H 172" opacity=".5"/>' +
+      '<g class="chipcard"><rect x="150" y="6" width="92" height="62" rx="9" fill="#0F0E0E"/>' +
+        '<text class="big" x="196" y="38" text-anchor="middle" font-size="25" style="fill:#F2EFEB">11/01</text>' +
+        '<text x="196" y="58" text-anchor="middle" font-size="12.5" font-weight="700" class="acc" font-family="Noto Sans TC, sans-serif">' + esc(line2) + '</text></g>' +
+    '</svg>';
+  }
+  function artE() {                                   // 自我探索遊戲：扭蛋滾進來、蓋子彈開
+    return '<svg viewBox="0 0 250 196" aria-hidden="true">' +
+      '<path class="ink draw" style="--len:240;--dur:.6s;--d:.05s" d="M10 172 C 70 168, 170 174, 240 170"/>' +
+      '<g class="capsule">' +
+        '<path d="M65 108 a 60 60 0 0 0 120 0 z" fill="#fff" stroke="#0F0E0E" stroke-width="2.4"/>' +
+        '<g class="lid"><path d="M65 104 a 60 60 0 0 1 120 0 z" class="acc" stroke="#0F0E0E" stroke-width="2.4"/>' +
+        '<path d="M90 70 a 34 34 0 0 1 22 -14" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none" opacity=".65"/></g>' +
+      '</g>' +
+      '<g class="pop" style="--d:1.35s;transform-origin:206px 46px"><path d="M206 30 V 62 M190 46 H 222" stroke="#0F0E0E" stroke-width="3" stroke-linecap="round"/></g>' +
+      '<g class="pop" style="--d:1.5s;transform-origin:38px 56px"><path d="M38 46 V 66 M28 56 H 48" stroke="#B9B0A3" stroke-width="3" stroke-linecap="round"/></g>' +
+    '</svg>';
+  }
+  function artBulb() {                               // 創意思考（通用）：手繪燈泡＋點子火花
+    return '<svg viewBox="0 0 250 196" aria-hidden="true">' +
+      '<path class="ink draw paper" style="--len:330;--dur:1s;--d:.1s" d="M125 30 C 92 30, 72 54, 72 82 C 72 104, 86 116, 96 128 C 101 134, 103 140, 103 148 H 147 C 147 140, 149 134, 154 128 C 164 116, 178 104, 178 82 C 178 54, 158 30, 125 30 Z"/>' +
+      '<path class="acc-s draw" style="--len:120;--dur:.6s;--d:.7s" d="M112 146 V 110 C 112 100, 124 100, 125 108 C 126 100, 138 100, 138 110 V 146"/>' +
+      '<path class="ink draw" style="--len:120;--dur:.5s;--d:.9s" d="M104 158 H 146 M 108 168 H 142 M 116 178 H 134"/>' +
+      ['M125 6 V 18', 'M60 32 L 70 42', 'M190 32 L 180 42', 'M38 84 H 52', 'M198 84 H 212'].map(function (d, i) {
+        return '<path class="acc-s draw" style="--len:40;--dur:.3s;--d:' + (1.2 + i * 0.05).toFixed(2) + 's;stroke-width:3.2" d="' + d + '"/>';
+      }).join("") +
+      '<g class="pop" style="--d:1.5s;transform-origin:222px 140px"><circle cx="222" cy="140" r="7" class="acc" stroke="#0F0E0E" stroke-width="2"/></g>' +
+      '<g class="pop" style="--d:1.6s;transform-origin:30px 140px"><path d="M30 130 V 150 M20 140 H 40" stroke="#0F0E0E" stroke-width="2.5" stroke-linecap="round"/></g>' +
+    '</svg>';
+  }
+  function artOdd() {                                // 創意思考：一排一樣的圓，只有一個不一樣
+    var cells = [], k = 0;
+    for (var r = 0; r < 3; r++) for (var c = 0; c < 4; c++) {
+      var x = 44 + c * 54, y = 46 + r * 52, d = (0.15 + k * 0.05).toFixed(2) + "s";
+      if (r === 1 && c === 2)
+        cells.push('<g class="pop" style="--d:1.05s;transform-origin:' + x + 'px ' + y + 'px"><path d="M' + x + ' ' + (y - 20) + ' L ' + (x + 6) + ' ' + (y - 6) + ' L ' + (x + 20) + ' ' + y + ' L ' + (x + 6) + ' ' + (y + 6) + ' L ' + x + ' ' + (y + 20) + ' L ' + (x - 6) + ' ' + (y + 6) + ' L ' + (x - 20) + ' ' + y + ' L ' + (x - 6) + ' ' + (y - 6) + ' Z" class="acc" stroke="#0F0E0E" stroke-width="2.2" stroke-linejoin="round"/></g>');
+      else
+        cells.push('<g class="pop" style="--d:' + d + ';transform-origin:' + x + 'px ' + y + 'px"><circle cx="' + x + '" cy="' + y + '" r="14" fill="#fff" stroke="#0F0E0E" stroke-width="2.2"/></g>');
+      k++;
+    }
+    return '<svg viewBox="0 0 250 196" aria-hidden="true">' + cells.join("") +
+      '<path class="acc-s draw" style="--len:190;--dur:.7s;--d:1.25s" d="M124 104 a 28 26 0 1 0 6 -22"/></svg>';
+  }
+  function artMeeting() {                            // 創意思考：會議桌，對話框一個接一個亮起來
+    var seats = [[50, 70], [125, 52], [200, 70], [62, 150], [188, 150]];
+    var bubbles = [[34, 18], [109, 4], [184, 18], [10, 104], [204, 104]];
+    var people = seats.map(function (p, i) {
+      return '<g class="pop" style="--d:' + (0.45 + i * 0.08).toFixed(2) + 's;transform-origin:' + p[0] + 'px ' + p[1] + 'px">' +
+        '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="11" fill="#fff" stroke="#0F0E0E" stroke-width="2.2"/></g>';
+    }).join("");
+    var talk = bubbles.map(function (b, i) {
+      var d = (1.0 + i * 0.16).toFixed(2) + "s";
+      return '<g class="pop" style="--d:' + d + ';transform-origin:' + (b[0] + 16) + 'px ' + (b[1] + 22) + 'px">' +
+        '<path d="M' + b[0] + ' ' + (b[1] + 4) + ' a 4 4 0 0 1 4 -4 h 28 a 4 4 0 0 1 4 4 v 14 a 4 4 0 0 1 -4 4 h -18 l -8 7 v -7 h -2 a 4 4 0 0 1 -4 -4 z" class="acc" stroke="#0F0E0E" stroke-width="2"/>' +
+        '<path d="M' + (b[0] + 8) + ' ' + (b[1] + 11) + ' h 20" stroke="#0F0E0E" stroke-width="2" stroke-linecap="round"/></g>';
+    }).join("");
+    return '<svg viewBox="0 0 250 196" aria-hidden="true">' +
+      '<rect class="ink draw paper" style="--len:420;--dur:.9s;--d:.05s" x="70" y="84" width="110" height="52" rx="26"/>' +
+      '<path class="ink draw" style="--len:60;--dur:.4s;--d:.6s" d="M100 104 h 22 M 130 116 h 20" opacity=".45"/>' +
+      people + talk +
+    '</svg>';
+  }
+  function art(ad) {
+    if (ad.bulb) return artBulb();
+    if (ad.odd) return artOdd();
+    if (ad.meeting) return artMeeting();
+    if (ad.cat === "D") return artD(ad);
+    if (ad.cat === "B") return artB();
+    if (ad.cat === "C") return artC(ad);
+    if (ad.cat === "E") return artE();
+    return "";
+  }
+
+  // 標題切成小塊逐字浮現：中文一字一塊，英數連在一起，標點黏在前一個字後面（避免標點跑到行首）
+  // 再以逗號、問號等切成「詞組」，詞組整塊換行（不會出現「設計思／考」這種斷法），太長時才在詞組內換行
+  function titleHTML(ad) {
+    var n = 0, re = /[A-Za-z0-9.]+[，。？！、」』）：]*|[「『（《]*[\s\S][，。？！、」』）：》]*/g;
+    return ad.title.split(/(?<=[，。？！：])/).map(function (phrase) {
+      return '<span class="ph">' + (phrase.match(re) || []).map(function (c) { return '<span class="ch" style="--i:' + (n++) + '">' + esc(c) + '</span>'; }).join("") + '</span>';
+    }).join("");
+  }
+
+  // ===== 依位置、依時段選文案 =====
+  var SLOT_END = params.get("slot") === "end";        // 測試用 ?slot=end；正式由「同一頁第二個載入」決定
+  function daypart() {
+    var h = parseInt(params.get("hour"), 10);
+    if (isNaN(h)) h = parseInt(new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Taipei", hour: "2-digit", hourCycle: "h23" }).format(new Date()), 10);
+    return h >= 5 && h < 11 ? "morning" : (h >= 11 && h < 17 ? "day" : "evening");
+  }
+  function copyFor(ad) {
+    var c = { kicker: ad.kicker, title: ad.title, sub: ad.sub }, v = null;
+    if (ad.cat === "A" && SLOT_END) v = COPY_VARIANTS.A && COPY_VARIANTS.A.end;
+    if (!v && COPY_VARIANTS[ad.id]) v = COPY_VARIANTS[ad.id][daypart()];
+    if (v) for (var k in v) c[k] = v[k];
+    return c;
+  }
+
+  // 說明句也以標點分詞組換行，避免「看問／題」這種斷法
+  function phr(text) {
+    return String(text).split(/(?<=[，。？！：；、])/).map(function (x) { return '<span class="ph">' + esc(x) + '</span>'; }).join("");
+  }
+
+  // 第一次捲進畫面才播（iframe 內的 IntersectionObserver 會反映外層文章的捲動）
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var played = false, io = null;
+  function setupIntro() {
+    var stage = document.getElementById("stage");
+    if (!stage) return;
+    if (reduceMotion || played) { stage.classList.add("go"); return; }
+    stage.classList.add("pre");
+    function play() {
+      if (played) return; played = true;
+      stage.classList.remove("pre"); stage.classList.add("go");
+      if (io) io.disconnect();
+    }
+    if ("IntersectionObserver" in window) {
+      io = new IntersectionObserver(function (entries) { if (entries.some(function (e) { return e.isIntersecting; })) play(); }, { threshold: 0.4 });
+      io.observe(stage);
+      // 保險：萬一瀏覽器沒有回報捲動（例如某些內嵌環境），6 秒後照樣播放，廣告絕不會一直空白
+      setTimeout(play, 6000);
+    } else { play(); }
+  }
+
+  // ===== 廣告成效追蹤（ADS_GA4_ID 有填才啟用）=====
+  // 事件：ad_impression（看到 50% 以上且滿 1 秒）、ad_view_time（看了幾秒，離開時送一次，最多 600 秒）、
+  //       ad_click、quiz_answer、quiz_result、substack_box_engaged、worksheet_submit
+  var GA_ID = params.get("ga") === "off" ? "" : (params.get("ga") || ADS_GA4_ID);   // 測試用：?ga=off 關閉、?ga=G-TEST 換 ID
+  var gaReady = false;
+  if (GA_ID) {
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    gtag("js", new Date());
+    gtag("config", GA_ID, { send_page_view: false, cookie_flags: "SameSite=None;Secure", anonymize_ip: true });
+    var gs = document.createElement("script"); gs.async = true;
+    gs.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(GA_ID);
+    document.head.appendChild(gs);
+    gaReady = true;
+  }
+  var trackAd = null;                                  // 目前顯示中的廣告
+  function track(name, extra) {
+    if (!gaReady || !trackAd) return;
+    var p = { ad_id: trackAd.id, category: trackAd.cat };
+    for (var k in extra || {}) p[k] = extra[k];
+    gtag("event", name, p);
+  }
+  var vis = { io: null, since: 0, total: 0, impTimer: 0, impSent: false, timeSent: false, inView: false };
+  function visibleNow() { return vis.inView && document.visibilityState === "visible"; }
+  function visTick() {                                 // 依目前可見狀態開始或停止計時
+    var now = Date.now();
+    if (visibleNow()) {
+      if (!vis.since) vis.since = now;
+      if (!vis.impSent && !vis.impTimer) vis.impTimer = setTimeout(function () {
+        vis.impTimer = 0;
+        if (visibleNow() && !vis.impSent) {
+          vis.impSent = true;
+          track("ad_impression", { slot: SLOT_END ? 2 : 1, topic: params.get("topic") || "general",
+            time_variant: daypart(), end_of_article: SLOT_END });
+        }
+      }, 1000);
+    } else {
+      if (vis.since) { vis.total += now - vis.since; vis.since = 0; }
+      if (vis.impTimer) { clearTimeout(vis.impTimer); vis.impTimer = 0; }
+    }
+  }
+  function sendViewTime() {
+    if (vis.timeSent || !gaReady || !trackAd) return;
+    visTick();
+    if (vis.since) { vis.total += Date.now() - vis.since; vis.since = Date.now(); }
+    if (vis.total < 1000) return;
+    vis.timeSent = true;
+    track("ad_view_time", { seconds: Math.min(600, Math.round(vis.total / 1000)), transport_type: "beacon" });
+  }
+  function analyticsAttach(ad) {
+    trackAd = ad;
+    if (!gaReady) return;
+    var stage = document.getElementById("stage");
+    if (vis.io) vis.io.disconnect();
+    vis.inView = false; vis.since = 0; vis.total = 0; vis.impSent = false; vis.timeSent = false;
+    if ("IntersectionObserver" in window && stage) {
+      vis.io = new IntersectionObserver(function (es) { vis.inView = es[es.length - 1].intersectionRatio >= 0.5; visTick(); }, { threshold: [0, 0.5, 1] });
+      vis.io.observe(stage);
+    }
+    // 點擊：整塊廣告、按鈕、文字連結
+    if (stage) stage.addEventListener("click", function (e) {
+      var t = e.target.closest ? e.target.closest("a, button.qopt, #q-start, #q-again") : null;
+      if (!t) return;
+      if (t.tagName === "A") track("ad_click", { cta: (t.querySelector && t.querySelector(".btn") ? t.querySelector(".btn").textContent : t.textContent).replace("→", "").trim().slice(0, 40) });
+    }, true);
+  }
+  document.addEventListener("visibilitychange", function () { visTick(); if (document.visibilityState === "hidden") sendViewTime(); });
+  window.addEventListener("pagehide", sendViewTime);
 
   // ===== 畫出廣告 =====
   function markSubscribed() { store("dtads_subscribed", Date.now()); }
 
   function render(ad) {
     var root = document.getElementById("root");
+    var c = copyFor(ad);
+    if (ad.seasonProof && inSeason(ad.seasonProof.season)) ad = Object.assign({}, ad, { proof: ad.seasonProof.proof });
     var href = withUtm(ad.url, ad.id);
-    var beams = '<div class="beam b1"></div><div class="beam b2"></div>';
-    var tags = '<div class="tags">' + ad.tags.map(function (t) { return '<span class="tag">' + esc(t) + '</span>'; }).join("") + '</div>';
+    var blobs = '<div class="rail"><i></i></div>';
+    var vars = 'style="--accent:' + ad.accent + ';--on:' + ad.on + '"';
+    var btnStyle = ad.btnBg ? ' style="background:' + ad.btnBg + '"' : "";
+    var head = '<p class="kicker">' + esc(c.kicker) + '</p><p class="title">' + titleHTML(c) + '</p>';
     var wide = window.innerWidth >= 560;
+
+    if (ad.id === "D1") return renderQuiz(ad, c, vars, blobs);
+    if (ad.worksheet && worksheetOn()) return renderWorksheet(ad, c, vars, blobs, href);
 
     if (ad.embed && wide) {
       // 功能 2：訂閱廣告直接放 Substack 訂閱框，讀者不用離開文章
       root.innerHTML =
-        '<div id="stage">' + beams +
-          '<div class="split">' +
-            '<div class="content">' +
-              '<p class="title">' + esc(ad.title) + '</p>' +
-              '<p class="sub">' + esc(ad.sub) + '</p>' + tags +
+        '<div id="stage" class="cat-A" ' + vars + '>' + blobs +
+          '<div class="grid sub-grid">' +
+            '<div class="copy">' + head +
+              '<p class="sub">' + phr(c.sub) + '</p>' +
+              '<p class="proof latest">' + esc(ad.proof) + '</p>' +
             '</div>' +
             '<div><div class="embed-card"><iframe id="sub-embed" title="訂閱未來思考週報" scrolling="no" src="' + esc(EMBED_URL) + '"></iframe></div>' +
-            '<div class="embed-note">輸入 Email，每週三收到一封，隨時可以取消</div></div>' +
+            '<p class="embed-note">輸入 Email 就完成，隨時可以取消</p></div>' +
           '</div>' +
         '</div>';
       // 讀者點進訂閱框（框是跨網域，看不到送出結果，以「開始操作」視為有興趣）
       window.addEventListener("blur", function () {
         setTimeout(function () {
-          if (document.activeElement && document.activeElement.id === "sub-embed") markSubscribed();
+          if (document.activeElement && document.activeElement.id === "sub-embed") { markSubscribed(); track("substack_box_engaged"); }
         }, 0);
       });
+      setupIntro();
+      analyticsAttach(ad);
+      loadLatestIssue(ad);
       return;
     }
 
+    var pic = art(ad);
     root.innerHTML =
-      '<a id="stage" href="' + esc(href) + '" target="_blank" rel="noopener">' + beams +
-        '<div class="content">' + (ad.capsule ? CAPSULE_SVG : '') +
-          '<p class="title">' + esc(ad.title) + '</p>' +
-          '<p class="sub">' + esc(ad.sub) + '</p>' + tags +
-          '<div class="cta">' + esc(ad.cta) + '</div>' +
+      '<a id="stage" class="cat-' + ad.cat + '" ' + vars + ' href="' + esc(href) + '" target="_blank" rel="noopener" aria-label="' + esc(c.title + "｜" + ad.btn) + '">' + blobs +
+        '<div class="grid' + (pic ? "" : " no-art") + '">' +
+          (pic ? '<div class="art">' + pic + '</div>' : "") +
+          '<div class="copy">' + head +
+            '<p class="sub">' + phr(c.sub) + '</p>' +
+            '<div class="row"><span class="btn"' + btnStyle + '>' + esc(ad.btn) + '<span class="arr">→</span></span>' +
+            (ad.proof ? '<span class="proof latest">' + ad.proof + '</span>' : "") + '</div>' +
+          '</div>' +
         '</div>' +
       '</a>';
     if (ad.cat === "A") document.getElementById("stage").addEventListener("click", markSubscribed);
     if (ad.cat === "E") document.getElementById("stage").addEventListener("click", function () { store("dtads_played", Date.now()); });
+    setupIntro();
+    analyticsAttach(ad);
+    if (ad.cat === "A") loadLatestIssue(ad);
+  }
+
+  // ===== 本週週報搶先看（A）：讀 latest-issue.json，沒有檔案就維持原本的說明 =====
+  function loadLatestIssue(ad) {
+    if (!window.fetch) return;
+    var url = params.get("issue") === "none" ? "./__none__.json" : LATEST_ISSUE_URL;
+    fetch(url, { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+      if (!d || !d.display) return;
+      var el = document.querySelector(".latest");
+      if (!el) return;
+      var link = d.link ? withUtm(d.link, ad.id + "-latest") : "";
+      // 寬版（訂閱框旁）：整行可點，連到這一期；窄版整塊廣告本身就是連結，只換文字
+      el.innerHTML = '本週搶先看：' + (link && document.querySelector("div#stage")
+        ? '<a class="issue" href="' + esc(link) + '" target="_blank" rel="noopener">' + esc(d.display) + '</a>'
+        : '<b>' + esc(d.display) + '</b>');
+      el.classList.add("has-issue");
+    }).catch(function () {});
+  }
+
+  // ===== D1 企業小測驗（3 題，一次一題，結果指到對應步驟）=====
+  function renderQuiz(ad, c, vars, blobs) {
+    var root = document.getElementById("root");
+    var votes = [0, 0, 0, 0, 0], last = 1, qi = -1;
+    root.innerHTML =
+      '<div id="stage" class="cat-D quiz" ' + vars + '>' + blobs +
+        '<div class="grid">' +
+          '<div class="art" id="quiz-art">' + artD({ step: 1, on: ad.on }) + '</div>' +
+          '<div class="copy" id="pane"></div>' +
+        '</div>' +
+      '</div>';
+    var pane = document.getElementById("pane");
+    function dots(n) {
+      return '<div class="dots" aria-label="第 ' + (n + 1) + ' 題，共 3 題">' + [0, 1, 2].map(function (i) { return '<i class="' + (i <= n ? "on" : "") + '"></i>'; }).join("") + '</div>';
+    }
+    function showIntro() {
+      pane.innerHTML =
+        '<p class="kicker">' + esc(c.kicker) + '</p><p class="title">' + titleHTML(c) + '</p>' +
+        '<p class="sub">' + phr(QUIZ.intro.sub) + '</p>' +
+        '<div class="row"><button type="button" class="btn" id="q-start">' + esc(QUIZ.intro.start) + '<span class="arr">→</span></button>' +
+        '<a class="textlink proof" href="' + esc(withUtm(CONTACT_URL, "D1")) + '" target="_blank" rel="noopener">直接預約內訓諮詢</a></div>';
+      document.getElementById("q-start").addEventListener("click", function () { qi = 0; showQ(); });
+    }
+    function showQ() {
+      var q = QUIZ.questions[qi];
+      pane.innerHTML =
+        '<div class="qhead">' + dots(qi) + '<span class="qnum">' + (qi + 1) + '／3</span></div>' +
+        '<p class="qtitle">' + esc(q.q) + '</p>' +
+        '<div class="qopts">' + q.opts.map(function (o, i) { return '<button type="button" class="qopt" data-i="' + i + '">' + esc(o[0]) + '</button>'; }).join("") + '</div>';
+      pane.classList.remove("swap"); void pane.offsetWidth; pane.classList.add("swap");
+      [].forEach.call(pane.querySelectorAll(".qopt"), function (b) {
+        b.addEventListener("click", function () {
+          var step = q.opts[+b.getAttribute("data-i")][1];
+          track("quiz_answer", { step: qi + 1, choice: QUIZ.results[step].key });
+          votes[step]++; last = step; b.classList.add("picked");
+          setTimeout(function () { qi++; if (qi < 3) showQ(); else showResult(); }, 220);
+        });
+      });
+    }
+    function showResult() {
+      var best = last, max = votes[last];
+      votes.forEach(function (v, i) { if (v > max) { max = v; best = i; } });
+      var r = QUIZ.results[best];
+      track("quiz_result", { result_step: r.key });
+      document.getElementById("quiz-art").innerHTML = artD({ step: best, on: ad.on });
+      pane.innerHTML =
+        '<p class="kicker">團隊的下一步：' + esc(r.step) + '</p><p class="title">' + titleHTML({ title: r.title }) + '</p>' +
+        '<p class="sub">' + phr(r.line) + '</p>' +
+        '<div class="row"><a class="btn" href="' + esc(withUtm(CONTACT_URL, "D1-quiz-" + r.key)) + '" target="_blank" rel="noopener">預約內訓諮詢<span class="arr">→</span></a>' +
+        '<button type="button" class="textlink proof" id="q-again">重新測一次</button></div>';
+      pane.classList.remove("swap"); void pane.offsetWidth; pane.classList.add("swap");
+      document.getElementById("q-again").addEventListener("click", function () { votes = [0, 0, 0, 0, 0]; qi = 0; showQ(); });
+    }
+    showIntro();
+    setupIntro();
+    analyticsAttach(ad);
+  }
+
+  // ===== D2／D3 老師免費學習單（WORKSHEET_ENABLED 打開才出現）=====
+  function worksheetOn() { return params.get("ws") === "mock" || (WORKSHEET_ENABLED && !!WORKSHEET_ENDPOINT); }
+  function renderWorksheet(ad, c, vars, blobs, href) {
+    var root = document.getElementById("root");
+    var pic = art(ad);
+    root.innerHTML =
+      '<div id="stage" class="cat-D ws" ' + vars + '>' + blobs +
+        '<div class="grid">' +
+          '<div class="art">' + pic + '</div>' +
+          '<div class="copy">' +
+            '<p class="kicker">' + esc(c.kicker) + '</p><p class="title">' + titleHTML(c) + '</p>' +
+            '<p class="wsline">免費下載：一份可以直接上課用的設計思考學習單</p>' +
+            '<form id="ws-form" class="wsform" novalidate>' +
+              '<input id="ws-email" type="email" required placeholder="老師的 Email" autocomplete="email" aria-label="Email">' +
+              '<button type="submit" class="btn">寄給我<span class="arr">→</span></button>' +
+            '</form>' +
+            '<label class="consent"><input id="ws-ok" type="checkbox"> 我同意查查創意用這個 Email 寄送學習單與教學資訊，個資只用於此，可隨時取消。</label>' +
+            '<p class="wsmsg" id="ws-msg" role="status"></p>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    var form = document.getElementById("ws-form"), msg = document.getElementById("ws-msg");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var email = document.getElementById("ws-email").value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.textContent = "請輸入正確的 Email。"; return; }
+      if (!document.getElementById("ws-ok").checked) { msg.textContent = "請先勾選同意，才能寄送學習單。"; return; }
+      msg.textContent = "寄送中…";
+      var done = function (pdf) {
+        store("dtads_worksheet", Date.now());
+        track("worksheet_submit");
+        msg.innerHTML = '已寄出，也可以直接<a href="' + esc(pdf || WORKSHEET_PDF_URL || "#") + '" target="_blank" rel="noopener">下載學習單</a>。';
+      };
+      if (params.get("ws") === "mock") { setTimeout(function () { done("https://example.com/worksheet.pdf"); }, 300); return; }
+      // Apps Script 用 text/plain 送出，不會觸發跨網域預檢；回傳 {ok, pdfUrl}
+      fetch(WORKSHEET_ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ email: email, consent: true, source: ad.id }) })
+        .then(function (r) { return r.json(); })
+        .then(function (d) { if (d && d.ok) done(d.pdfUrl); else msg.textContent = "暫時寄不出去，請稍後再試。"; })
+        .catch(function () { msg.textContent = "暫時寄不出去，請稍後再試。"; });
+    });
+    setupIntro();
+    analyticsAttach(ad);
   }
 
   // ===== 同一頁兩個版位不重複 =====
@@ -302,7 +901,7 @@
   }
   function claim(slots, ad) {
     var others = slots.filter(function (x) { return x.k !== myKey; });
-    store("dtads_page", { t: Date.now(), slots: others.concat([{ k: myKey, id: ad.id }]) });
+    store("dtads_page", { t: Date.now(), slots: others.concat([{ k: myKey, id: ad.id, t: Date.now() }]) });
   }
   window.addEventListener("storage", function (e) {
     if (e.key !== "dtads_page" || !current || params.get("ad")) return;
@@ -316,6 +915,9 @@
   });
   setTimeout(function () {
     var slots = freshSlots();
+    // 功能：同一頁第二個登記的版位＝文章結尾那一格，用結尾版文案
+    // 只算 3 秒內剛登記的版位（同一頁的兩格幾乎同時載入；避免把「上一頁」誤認為同一頁）
+    if (!params.get("slot") && slots.some(function (x) { return x.k !== myKey && x.t && Date.now() - x.t < 3000; })) SLOT_END = true;
     current = pickAd(slots.map(function (x) { return x.id; }));
     claim(slots, current);
     render(current);
