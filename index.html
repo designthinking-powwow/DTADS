@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DT POW WOW 文章輪播廣告</title>
 <!--
-  官網文章輪播廣告 v4 設計版（2026/10/06，查查創意 開發部＋行銷部）
+  官網文章輪播廣告 v5 課程風格版（2026/10/13，改成第二門課的視覺：粗黑體標題、單一藍色、白卡線條人物插圖；v4 設計版 2026/10/06）
   ─────────────────────────────────────────────
   設計：照〈插畫風格規範〉——米白底、黑色線條、暖灰，每則廣告只用「一個」鮮豔強調色，
     不同類別用不同強調色（輪播起來有變化但同一個品牌）；扁平色塊，不用漸層與陰影。
@@ -23,12 +23,12 @@
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Inter:wght@700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --paper: #F2EFEB;  --ink: #0F0E0E;  --muted: #6B6257;  --line: #D6CFC4;
+    --paper: #F5F2EA;  --ink: #0F0E0E;  --muted: #6B6257;  --line: #D6CFC4;
     --accent: #1F4BFF;  --on: #FFFFFF;   /* 每則廣告各自覆寫：強調色、按鈕上的字色 */
-    --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+    --serif: "Noto Sans TC", -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", sans-serif;   /* v5：標題也用粗黑體 */
     --sans: "Noto Sans TC", -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", sans-serif;
   }
   * { box-sizing: border-box; }
@@ -40,8 +40,8 @@
   #stage { position: relative; display: block; width: 100%; height: 250px; overflow: hidden;
     background: var(--paper); color: inherit; text-decoration: none; }
   /* 雜誌風上緣：一條黑線＋一小段強調色 */
-  #stage::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--ink); z-index: 5; }
-  #stage::after { content: ""; position: absolute; left: 0; top: 0; width: 72px; height: 6px; background: var(--accent); z-index: 6; }
+  
+  
 
   /* 背景小動態：底部一條細線，上面一顆強調色小點極慢地來回（扁平、不搶戲） */
   .rail { position: absolute; left: 26px; right: 26px; bottom: 12px; height: 1px; background: var(--line); z-index: 1; pointer-events: none; }
@@ -56,12 +56,24 @@
   .grid.sub-grid { grid-template-columns: 1fr 336px; gap: 26px; padding: 22px 26px 20px 36px; }
   .art { height: 196px; display: flex; align-items: center; justify-content: center; }
   .art svg { width: 100%; height: 100%; overflow: visible; }
+  /* v5：白色圓角卡片＋第二門課的線條人物插圖 */
+  .card { position: relative; width: 100%; height: 100%; background: #fff; border-radius: 20px;
+    box-shadow: 0 10px 28px rgba(15,14,14,.07); display: flex; align-items: center; justify-content: center; padding: 12px; }
+  .card img { display: block; max-width: 100%; max-height: 100%; object-fit: contain; }
+  .pill { position: absolute; left: 12px; top: 12px; height: 26px; padding: 0 12px; border-radius: 999px; background: var(--accent); color: #fff;
+    font-family: Inter, var(--sans); font-size: 12px; font-weight: 800; letter-spacing: .04em; display: inline-flex; align-items: center; gap: 6px; }
+  .datechip { position: absolute; right: -10px; top: -12px; padding: 7px 12px 8px; border-radius: 12px; background: var(--ink); color: #fff; text-align: center; line-height: 1.15; }
+  .datechip b { display: block; font-family: Inter, var(--sans); font-size: 21px; font-weight: 800; }
+  .datechip span { font-size: 12px; font-weight: 700; color: #9DB0FF; }
   .copy { min-width: 0; }
 
   .kicker { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700;
     letter-spacing: .14em; color: var(--ink); margin-bottom: 9px; white-space: nowrap; }
-  .kicker::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
-  .title { font-family: var(--serif); font-weight: 900; font-size: 26px; line-height: 1.32; letter-spacing: .01em;
+  .kicker::before { content: none; }
+  .kicker { color: var(--muted); }
+  .kicker[data-en]::before { content: attr(data-en); font-family: Inter, var(--sans); font-weight: 800; letter-spacing: .12em; color: var(--accent);
+    padding-right: 10px; margin-right: 2px; border-right: 1.5px solid var(--accent); line-height: 1; }
+  .title { font-family: var(--serif); font-weight: 900; font-size: 26px; line-height: 1.32; letter-spacing: 0;
     margin-bottom: 8px; text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
   .title .ch { display: inline-block; white-space: pre; }
   .title .ph { display: inline-block; max-width: 100%; }
@@ -70,7 +82,7 @@
   .row { display: flex; align-items: center; gap: 14px; flex-wrap: nowrap; }
   .btn { flex: none; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px 0 20px;
     border-radius: 999px; background: var(--accent); color: var(--on); font-size: 15px; font-weight: 700; letter-spacing: .04em;
-    border: 2px solid var(--ink); transition: background .2s ease, color .2s ease; }
+    border: 0; transition: background .2s ease, color .2s ease; }
   .btn .arr { font-size: 18px; line-height: 1; transition: transform .2s ease; }
   a#stage:hover .btn, a#stage:focus-visible .btn { background: var(--ink); color: #fff; }
   a#stage:hover .btn .arr, a#stage:focus-visible .btn .arr { transform: translateX(3px); }
@@ -79,7 +91,7 @@
   .proof b { color: var(--ink); font-weight: 700; }
 
   /* 訂閱廣告：右側 Substack 訂閱框 */
-  .embed-card { background: #fff; border: 2px solid var(--ink); border-radius: 12px; overflow: hidden; height: 150px; }
+  .embed-card { background: #fff; border: 0; border-radius: 20px; box-shadow: 0 10px 28px rgba(15,14,14,.07); overflow: hidden; height: 150px; }
   .embed-card iframe { display: block; width: 100%; height: 150px; border: 0; background: #fff; }
   .embed-note { font-size: 12px; color: var(--muted); margin-top: 8px; text-align: center; }
 
@@ -130,7 +142,7 @@
 
   /* ===== 進場動畫（只播一次）===== */
   #stage.pre .kicker, #stage.pre .title .ch, #stage.pre .sub, #stage.pre .btn, #stage.pre .proof,
-  #stage.pre .embed-card, #stage.pre .embed-note, #stage.pre .pop, #stage.pre .fade { opacity: 0; }
+  #stage.pre .embed-card, #stage.pre .embed-note, #stage.pre .pop, #stage.pre .fade, #stage.pre .card { opacity: 0; }
   #stage.pre .draw { stroke-dashoffset: var(--len, 600); }
   #stage.pre .bar { transform: scaleY(.15); }
   #stage.pre .chipcard { transform: perspective(300px) rotateX(-90deg); opacity: 0; }
@@ -140,6 +152,8 @@
   #stage.go .pop { animation: pop .45s cubic-bezier(.3,1.5,.5,1) both; animation-delay: var(--d, 0s); }
   #stage.go .fade { animation: fade .5s ease-out both; animation-delay: var(--d, 0s); }
   #stage.go .kicker { animation: slideR .5s ease-out both .1s; }
+  #stage.go .card { animation: fadeUp .7s cubic-bezier(.2,.7,.3,1) both .05s; }
+  #stage.go .card .pill, #stage.go .card .datechip { animation: pop .45s cubic-bezier(.3,1.5,.5,1) both .7s; }
   #stage.go .title .ch { animation: chIn .5s cubic-bezier(.2,.75,.25,1) both; animation-delay: calc(var(--i) * 28ms + .2s); }
   #stage.go .sub { animation: fadeUp .5s ease-out both .9s; }
   #stage.go .btn { animation: fadeUp .5s ease-out both 1.25s, breathe 3.4s ease-in-out 2.4s infinite; }
@@ -218,9 +232,9 @@
 (function () {
   // ===== 需要時才改的設定 =====
   // 10/14 Podcast 公開後，填入節目頁網址；空字串＝不顯示 Podcast 廣告
-  var PODCAST_URL = "";
+  var PODCAST_URL = "https://open.spotify.com/show/6G9ORPWiRvZEcRvT6Uax8y";
   // PressPlay 課程審核通過後，填入課程頁網址；空字串＝不顯示課程廣告
-  var PRESSPLAY_URL = "";
+  var PRESSPLAY_URL = "https://www.pressplay.cc/project/22CABB62FE270EA6FC8BA722381C75F3/about?utm_source=website&utm_medium=dtads&utm_campaign=course1";
 
   var SUBSCRIBE_URL = "https://chachacreative101.substack.com/subscribe";
   var EMBED_URL = "https://chachacreative101.substack.com/embed";
@@ -298,14 +312,14 @@
       sub: "AI 趨勢、未來思考、創意策略、職涯發展，一封信讀完。",
       proof: "每週三 07:00・3 分鐘讀完・免費", btn: "免費訂閱" },
     { id: "A2", cat: "A", url: SUBSCRIBE_URL, embed: true, kicker: "免費電子報", accent: "#1F4BFF", on: "#FFFFFF",
-      title: "讀到這裡，代表你也在想這些事",
+      title: "你也在想這些事嗎？",
       sub: "每週精選 3 篇值得讀的研究，加上一件這週就能試的小事。",
       proof: "每週三 07:00・3 分鐘讀完・免費", btn: "每週三收到一封" },
-    { id: "B", cat: "B", url: PODCAST_URL, from: "2026-10-14", kicker: "PODCAST", accent: "#7B2FF7", on: "#FFFFFF",
+    { id: "B", cat: "B", url: PODCAST_URL, from: "2026-10-14", kicker: "每週三新一集", accent: "#7B2FF7", on: "#FFFFFF",
       title: "別急著找答案，先聽一個工作坊現場的故事",
       sub: "《別急著找答案｜跟 Cha Cha 一起思考》陪你換個角度想問題。",
       proof: "每週三更新・Spotify、KKBOX、YouTube 都能聽", btn: "收聽最新一集" },
-    { id: "C1", cat: "C", url: PRESSPLAY_URL, from: "2026-10-21", to: "2026-10-31", kicker: "線上課程・11/01 開課", accent: "#FF3B5C", on: "#0F0E0E",
+    { id: "C1", cat: "C", url: PRESSPLAY_URL, from: "2026-10-14", to: "2026-10-31", kicker: "線上課程・11/01 開課", accent: "#FF3B5C", on: "#0F0E0E",
       title: "別急著找答案，用設計思考，打造你自己的人生藍圖",
       sub: "先追蹤課程，開課第一時間通知你。",
       proof: "錄影課＋學習單・隨時開始", btn: "搶先追蹤課程" },
@@ -579,16 +593,32 @@
       people + talk +
     '</svg>';
   }
-  function art(ad) {
-    if (ad.bulb) return artBulb();
-    if (ad.odd) return artOdd();
-    if (ad.meeting) return artMeeting();
-    if (ad.cat === "D") return artD(ad);
-    if (ad.cat === "B") return artB();
-    if (ad.cat === "C") return artC(ad);
+  // v5：第二門課的線條人物插圖（img/ 資料夾，WebP，每張約 30KB）
+  var BRAND_BLUE = "#1F4BFF";
+  var EN = { A: "NEWSLETTER", B: "PODCAST", C: "ONLINE COURSE", D: "WORKSHOP", E: "GAME" };
+  function enOf(ad) { return EN[ad.cat] || ""; }
+  var STEP_IMG = ["empathize", "define", "ideate", "prototype", "test"];
+  function card(img, extra) {
+    return '<div class="card"><img src="img/' + img + '.webp" alt="" loading="eager" decoding="async">' + (extra || "") + '</div>';
+  }
+  function artCard(ad) {
     if (ad.cat === "E") return artE();
+    if (ad.bulb) return card("ideate");
+    if (ad.odd) return card("define");
+    if (ad.meeting) return card("meeting");
+    if (ad.cat === "B") return card("empathize");
+    if (ad.cat === "C") {
+      var d = daysUntil("2026-11-01");
+      var line2 = ad.id === "C1" ? (d > 0 ? "還有 " + d + " 天" : "即將開課") : "開課了";
+      return card("think", '<div class="datechip"><b>11/01</b><span>' + esc(line2) + '</span></div>');
+    }
+    if (ad.cat === "D") {
+      var st = typeof ad.step === "number" ? ad.step : 1;
+      return card(STEP_IMG[st], '<span class="pill">STEP ' + (st + 1) + '｜' + STEPS[st] + '</span>');
+    }
     return "";
   }
+  function art(ad) { return artCard(ad); }
 
   // 標題切成小塊逐字浮現：中文一字一塊，英數連在一起，標點黏在前一個字後面（避免標點跑到行首）
   // 再以逗號、問號等切成「詞組」，詞組整塊換行（不會出現「設計思／考」這種斷法），太長時才在詞組內換行
@@ -718,9 +748,9 @@
     if (ad.seasonProof && inSeason(ad.seasonProof.season)) ad = Object.assign({}, ad, { proof: ad.seasonProof.proof });
     var href = withUtm(ad.url, ad.id);
     var blobs = '<div class="rail"><i></i></div>';
-    var vars = 'style="--accent:' + ad.accent + ';--on:' + ad.on + '"';
-    var btnStyle = ad.btnBg ? ' style="background:' + ad.btnBg + '"' : "";
-    var head = '<p class="kicker">' + esc(c.kicker) + '</p><p class="title">' + titleHTML(c) + '</p>';
+    var vars = 'style="--accent:' + BRAND_BLUE + ';--on:#FFFFFF"';   // v5：所有廣告統一用第二門課的藍
+    var btnStyle = "";
+    var head = '<p class="kicker" data-en="' + enOf(ad) + '">' + esc(c.kicker) + '</p><p class="title">' + titleHTML(c) + '</p>';
     var wide = window.innerWidth >= 560;
 
     if (ad.id === "D1") return renderQuiz(ad, c, vars, blobs);
@@ -794,7 +824,7 @@
     root.innerHTML =
       '<div id="stage" class="cat-D quiz" ' + vars + '>' + blobs +
         '<div class="grid">' +
-          '<div class="art" id="quiz-art">' + artD({ step: 1, on: ad.on }) + '</div>' +
+          '<div class="art" id="quiz-art">' + artCard({ cat: "D", step: 1 }) + '</div>' +
           '<div class="copy" id="pane"></div>' +
         '</div>' +
       '</div>';
@@ -804,7 +834,7 @@
     }
     function showIntro() {
       pane.innerHTML =
-        '<p class="kicker">' + esc(c.kicker) + '</p><p class="title">' + titleHTML(c) + '</p>' +
+        '<p class="kicker" data-en="' + enOf(ad) + '">' + esc(c.kicker) + '</p><p class="title">' + titleHTML(c) + '</p>' +
         '<p class="sub">' + phr(QUIZ.intro.sub) + '</p>' +
         '<div class="row"><button type="button" class="btn" id="q-start">' + esc(QUIZ.intro.start) + '<span class="arr">→</span></button>' +
         '<a class="textlink proof" href="' + esc(withUtm(CONTACT_URL, "D1")) + '" target="_blank" rel="noopener">直接預約內訓諮詢</a></div>';
@@ -831,7 +861,7 @@
       votes.forEach(function (v, i) { if (v > max) { max = v; best = i; } });
       var r = QUIZ.results[best];
       track("quiz_result", { result_step: r.key });
-      document.getElementById("quiz-art").innerHTML = artD({ step: best, on: ad.on });
+      document.getElementById("quiz-art").innerHTML = artCard({ cat: "D", step: best });
       pane.innerHTML =
         '<p class="kicker">團隊的下一步：' + esc(r.step) + '</p><p class="title">' + titleHTML({ title: r.title }) + '</p>' +
         '<p class="sub">' + phr(r.line) + '</p>' +
@@ -855,7 +885,7 @@
         '<div class="grid">' +
           '<div class="art">' + pic + '</div>' +
           '<div class="copy">' +
-            '<p class="kicker">' + esc(c.kicker) + '</p><p class="title">' + titleHTML(c) + '</p>' +
+            '<p class="kicker" data-en="' + enOf(ad) + '">' + esc(c.kicker) + '</p><p class="title">' + titleHTML(c) + '</p>' +
             '<p class="wsline">免費下載：一份可以直接上課用的設計思考學習單</p>' +
             '<form id="ws-form" class="wsform" novalidate>' +
               '<input id="ws-email" type="email" required placeholder="老師的 Email" autocomplete="email" aria-label="Email">' +
