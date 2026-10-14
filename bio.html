@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cha Cha 作者介紹卡</title>
+<!--
+  官網文章「關於文字策展人」下面的小卡：Podcast＋線上課程。所有文章共用這一個檔案，改這裡就全站一起改。
+  放在 DTADS 同一個 GitHub 資料夾：https://designthinking-powwow.github.io/DTADS/bio.html
+  iframe 高度：一般 100（三行：Podcast＋兩門課；手機也是三行）、DYL 文章（只有 Podcast）50。
+  網址參數：&nocourse=1 不顯示課程（寫到 DYL 的文章用）；&post=文章代稱（記錄用）；&date=2026-11-01 預覽某天的樣子
+  每門課的那行依日期自動出現、自動從「搶先追蹤」換成「已開課」，不用手動改（設定在下面 COURSES）。
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  /* 精簡版（查查 10/15：不要太大，幾行就做多大）：像文章裡的幾行文字，沒有底色、沒有大按鈕 */
+  :root { --ink:#2b2f36; --muted:#6b7280; --accent:#1F4BFF;
+    --sans: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", Inter, sans-serif; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { background: transparent; }
+  body { font-family: var(--sans); color: var(--ink); font-size: 15px; line-height: 1.75; -webkit-font-smoothing: antialiased; padding: 2px 0; }
+  p + p, p + div > p, div > p + p { margin-top: 4px; }
+  b { font-weight: 700; color: var(--accent); margin-right: 6px; font-size: 13px; letter-spacing: .06em; }
+  a { color: var(--accent); text-decoration: none; font-weight: 500; white-space: nowrap; }
+  a:hover, a:focus-visible { text-decoration: underline; outline: none; }
+  .dot { color: #b8bec8; margin: 0 3px; }
+  .long { }
+  .short { display: none; }
+  /* 手機：拿掉節目與課程的長名稱，維持三行，iframe 高度桌機手機都用 100 */
+  @media (max-width: 600px) { body { font-size: 14px; line-height: 1.7; } b { margin-right: 4px; } .dot { margin: 0 1px; } .long { display: none; } .short { display: inline; } }
+  @media (max-width: 380px) { body { font-size: 13px; } b { font-size: 12px; letter-spacing: .02em; } }
+</style>
+</head>
+<body>
+<p><b>Podcast</b><span class="long">《別急著找答案｜跟 Cha Cha 一起思考》：</span><a href="https://podcasts.apple.com/tw/podcast/id6819133837">Apple</a><span class="dot">・</span><a href="https://open.spotify.com/show/6G9ORPWiRvZEcRvT6Uax8y">Spotify</a><span class="dot">・</span><a href="https://podcast.kkbox.com/tw/channel/Lab7sI8O4jH_rWU572">KKBOX</a><span class="dot">・</span><a href="https://www.youtube.com/channel/UC-qiZ2NTmw8uukEF1LY1Jvg/podcasts">YouTube</a><span class="long"><span class="dot">・</span><a href="https://chachacreative101.substack.com/podcast">Substack</a></span></p>
+<div id="courses"></div>
+<script>
+(function () {
+  // ===== 之後要改文字，只改這一區 =====
+  // 每門課一行：show＝哪天起出現、launch＝開課時間（之前寫「搶先追蹤」，之後寫「已開課」），都是台北時間
+  // 第二門課：11/17 預熱開始出現；url 等查查建好「第二門課_官網部落格」短網址再填（沒填之前不會出現）
+  var COURSES = [
+    { name: "別急著找答案！善用設計思考，打造你自己的人生藍圖", short: "別急著找答案！",
+      show: "2026-10-01", launch: "2026-11-01T00:00:00+08:00", date: "11/01",
+      url: "https://www.pressplay.cc/link/s/DE956453" },
+    { name: "設計思考：每個人都能用的問題解決術", short: "設計思考問題解決術",
+      show: "2026-11-17", launch: "2026-12-15T00:00:00+08:00", date: "12/15",
+      url: "" }
+  ];
+  // =====================================
+  var q = new URLSearchParams(location.search);
+  var now = q.get("date") ? new Date(q.get("date") + "T12:00:00+08:00") : new Date();
+  var post = q.get("post") || "";
+  var box = document.getElementById("courses");
+  if (q.get("nocourse") !== "1") COURSES.forEach(function (c, i) {
+    if (!c.url || now < new Date(c.show + "T00:00:00+08:00")) return;
+    var live = now >= new Date(c.launch);
+    var u = new URL(c.url); u.searchParams.set("utm_content", "bio-card" + (post ? "-" + post : ""));
+    var p = document.createElement("p");
+    p.innerHTML = '<b>線上課程</b><span class="long">《' + c.name + '》' + (live ? "已在 PressPlay 開課，" : c.date + " 在 PressPlay 開課，") + '</span>'
+      + '<span class="short">《' + c.short + '》' + (live ? "已開課，" : c.date + " 開課，") + '</span>'
+      + '<a href="' + u.toString() + '">' + (live ? "看課程 →" : "搶先追蹤 →") + '</a>';
+    box.appendChild(p);
+  });
+  // 連結在新分頁開（在 iframe 裡點才不會卡在小框）
+  document.querySelectorAll("a").forEach(function (a) { a.target = "_blank"; a.rel = "noopener"; });
+})();
+</script>
+</body>
+</html>
