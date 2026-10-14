@@ -49,6 +49,9 @@
       show: "2026-11-17", launch: "2026-12-15T00:00:00+08:00", date: "12/15",
       url: "" }
   ];
+  // 第三行還沒有第二門課時（11/17 前），放企業內訓這行，讓卡片剛好三行、下面不留空白
+  var FILLER = { label: "企業內訓", long: "設計思考、創意思考工作坊，為團隊量身規劃，", short: "設計思考、創意思考工作坊，",
+    btn: "歡迎洽詢 →", url: "https://www.designthinking.com.tw/contactus" };
   // =====================================
   var q = new URLSearchParams(location.search);
   var now = q.get("date") ? new Date(q.get("date") + "T12:00:00+08:00") : new Date();
@@ -64,6 +67,12 @@
       + '<a href="' + u.toString() + '">' + (live ? "看課程 →" : "搶先追蹤 →") + '</a>';
     box.appendChild(p);
   });
+  if (q.get("nocourse") !== "1" && box.children.length < 2) {
+    var p2 = document.createElement("p");
+    var fu = new URL(FILLER.url); fu.searchParams.set("utm_source", "blog"); fu.searchParams.set("utm_medium", "bio-card"); if (post) fu.searchParams.set("utm_content", post);
+    p2.innerHTML = '<b>' + FILLER.label + '</b><span class="long">' + FILLER.long + '</span><span class="short">' + FILLER.short + '</span><a href="' + fu.toString() + '">' + FILLER.btn + '</a>';
+    box.appendChild(p2);
+  }
   // 連結在新分頁開（在 iframe 裡點才不會卡在小框）
   document.querySelectorAll("a").forEach(function (a) { a.target = "_blank"; a.rel = "noopener"; });
 })();
