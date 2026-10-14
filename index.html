@@ -15,6 +15,7 @@
     舊文章：https://designthinking-powwow.github.io/DTADS/            → 一般組合
     新文章：https://designthinking-powwow.github.io/DTADS/?topic=dt   → 依主題加權
       topic 可用：dt（設計思考）、career（職涯／主管）、ai（AI 趨勢）、edu（教育）、general
+    不放課程廣告：網址再加 &nocourse=1（寫到 DYL 的文章用）；新文章另加 &post=文章代稱，之後可在 NO_COURSE_POSTS 統一控制
   測試用：?date=2026-11-02 可模擬日期；?ad=A1 可指定顯示某一則。
   功能（與 v2／v3 相同）：主題加權、訂閱廣告內直接訂閱（Substack 官方訂閱框）、記得讀者、
     同一頁兩個版位不重複、追蹤碼、日期自動切換比例、第一次捲進畫面才播動畫（6 秒保險）。
@@ -306,6 +307,9 @@
   // ===== 廣告內容（文案見 03_行銷部/官網輪播廣告規劃_20261006.md）=====
   // kicker＝類別標籤；proof＝真實、具體的說明短句〔待查查確認〕（不寫未經確認的數字、客戶名或推薦語）
   // btn＝實心按鈕文字；accent＝這則的強調色（插畫風格規範），on＝按鈕上的字色（依 WCAG AA 對比選黑或白）
+  // 不放課程廣告的文章（iframe 網址有 &post=文章代稱 時生效；舊文章請改用 &nocourse=1）
+  var NO_COURSE_POSTS = [];
+
   var ADS = [
     { id: "A1", cat: "A", url: SUBSCRIBE_URL, embed: true, kicker: "免費電子報", accent: "#1F4BFF", on: "#FFFFFF",
       title: "每週三早上 7 點，陪你把這週想清楚",
@@ -452,8 +456,11 @@
     var playedAt = store("dtads_played");
     var hideE = playedAt && (Date.now() - playedAt) < HIDE_GAME_DAYS * 864e5;
 
+    // 查查 10/14：寫到 DYL 的文章不放課程廣告。iframe 網址加 &nocourse=1，或把文章代稱（&post=代稱）加進 NO_COURSE_POSTS
+    var noCourse = params.get("nocourse") === "1" || NO_COURSE_POSTS.indexOf(params.get("post") || "") >= 0;
     var active = ADS.filter(function (ad) {
       if (!ad.url) return false;                        // 網址還沒填：跳過
+      if (noCourse && ad.cat === "C") return false;     // 這篇文章不放課程廣告
       if (ad.from && today < ad.from) return false;
       if (ad.to && today > ad.to) return false;
       if (ad.season && !inSeason(ad.season)) return false;   // 季節限定（例如年底限定）
