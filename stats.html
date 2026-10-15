@@ -7,6 +7,7 @@
 <!--
   官網首頁 ⑦「數字＋合作單位」（2026/10/15 製作），取代原本的「創意教學里程碑」
   - 名單取自 Google 文件「合作單位」，挑大家認得的；若有企業提出異議，改成產業別寫法
+  - 跑馬燈版（/workshops 用，名單較多、每次隨機排序）：stats.html?wall=1，高度 560
   - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/stats.html" width="100%" height="820" style="border:0;" frameborder="0" scrolling="no"></iframe>
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,7 +30,20 @@
   .g b { font:700 14px/2.1 "Noto Sans TC",sans-serif; color:var(--cobalt); }
   .n { white-space:nowrap; }
   .clients i { font-style:normal; color:#C9C1BB; margin:0 8px; }
+  /* 跑馬燈版 */
+  .wall { margin-top:40px; padding-top:26px; border-top:1px solid var(--line); }
+  .wall h3 { font:700 15px "Noto Sans TC",sans-serif; color:var(--muted); margin-bottom:14px; }
+  .lane { overflow:hidden; margin:10px 0; -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent); mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent); }
+  .track { display:flex; gap:10px; width:max-content; animation:run var(--d) linear infinite; }
+  .lane.rev .track { animation-direction:reverse; }
+  .lane:hover .track { animation-play-state:paused; }
+  .chip { white-space:nowrap; font:500 16px/1 "Noto Sans TC",sans-serif; padding:12px 18px; border-radius:999px; background:#F5F1EE; }
+  .chip.c1 { background:#EAF0FF; } .chip.c3 { background:#F1EAFE; }
+  @keyframes run { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .track { animation:none; flex-wrap:wrap; width:auto; } }
   @media (max-width: 760px) {
+    .wall { margin-top:26px; padding-top:18px; }
+    .chip { font-size:13.5px; padding:10px 14px; }
     .wrap { padding:0 16px; }
     h2 { font-size:24px; }
     .nums { grid-template-columns:repeat(4,1fr); gap:6px; margin-top:24px; }
@@ -57,6 +71,19 @@
   </div>
 </div>
 <script>
+  var WALL = [
+    ["Google Taiwan","LINE","宜睿智慧 Edenred","羅氏藥廠","楊森藥廠","新思科技","遠傳電信","精誠資訊","美律實業","明緯企業","iKala","Pinkoi","JustCo","Citiesocial","國泰世華銀行","中國信託商業銀行","第一銀行","合作金庫","土地銀行","上海銀行","臺灣中小企業銀行","群益投信","台灣金融研訓院","新光人壽","南山人壽","台灣人壽","康健人壽"],
+    ["文化部","教育部","交通部","勞動部勞動力發展署","工研院","台灣設計研究院","中華民國中小企業總會","黑松教育基金會","學學文創教育基金會","立賢教育基金會","兒福聯盟","台灣公益聯盟","MeDA 博物館教育發展協會","POA 臺灣產品人學會","雜學校","桃園市立兒童美術館","新竹縣政府文化局"],
+    ["台灣大學","政治大學","輔仁大學","淡江大學","中原大學","文化大學","世新大學","銘傳大學","臺北大學","長榮大學","高雄餐旅大學","明新科技大學","健行科技大學","景文科技大學","嶺東科技大學","南科實驗高中","板橋高中","復興商工"]
+  ];
+  if (new URLSearchParams(location.search).get("wall")) {
+    var shuffle = function (a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
+    var lanes = WALL.map(function (names, k) {
+      var chips = shuffle(names).map(function (n) { return '<span class="chip c' + (k + 1) + '">' + n + '</span>'; }).join("");
+      return '<div class="lane' + (k === 1 ? ' rev' : '') + '"><div class="track" style="--d:' + (names.length * 3.2) + 's">' + chips + chips + '</div></div>';
+    }).join("");
+    document.querySelector(".clients").outerHTML = '<div class="wall"><h3>合作過的企業、政府、基金會與學校（部分）</h3>' + lanes + '</div>';
+  }
   // 依「合作單位」文件分類；名字順序＝大家最認得的放前面
   var GROUPS = [
     ["外商", ["Google Taiwan","LINE","宜睿智慧 Edenred","羅氏藥廠","楊森藥廠","新思科技"]],
