@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>首頁課程橫幅</title>
+<!--
+  官網首頁第一屏：第一門課橫幅（2026/10/15 製作）
+  - 依台北日期自動換字：11/01 前「11/01 上線・還有 N 天」，11/01 起「現正上線」
+  - 早鳥 50 名賣完時：把 COURSE_PLAN 的 "early" 改成 "regular"，再上傳 hero.html（只改這一行）
+  - 預覽：?date=2026-11-02、?plan=regular
+  - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/hero.html" width="100%" height="480" style="border:0;" frameborder="0" scrolling="no"></iframe>
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --coral: #FF3B5C; --ink: #0F0E0E; --paper: #FFF8F3; --muted: #5C5552; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--paper); }
+  body { font-family: "Inter", "Noto Sans TC", "PingFang TC", sans-serif; color: var(--ink); overflow: hidden; }
+  a.hero { display: flex; align-items: center; gap: 48px; height: 100%; padding: 32px 56px; text-decoration: none; color: inherit; max-width: 1240px; margin: 0 auto; }
+  .txt { flex: 1 1 46%; min-width: 0; }
+  .pic { flex: 1 1 54%; min-width: 0; }
+  .pic img { display: block; width: 100%; height: auto; border-radius: 14px; box-shadow: 0 18px 40px rgba(15,14,14,.16); transition: transform .3s ease; }
+  a.hero:hover .pic img { transform: translateY(-4px); }
+  .kicker { display: inline-flex; align-items: center; gap: 10px; font: 800 13px/1 "Inter", sans-serif; letter-spacing: .14em; color: var(--coral); }
+  .kicker b { background: var(--coral); color: #fff; letter-spacing: .04em; padding: 6px 10px; border-radius: 999px; font-family: "Noto Sans TC", sans-serif; font-weight: 700; }
+  h1 { font: 900 44px/1.15 "Noto Sans TC", sans-serif; margin: 18px 0 10px; letter-spacing: .01em; }
+  .sub { font: 500 19px/1.55 "Noto Sans TC", sans-serif; color: var(--muted); }
+  .meta { font: 500 15px/1.6 "Noto Sans TC", sans-serif; color: var(--muted); margin-top: 14px; }
+  .row { display: flex; align-items: center; flex-wrap: wrap; gap: 14px 18px; margin-top: 26px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; background: var(--coral); color: #fff; font: 700 17px/1 "Noto Sans TC", sans-serif; padding: 16px 26px; border-radius: 999px; transition: background .2s; }
+  a.hero:hover .btn { background: #E8243F; }
+  .price { font: 700 16px/1.4 "Noto Sans TC", sans-serif; }
+  .price em { font-style: normal; color: var(--coral); font-family: "Inter", sans-serif; font-weight: 800; font-size: 22px; }
+
+  .kicker, .kicker b, .btn, .price { white-space: nowrap; }
+  @media (max-width: 900px) {
+    a.hero { gap: 24px; padding: 20px 24px; }
+    .txt { flex-basis: 50%; }
+    .pic { flex-basis: 50%; }
+    .kicker { font-size: 11px; gap: 8px; }
+    h1 { font-size: 30px; margin: 14px 0 6px; }
+    .sub { font-size: 15px; }
+    .meta { font-size: 13px; }
+    .row { margin-top: 18px; }
+    .btn { font-size: 15px; padding: 13px 20px; }
+  }
+  /* 手機：封面在上，字在下（iframe 高度固定 480） */
+  @media (max-width: 600px) {
+    a.hero { flex-direction: column; align-items: stretch; justify-content: center; gap: 16px; padding: 16px; }
+    .pic { flex: none; order: -1; }
+    .pic img { border-radius: 10px; box-shadow: 0 10px 24px rgba(15,14,14,.14); }
+    .txt { flex: none; }
+    .kicker { font-size: 11px; }
+    .kicker b { padding: 5px 8px; }
+    h1 { font-size: 23px; margin: 10px 0 4px; }
+    .sub { font-size: 14px; }
+    .meta { font-size: 13px; margin-top: 6px; }
+    .row { margin-top: 12px; gap: 10px 14px; }
+    .btn { font-size: 15px; padding: 12px 20px; }
+    .price { font-size: 14px; }
+    .price em { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+<a class="hero" id="hero" target="_blank" rel="noopener">
+  <div class="txt">
+    <div class="kicker">ONLINE COURSE <b id="status"></b></div>
+    <h1>別急著找答案！</h1>
+    <p class="sub">善用設計思考，打造你自己的人生藍圖</p>
+    <p class="meta">8 堂錄影課＋8 份學習單・在 PressPlay 上課</p>
+    <div class="row">
+      <span class="btn" id="btn"></span>
+      <span class="price" id="price"></span>
+    </div>
+  </div>
+  <div class="pic"><img src="img/course1_cover.webp" alt="別急著找答案！善用設計思考，打造你自己的人生藍圖 課程封面" width="1200" height="675"></div>
+</a>
+<script>
+(function () {
+  // ===== 需要時才改的設定 =====
+  var COURSE_URL = "https://www.pressplay.cc/link/s/DE956453";   // 第一門課_官網部落格 短網址
+  var LAUNCH = "2026-11-01";                                       // 台北日期，這天起顯示「現正上線」
+  // ★ 早鳥 50 名賣完時：把 "early" 改成 "regular"，再上傳 hero.html
+  var COURSE_PLAN = "early";
+  var PLANS = {
+    early:   '早鳥 <em>NT$990</em>・前 50 名',
+    regular: '3 人團 每人 <em>NT$1,190</em>'
+  };
+
+  var q = new URLSearchParams(location.search);
+  if (q.get("plan") && PLANS[q.get("plan")]) COURSE_PLAN = q.get("plan");
+  var today = q.get("date") || new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);  // 台北日期
+  var live = today >= LAUNCH;
+  var days = Math.round((Date.parse(LAUNCH) - Date.parse(today)) / 864e5);
+
+  document.getElementById("status").textContent = live ? "現正上線" : (days <= 1 ? "明天上線" : "11/01 上線・還有 " + days + " 天");
+  document.getElementById("btn").textContent = live ? "看課程 →" : "看課程介紹 →";
+  document.getElementById("price").innerHTML = PLANS[COURSE_PLAN];
+  document.getElementById("hero").href = COURSE_URL + (COURSE_URL.indexOf("?") < 0 ? "?" : "&") + "utm_content=home-hero";
+})();
+</script>
+</body>
+</html>
