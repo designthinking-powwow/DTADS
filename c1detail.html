@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第一門課介紹</title>
+<!--
+  /online-courses 第一門課詳細介紹（2026/10/15 製作）：適合誰＋八集＋價格
+  - 早鳥 50 名賣完：COURSE_PLAN 改 "regular"（早鳥那格變灰、標「已售完」）
+  - 不寫各集分鐘數（避免和實際長度不符的消費爭議）
+  - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/c1detail.html" width="100%" height="1180" style="border:0;" frameborder="0" scrolling="no"></iframe>
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --coral:#FF3B5C; --ink:#0F0E0E; --muted:#5C5552; --line:#E9E2DC; --soft:#FFF4F0; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { height:100%; background:#fff; }
+  body { font-family:"Inter","Noto Sans TC","PingFang TC",sans-serif; color:var(--ink); overflow:hidden; display:flex; flex-direction:column; justify-content:center; }
+  .wrap { max-width:1120px; width:100%; margin:0 auto; padding:0 48px; }
+  .k { font:800 13px/1 Inter,sans-serif; letter-spacing:.16em; color:var(--coral); }
+  h2 { font:900 34px/1.3 "Noto Sans TC",sans-serif; margin:14px 0 10px; }
+  .lead { font:500 17px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); max-width:820px; }
+  .who { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:24px; }
+  .who div { background:var(--soft); border-radius:14px; padding:18px 18px 20px; }
+  .who b { display:block; font:900 17px/1.4 "Noto Sans TC",sans-serif; margin-bottom:6px; }
+  .who span { font:400 14px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); }
+  .eps { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:22px; }
+  .ep { border:1px solid var(--line); border-radius:14px; padding:16px 16px 18px; }
+  .ep i { font-style:normal; font:800 13px Inter,sans-serif; color:var(--coral); }
+  .ep b { display:block; font:900 16px/1.4 "Noto Sans TC",sans-serif; margin:6px 0 4px; }
+  .ep span { font:400 13px/1.65 "Noto Sans TC",sans-serif; color:var(--muted); }
+  .sec { margin-top:44px; }
+  .note { font:500 14px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); margin-top:12px; }
+  .price { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:22px; }
+  .pr { border-radius:16px; padding:20px 20px 22px; border:2px solid var(--line); }
+  .pr.hot { border-color:var(--coral); background:var(--soft); }
+  .pr.off { opacity:.45; }
+  .pr small { font:700 13px "Noto Sans TC",sans-serif; color:var(--muted); }
+  .pr b { display:block; font:800 32px/1.1 Inter,sans-serif; margin:8px 0 6px; }
+  .pr.hot b { color:var(--coral); }
+  .pr span { font:400 13.5px/1.6 "Noto Sans TC",sans-serif; color:var(--muted); }
+  .cta { margin-top:28px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .btn { display:inline-flex; background:var(--coral); color:#fff; text-decoration:none; font:700 17px/1 "Noto Sans TC",sans-serif; padding:16px 26px; border-radius:999px; }
+  .cta span { font:500 14px "Noto Sans TC",sans-serif; color:var(--muted); }
+  .swipe-hint { display:none; }
+  @media (max-width: 860px) {
+    .wrap { padding:0 16px; }
+    h2 { font-size:20px; } .lead { font-size:14.5px; }
+    .who, .eps, .price { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scroll-padding:0 16px; margin-left:-16px; margin-right:-16px; padding:0 16px; gap:10px; scrollbar-width:none; }
+    .who::-webkit-scrollbar, .eps::-webkit-scrollbar, .price::-webkit-scrollbar { display:none; }
+    .who div { flex:0 0 min(78%, 280px); scroll-snap-align:start; }
+    .ep { flex:0 0 min(60%, 220px); scroll-snap-align:start; }
+    .pr { flex:0 0 min(70%, 250px); scroll-snap-align:start; }
+    .sec { margin-top:30px; }
+    .pr b { font-size:26px; }
+    .btn { font-size:15px; padding:14px 22px; }
+    .swipe-hint { display:block; font:500 12px "Noto Sans TC",sans-serif; color:#9A928D; margin-top:6px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="k">COURSE 01</div>
+  <h2>別急著找答案！<br><span style="white-space:nowrap">善用設計思考，打造你自己的人生藍圖</span></h2>
+  <p class="lead">這門課不給你答案，而是陪你把問題問對，再一步一步做出屬於你的人生原型。8 堂錄影課、8 份學習單，在 PressPlay 按自己的節奏上。</p>
+
+  <div class="sec" style="margin-top:30px">
+    <div class="k">適合誰</div>
+    <div class="who">
+      <div><b>對下一步感到迷惘的人</b><span>不知道該往哪裡走，但不想再只靠運氣或別人的意見。</span></div>
+      <div><b>想很多卻遲遲沒行動的人</b><span>怕選錯，所以一直在原地想，想學一個可以動手的方法。</span></div>
+      <div><b>正站在岔路口的人</b><span>想換工作、想出國、想創業，或剛畢業、工作幾年開始問自己下一步。</span></div>
+    </div>
+    <div class="swipe-hint">← 左右滑動看更多 →</div>
+  </div>
+
+  <div class="sec">
+    <div class="k">八堂課，一堂一步</div>
+    <div class="eps">
+      <div class="ep"><i>01</i><b>把說不出口的寫下來</b><span>把「哪裡不太對」寫成具體的句子</span></div>
+      <div class="ep"><i>02</i><b>看清楚現在站在哪裡</b><span>從八個生活面向，盤點自己的現況</span></div>
+      <div class="ep"><i>03</i><b>找回讓你有能量的線索</b><span>記下最有勁和最被榨乾的時刻</span></div>
+      <div class="ep"><i>04</i><b>把問題重新問一次</b><span>你問的問題，可能本來就問錯了</span></div>
+      <div class="ep"><i>05</i><b>讓想法跑得更遠</b><span>從一個問題往外發散，找出讓你心動的方向</span></div>
+      <div class="ep"><i>06</i><b>不要只有一條路</b><span>畫出三條不一樣的人生路徑</span></div>
+      <div class="ep"><i>07</i><b>走出去，跟人聊</b><span>帶著你的路徑，去找走過類似路口的人</span></div>
+      <div class="ep"><i>08</i><b>整合成你的人生藍圖</b><span>定下接下來 30 天要做的一件事</span></div>
+    </div>
+    <div class="swipe-hint">← 左右滑動看更多 →</div>
+    <p class="note">八步走完，剛好是設計思考的一整圈：同理、定義、發想、原型、測試。</p>
+  </div>
+
+  <div class="sec">
+    <div class="k">價格</div>
+    <div class="price" id="price"></div>
+    <div class="swipe-hint">← 左右滑動看更多 →</div>
+    <div class="cta"><a class="btn" id="btn" target="_blank" rel="noopener"></a><span id="when"></span></div>
+  </div>
+</div>
+<script>
+(function () {
+  var COURSE_URL = "https://www.pressplay.cc/link/s/DE956453";
+  var COURSE_PLAN = "early";   // ★ 早鳥 50 名賣完改 "regular"
+  var q = new URLSearchParams(location.search);
+  if (q.get("plan")) COURSE_PLAN = q.get("plan");
+  var today = q.get("date") || new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);
+  var live = today >= "2026-11-01";
+  var early = COURSE_PLAN !== "regular";
+  document.getElementById("price").innerHTML =
+    '<div class="pr ' + (early ? "hot" : "off") + '"><small>早鳥（前 50 名）' + (early ? "" : "・已售完") + '</small><b>NT$990</b><span>上線後先買先得，額滿就恢復原價</span></div>' +
+    '<div class="pr' + (early ? "" : " hot") + '"><small>3 人團</small><b>NT$1,190</b><span>每人價格，3 人一起報名共 NT$3,570，剛好輪流當彼此的訪談對象</span></div>' +
+    '<div class="pr"><small>原價</small><b>NT$1,490</b><span>不限時間、不限次數觀看</span></div>';
+  var btn = document.getElementById("btn");
+  btn.href = COURSE_URL + "?utm_content=online-courses";
+  btn.textContent = live ? "到 PressPlay 看課程 →" : "到 PressPlay 先看課程介紹 →";
+  document.getElementById("when").textContent = live ? "現正上線・在 PressPlay 上課" : "2026/11/01 在 PressPlay 上線";
+})();
+</script>
+</body>
+</html>
