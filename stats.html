@@ -7,7 +7,7 @@
 <!--
   官網首頁 ⑦「數字＋合作單位」（2026/10/15 製作），取代原本的「創意教學里程碑」
   - 名單取自 Google 文件「合作單位」，挑大家認得的；若有企業提出異議，改成產業別寫法
-  - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/stats.html" width="100%" height="640" style="border:0;" frameborder="0" scrolling="no"></iframe>
+  - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/stats.html" width="100%" height="820" style="border:0;" frameborder="0" scrolling="no"></iframe>
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
@@ -24,15 +24,19 @@
   .nums span { display:block; margin-top:8px; font:500 15px "Noto Sans TC",sans-serif; color:var(--muted); }
   .clients { margin-top:44px; padding-top:28px; border-top:1px solid var(--line); }
   .clients h3 { font:700 15px "Noto Sans TC",sans-serif; color:var(--muted); margin-bottom:12px; }
-  .clients p { font:500 17px/2 "Noto Sans TC",sans-serif; }
+  .g { display:grid; grid-template-columns:130px 1fr; gap:16px; padding:10px 0; border-bottom:1px dashed var(--line); font:500 16px/1.9 "Noto Sans TC",sans-serif; }
+  .g:last-child { border-bottom:0; }
+  .g b { font:700 14px/2.1 "Noto Sans TC",sans-serif; color:var(--cobalt); }
+  .n { white-space:nowrap; }
   .clients i { font-style:normal; color:#C9C1BB; margin:0 8px; }
   @media (max-width: 760px) {
     .wrap { padding:0 16px; }
     h2 { font-size:24px; }
-    .nums { grid-template-columns:repeat(2,1fr); row-gap:24px; margin-top:28px; }
-    .nums b { font-size:38px; } .nums span { font-size:13px; }
+    .nums { grid-template-columns:repeat(4,1fr); gap:6px; margin-top:24px; }
+    .nums b { font-size:24px; } .nums span { font-size:11.5px; margin-top:4px; }
     .clients { margin-top:28px; padding-top:20px; }
-    .clients p { font-size:14px; line-height:1.95; }
+    .g { grid-template-columns:1fr; gap:2px; padding:8px 0; font-size:14px; line-height:1.85; }
+    .g b { font-size:12.5px; line-height:1.6; }
     .clients i { margin:0 5px; }
   }
 </style>
@@ -49,12 +53,22 @@
   </div>
   <div class="clients">
     <h3>合作過的企業與單位（部分）</h3>
-    <p id="list"></p>
+    <div id="list"></div>
   </div>
 </div>
 <script>
-  var CLIENTS = ["Google Taiwan","LINE","國泰世華銀行","中國信託商業銀行","新光人壽","南山人壽","台灣人壽","遠傳電信","羅氏藥廠","楊森藥廠","新思科技","精誠資訊","美律實業","台灣設計研究院","工研院","文化部","教育部","台灣大學","政治大學"];
-  document.getElementById("list").innerHTML = CLIENTS.map(function (c) { return "<span style=\"white-space:nowrap\">" + c + "</span>"; }).join("<i>・</i> ");
+  // 依「合作單位」文件分類；名字順序＝大家最認得的放前面
+  var GROUPS = [
+    ["科技・電信", ["Google Taiwan","LINE","遠傳電信","新思科技","精誠資訊","美律實業"]],
+    ["金融", ["國泰世華銀行","中國信託商業銀行","第一銀行","合作金庫","土地銀行","上海銀行","臺灣中小企業銀行"]],
+    ["保險", ["新光人壽","南山人壽","台灣人壽"]],
+    ["醫藥", ["羅氏藥廠","楊森藥廠"]],
+    ["政府・基金會", ["文化部","教育部","工研院","台灣設計研究院","學學文創教育基金會","黑松教育基金會"]],
+    ["學校", ["台灣大學","政治大學"]]
+  ];
+  document.getElementById("list").innerHTML = GROUPS.map(function (g) {
+    return '<div class="g"><b>' + g[0] + '</b><span>' + g[1].map(function (c) { return '<span class="n">' + c + '</span>'; }).join('<i>・</i>') + '</span></div>';
+  }).join("");
 </script>
 </body>
 </html>
