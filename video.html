@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>首頁一分鐘看懂</title>
+<!--
+  官網首頁 ⑥「一分鐘看懂這門課」（2026/10/15 製作）：第一門課宣傳影片（版本一）＋按鈕
+  - 換影片：改 VIDEO_ID
+  - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/video.html" width="100%" height="460" style="border:0;" frameborder="0" scrolling="no" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --coral:#FF3B5C; --ink:#0F0E0E; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { height:100%; background:var(--ink); color:#fff; }
+  body { font-family:"Inter","Noto Sans TC","PingFang TC",sans-serif; overflow:hidden; display:flex; align-items:center; }
+  .g { display:grid; grid-template-columns:1.5fr 1fr; gap:44px; align-items:center; max-width:1120px; width:100%; margin:0 auto; padding:0 48px; }
+  .ph { aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:#000; }
+  .ph iframe { width:100%; height:100%; border:0; display:block; }
+  .k { font:800 13px/1 Inter,sans-serif; letter-spacing:.16em; color:var(--coral); }
+  h2 { font:900 34px/1.3 "Noto Sans TC",sans-serif; margin:14px 0 12px; }
+  p { font:500 17px/1.7 "Noto Sans TC",sans-serif; color:#CFC8C3; }
+  .btn { display:inline-block; margin-top:24px; background:var(--coral); color:#fff; text-decoration:none; font:700 16px/1 "Noto Sans TC",sans-serif; padding:15px 24px; border-radius:999px; }
+  @media (max-width: 600px) {
+    .g { grid-template-columns:1fr; gap:16px; padding:0 16px; }
+    h2 { font-size:22px; margin:8px 0 4px; }
+    p { font-size:14px; }
+    .btn { margin-top:12px; font-size:15px; padding:12px 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="g">
+  <div class="ph"><iframe id="yt" title="別急著找答案！課程介紹" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+  <div>
+    <div class="k">1 MINUTE</div>
+    <h2>為什麼你越努力，反而越模糊？</h2>
+    <p>一分鐘看懂《別急著找答案！》在上什麼。</p>
+    <a class="btn" id="btn" target="_blank" rel="noopener">看課程介紹 →</a>
+  </div>
+</div>
+<script>
+  var VIDEO_ID = "Y9Z9FiUggQM";
+  var COURSE_URL = "https://www.pressplay.cc/link/s/DE956453";
+  var today = new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);
+  document.getElementById("yt").src = "https://www.youtube-nocookie.com/embed/" + VIDEO_ID + "?rel=0";
+  document.getElementById("btn").href = COURSE_URL + "?utm_content=home-video";
+  if (today >= "2026-11-01") document.getElementById("btn").textContent = "看課程 →";
+</script>
+</body>
+</html>

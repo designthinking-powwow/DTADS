@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>首頁線上課程卡</title>
+<!--
+  官網首頁 ⑤「自己學：線上課程」卡片（2026/10/15 製作）。區塊標題與說明在 Kolable 打字，這裡只放卡片。
+  - 依台北日期自動換字：第一門課 11/01 前「11/01 上線」→ 之後「現正上線」；第二門課 11/17 起才出現（之前不曝光，避免搶第一門課）
+  - 早鳥 50 名賣完：COURSE1_PLAN 改 "regular"
+  - 第二門課短網址做好後填進 COURSE2_URL（空字串＝卡片不能點，只顯示日期）
+  - 預覽：?date=2026-11-20、?plan=regular
+  - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/courses.html" width="100%" height="480" style="border:0;" frameborder="0" scrolling="no"></iframe>
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --cobalt:#1F4BFF; --coral:#FF3B5C; --violet:#7B2FF7; --ink:#0F0E0E; --muted:#5C5552; --line:#E9E2DC; --soft:#F5F1EE; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { background:#fff; }
+  body { font-family:"Inter","Noto Sans TC","PingFang TC",sans-serif; color:var(--ink); overflow:hidden; }
+  a { color:inherit; text-decoration:none; }
+  .row { display:flex; justify-content:center; gap:22px; max-width:1120px; margin:0 auto; padding:8px 48px 24px; }
+  .cc { flex:1 1 0; min-width:0; max-width:400px; border:1px solid var(--line); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; background:#fff; transition:transform .25s, box-shadow .25s; }
+  a.cc:hover { transform:translateY(-4px); box-shadow:0 14px 30px rgba(15,14,14,.10); }
+  .cc img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; }
+  .b { padding:20px 22px 22px; display:flex; flex-direction:column; flex:1; }
+  .chip { align-self:flex-start; font:700 12px/1 "Noto Sans TC",sans-serif; padding:6px 10px; border-radius:999px; color:#fff; white-space:nowrap; }
+  h3 { font:900 19px/1.4 "Noto Sans TC",sans-serif; margin:12px 0 6px; }
+  p { font:400 14px/1.65 "Noto Sans TC",sans-serif; color:var(--muted); flex:1; }
+  .go { font:700 15px "Noto Sans TC",sans-serif; margin-top:14px; }
+  .free { background:var(--soft); flex:.85 1 0; max-width:360px; }
+  .item { display:flex; gap:14px; align-items:center; padding:4px 0; }
+  .item img { width:76px; height:76px; aspect-ratio:1; border-radius:12px; flex:none; }
+  .item h3 { font-size:16px; margin:0 0 4px; }
+  .item p { font-size:13px; }
+  .plats { font:500 13px/1.9 "Noto Sans TC",sans-serif; color:var(--muted); margin-top:8px; }
+  .plats a { color:var(--violet); font-weight:700; }
+  .free hr { border:0; border-top:1px solid var(--line); margin:14px 0; }
+  .sub { align-self:flex-start; display:inline-block; margin-top:10px; background:var(--violet); color:#fff; font:700 14px/1 "Noto Sans TC",sans-serif; padding:11px 16px; border-radius:999px; }
+
+  .hint { display:none; text-align:center; font:500 12px "Noto Sans TC",sans-serif; color:#9A928D; }
+  /* 手機：左右滑動 */
+  @media (max-width: 760px) {
+    .row { justify-content:flex-start; overflow-x:auto; scroll-snap-type:x mandatory; padding:4px 16px 18px; gap:14px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+    .row::-webkit-scrollbar { display:none; }
+    .cc { flex:0 0 min(82%, 330px); scroll-snap-align:start; }
+    .free { flex:0 0 min(82%, 330px); }
+    h3 { font-size:17px; }
+    .hint { display:block; }
+  }
+</style>
+</head>
+<body>
+<div class="row" id="row"></div>
+<div class="hint">← 左右滑動看更多 →</div>
+<script>
+(function () {
+  // ===== 需要時才改的設定 =====
+  var COURSE1_URL = "https://www.pressplay.cc/link/s/DE956453";   // 第一門課_官網部落格 短網址
+  var COURSE1_PLAN = "early";                                      // ★ 早鳥賣完改 "regular"
+  var COURSE2_URL = "";                                             // ★ 第二門課短網址（11/17 前做好填入）
+  var PODCAST = { Apple: "https://podcasts.apple.com/tw/podcast/id6819133837", Spotify: "https://open.spotify.com/show/6G9ORPWiRvZEcRvT6Uax8y",
+                  KKBOX: "https://podcast.kkbox.com/tw/channel/Lab7sI8O4jH_rWU572", YouTube: "https://www.youtube.com/channel/UC-qiZ2NTmw8uukEF1LY1Jvg/podcasts" };
+  var SUBSCRIBE_URL = "https://chachacreative101.substack.com/subscribe";
+
+  var q = new URLSearchParams(location.search);
+  if (q.get("plan")) COURSE1_PLAN = q.get("plan");
+  var today = q.get("date") || new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);   // 台北日期
+  function utm(u) { return u + (u.indexOf("?") < 0 ? "?" : "&") + "utm_content=home-courses"; }
+  function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+
+  var live1 = today >= "2026-11-01";
+  var c1chip = (live1 ? "現正上線" : "11/01 上線") + "・" + (COURSE1_PLAN === "regular" ? "3 人團 每人 NT$1,190" : "早鳥 NT$990");
+  var html = '<a class="cc" target="_blank" rel="noopener" href="' + utm(COURSE1_URL) + '">' +
+    '<img src="img/course1_cover.webp" alt="別急著找答案！課程封面">' +
+    '<div class="b"><span class="chip" style="background:var(--coral)">' + c1chip + '</span>' +
+    '<h3>別急著找答案！善用設計思考，打造你自己的人生藍圖</h3>' +
+    '<p>不知道下一步往哪走？8 堂課、8 份學習單，用設計思考的方法，一步一步做出屬於你的人生原型。</p>' +
+    '<span class="go" style="color:var(--coral)">' + (live1 ? "看課程 →" : "看課程介紹 →") + '</span></div></a>';
+
+  // 第二門課：11/17 起才出現
+  if (today >= "2026-11-17") {
+    var live2 = today >= "2026-12-15";
+    var tag = COURSE2_URL ? "a" : "div";
+    html += '<' + tag + ' class="cc"' + (COURSE2_URL ? ' target="_blank" rel="noopener" href="' + utm(COURSE2_URL) + '"' : "") + '>' +
+      '<img src="img/course2_cover.webp" alt="設計思考：每個人都能用的問題解決術 課程封面">' +
+      '<div class="b"><span class="chip" style="background:var(--cobalt)">' + (live2 ? "現正上線" : "12/15 上線") + '</span>' +
+      '<h3>設計思考：每個人都能用的問題解決術</h3>' +
+      '<p>工作和生活裡的問題，都能用同一套步驟拆開來想。從找到真正的問題到做出原型，一次學會。</p>' +
+      '<span class="go" style="color:var(--cobalt)">' + (live2 ? "看課程 →" : (COURSE2_URL ? "先追蹤，上線第一個知道 →" : "12/15 上線")) + '</span></div></' + tag + '>';
+  }
+
+  var plats = Object.keys(PODCAST).map(function (k) { return '<a target="_blank" rel="noopener" href="' + PODCAST[k] + '">' + k + '</a>'; }).join("・");
+  html += '<div class="cc free"><div class="b">' +
+    '<span class="chip" style="background:var(--violet)">免費</span>' +
+    '<div class="item" style="margin-top:14px"><img src="img/podcast_cover.webp" alt="Podcast 封面"><div><h3>Podcast《別急著找答案》</h3><p>每週三一集，一個真實故事，聊創意與設計思考。</p></div></div>' +
+    '<div class="plats">收聽：' + plats + '</div>' +
+    '<hr><h3 style="font-size:16px;margin:0 0 4px">《未來思考週報》</h3><p>每週三早上 7 點，3 分鐘讀完一週值得想的事。</p>' +
+    '<a class="sub" target="_blank" rel="noopener" href="' + SUBSCRIBE_URL + '">免費訂閱 →</a>' +
+    '</div></div>';
+  document.getElementById("row").innerHTML = html;
+})();
+</script>
+</body>
+</html>
