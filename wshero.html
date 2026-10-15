@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>企業工作坊頁首</title>
+<!--
+  /workshops 頁首（2026/10/15 製作）
+  - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/wshero.html" width="100%" height="520" style="border:0;" frameborder="0" scrolling="no"></iframe>
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --cobalt:#1F4BFF; --green:#00A86B; --violet:#7B2FF7; --ink:#0F0E0E; --muted:#5C5552; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { height:100%; background:var(--ink); color:#fff; }
+  body { font-family:"Inter","Noto Sans TC","PingFang TC",sans-serif; overflow:hidden; display:flex; align-items:center; }
+  .w { max-width:1120px; width:100%; margin:0 auto; padding:0 48px; display:grid; grid-template-columns:1.25fr 1fr; gap:56px; align-items:center; }
+  .k { font:800 13px/1 Inter,sans-serif; letter-spacing:.16em; color:#8FA6FF; }
+  h1 { font:900 50px/1.2 "Noto Sans TC",sans-serif; margin:16px 0 18px; }
+  p { font:500 18px/1.75 "Noto Sans TC",sans-serif; color:#CFC8C3; }
+  .row { display:flex; gap:14px; flex-wrap:wrap; margin-top:30px; }
+  a { display:inline-flex; align-items:center; font:700 16px/1 "Noto Sans TC",sans-serif; padding:15px 24px; border-radius:999px; text-decoration:none; transition:transform .2s; }
+  a:hover { transform:translateY(-2px); }
+  .cob { background:var(--cobalt); color:#fff; }
+  .ghost { border:2px solid #fff; color:#fff; padding:13px 22px; }
+  .tiles { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .t { border-radius:16px; padding:22px 20px; min-height:128px; display:flex; flex-direction:column; justify-content:space-between; }
+  .t b { font:900 22px/1.3 "Noto Sans TC",sans-serif; }
+  .t span { font:500 13px/1.5 "Noto Sans TC",sans-serif; opacity:.9; }
+  .t1 { background:var(--cobalt); } .t2 { background:var(--green); } .t3 { background:var(--violet); } .t4 { background:#fff; color:var(--ink); }
+  .t4 span { color:var(--muted); opacity:1; }
+  @media (max-width: 860px) {
+    .w { grid-template-columns:1fr; gap:26px; padding:0 16px; }
+    h1 { font-size:32px; margin:12px 0 12px; } p { font-size:15px; }
+    .row { margin-top:20px; gap:10px; } a { font-size:15px; padding:13px 18px; } .ghost { padding:11px 16px; }
+    .tiles { grid-template-columns:repeat(4,1fr); gap:8px; }
+    .t { min-height:0; padding:12px 10px; border-radius:12px; }
+    .t b { font-size:15px; } .t span { display:none; }
+  }
+</style>
+</head>
+<body>
+<div class="w">
+  <div>
+    <div class="k">WORKSHOPS FOR TEAMS</div>
+    <h1>企業設計思考<br>與創意思考工作坊</h1>
+    <p>從你們真正卡住的題目開始，依時間和人數量身設計。不講空泛的理論，整天動手做，下課時團隊手上就有能拿去試的成果。</p>
+    <div class="row">
+      <a class="cob" target="_top" href="https://www.designthinking.com.tw/contactus">聊聊你們的題目 →</a>
+    </div>
+  </div>
+  <div class="tiles">
+    <div class="t t1"><b>看懂人</b><span>設計思考工作坊</span></div>
+    <div class="t t2"><b>想得多</b><span>創意思考工作坊</span></div>
+    <div class="t t3"><b>看得遠</b><span>未來思考 × 設計思考</span></div>
+    <div class="t t4"><b>外商</b><span>總部年度主題落地</span></div>
+  </div>
+</div>
+</body>
+</html>
