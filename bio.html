@@ -28,9 +28,10 @@
   .dot { color: #b8bec8; margin: 0 3px; }
   .long { }
   .short { display: none; }
-  /* 手機：拿掉節目與課程的長名稱，維持三行，iframe 高度桌機手機都用 100 */
-  @media (max-width: 600px) { body { font-size: 14px; line-height: 1.7; } b { margin-right: 4px; } .dot { margin: 0 1px; } .long { display: none; } .short { display: inline; } }
-  @media (max-width: 380px) { body { font-size: 13px; } b { font-size: 12px; letter-spacing: .02em; } }
+  /* 每行都要一行放得下：放不下就先換短名稱，再縮字（程式 fit() 依實際寬度判斷，不看螢幕大小） */
+  body.compact .long { display: none; } body.compact .short { display: inline; } body.compact b { margin-right: 4px; } body.compact .dot { margin: 0 1px; }
+  body.small { font-size: 14px; line-height: 1.7; }
+  body.tiny { font-size: 13px; }
 </style>
 </head>
 <body>
@@ -73,6 +74,18 @@
     p2.innerHTML = '<b>' + FILLER.label + '</b><span class="long">' + FILLER.long + '</span><span class="short">' + FILLER.short + '</span><a href="' + fu.toString() + '">' + FILLER.btn + '</a>';
     box.appendChild(p2);
   }
+  // 每一項只佔一行：先用完整名稱，有任何一行折行就換短名稱，還折行就縮小字
+  function fit() {
+    var B = document.body, steps = ["", "compact", "compact small", "compact tiny"];
+    for (var k = 0; k < steps.length; k++) {
+      B.className = steps[k];
+      var lh = parseFloat(getComputedStyle(B).lineHeight);
+      var ok = [].every.call(document.querySelectorAll("body > p, #courses > p"), function (p) { return p.offsetHeight < lh * 1.5; });
+      if (ok) return;
+    }
+  }
+  fit(); window.addEventListener("resize", fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
   // 連結在新分頁開（在 iframe 裡點才不會卡在小框）
   document.querySelectorAll("a").forEach(function (a) { a.target = "_blank"; a.rel = "noopener"; });
 })();
