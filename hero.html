@@ -97,9 +97,35 @@
   var days = Math.round((Date.parse(LAUNCH) - Date.parse(today)) / 864e5);
 
   document.getElementById("status").textContent = live ? "現正上線" : (days <= 1 ? "明天上線" : "11/01 上線・還有 " + days + " 天");
-  document.getElementById("btn").textContent = live ? "看課程 →" : "看課程介紹 →";
+  document.getElementById("btn").textContent = live ? "看課程 →" : "追蹤課程 →";
   document.getElementById("price").innerHTML = PLANS[COURSE_PLAN];
   document.getElementById("hero").href = COURSE_URL + (COURSE_URL.indexOf("?") < 0 ? "?" : "&") + "utm_content=home-hero";
+})();
+</script>
+<!-- 課程點擊追蹤（2026/10/17）：點到 PressPlay 連結時，只送一個 pressplay_click 事件到官網 GA4。
+     不載入 gtag.js（避免 GA 自動記錄捲動、瀏覽，灌水官網流量）；不含個人資料。測試時網址加 ?ga=off 可關閉。 -->
+<script>
+(function () {
+  var SITE_GA4_ID = "G-Y0VX6H9PVX";   // 官網 GA4（DT POW WOW - GA4-New）；空字串＝關閉
+  var WIDGET = "home-hero";
+  var qs = new URLSearchParams(location.search);
+  if (!SITE_GA4_ID || qs.get("ga") === "off") return;
+  function cid() {
+    var id = "";
+    try { id = localStorage.getItem("dt_pp_cid") || ""; } catch (e) {}
+    if (!id) { id = Math.floor(Math.random() * 2147483647) + "." + Math.floor(Date.now() / 1000); try { localStorage.setItem("dt_pp_cid", id); } catch (e) {} }
+    return id;
+  }
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest ? e.target.closest("a[href*='pressplay']") : null;
+    if (!a) return;
+    var now = Math.floor(Date.now() / 1000);
+    var p = new URLSearchParams({ v: "2", tid: SITE_GA4_ID, cid: cid(), sid: String(now), sct: "1", seg: "1", _et: "1",
+      en: "pressplay_click", dl: location.href.slice(0, 300), dr: document.referrer.slice(0, 300),
+      "ep.widget": WIDGET, "ep.link_url": a.href.slice(0, 100), "ep.parent_page": (qs.get("post") || document.referrer || "").slice(0, 100) });
+    var u = "https://www.google-analytics.com/g/collect?" + p.toString();
+    if (!(navigator.sendBeacon && navigator.sendBeacon(u))) { var i = new Image(); i.src = u; }
+  }, true);
 })();
 </script>
 </body>

@@ -9,7 +9,7 @@
   放在 DTADS 同一個 GitHub 資料夾：https://designthinking-powwow.github.io/DTADS/bio.html
   iframe 高度：一般 100（三行：Podcast＋兩門課；手機也是三行）、DYL 文章（只有 Podcast）50。
   網址參數：&nocourse=1 不顯示課程（寫到 DYL 的文章用）；&post=文章代稱（記錄用）；&date=2026-11-01 預覽某天的樣子
-  每門課的那行依日期自動出現、自動從「搶先追蹤」換成「已開課」，不用手動改（設定在下面 COURSES）。
+  每門課的那行依日期自動出現、自動從「追蹤課程」換成「已開課」，不用手動改（設定在下面 COURSES）。
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,7 +38,7 @@
 <script>
 (function () {
   // ===== 之後要改文字，只改這一區 =====
-  // 每門課一行：show＝哪天起出現、launch＝開課時間（之前寫「搶先追蹤」，之後寫「已開課」），都是台北時間
+  // 每門課一行：show＝哪天起出現、launch＝開課時間（之前寫「追蹤課程」，之後寫「已開課」），都是台北時間
   // 第二門課：11/17 預熱開始出現；url 等查查建好「第二門課_官網部落格」短網址再填（沒填之前不會出現）
   var COURSES = [
     { name: "別急著找答案！善用設計思考，打造你自己的人生藍圖", short: "別急著找答案！",
@@ -61,7 +61,7 @@
     var live = now >= new Date(c.launch);
     var u = new URL(c.url); u.searchParams.set("utm_content", "bio-card" + (post ? "-" + post : ""));
     var p = document.createElement("p");
-    var a = '<a href="' + u.toString() + '">' + (live ? "看課程 →" : "搶先追蹤 →") + '</a>';
+    var a = '<a href="' + u.toString() + '">' + (live ? "看課程 →" : "追蹤課程 →") + '</a>';
     p.className = "fit";
     p.innerHTML = '<b>線上課程</b>'
       + '<span class="v">《' + c.name + '》' + (live ? "已在 PressPlay 開課，" : c.date + " 在 PressPlay 開課，") + a + '</span>'
@@ -108,6 +108,32 @@
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
   // 連結在新分頁開（在 iframe 裡點才不會卡在小框）
   document.querySelectorAll("a").forEach(function (a) { a.target = "_blank"; a.rel = "noopener"; });
+})();
+</script>
+<!-- 課程點擊追蹤（2026/10/17）：點到 PressPlay 連結時，只送一個 pressplay_click 事件到官網 GA4。
+     不載入 gtag.js（避免 GA 自動記錄捲動、瀏覽，灌水官網流量）；不含個人資料。測試時網址加 ?ga=off 可關閉。 -->
+<script>
+(function () {
+  var SITE_GA4_ID = "G-Y0VX6H9PVX";   // 官網 GA4（DT POW WOW - GA4-New）；空字串＝關閉
+  var WIDGET = "bio-card";
+  var qs = new URLSearchParams(location.search);
+  if (!SITE_GA4_ID || qs.get("ga") === "off") return;
+  function cid() {
+    var id = "";
+    try { id = localStorage.getItem("dt_pp_cid") || ""; } catch (e) {}
+    if (!id) { id = Math.floor(Math.random() * 2147483647) + "." + Math.floor(Date.now() / 1000); try { localStorage.setItem("dt_pp_cid", id); } catch (e) {} }
+    return id;
+  }
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest ? e.target.closest("a[href*='pressplay']") : null;
+    if (!a) return;
+    var now = Math.floor(Date.now() / 1000);
+    var p = new URLSearchParams({ v: "2", tid: SITE_GA4_ID, cid: cid(), sid: String(now), sct: "1", seg: "1", _et: "1",
+      en: "pressplay_click", dl: location.href.slice(0, 300), dr: document.referrer.slice(0, 300),
+      "ep.widget": WIDGET, "ep.link_url": a.href.slice(0, 100), "ep.parent_page": (qs.get("post") || document.referrer || "").slice(0, 100) });
+    var u = "https://www.google-analytics.com/g/collect?" + p.toString();
+    if (!(navigator.sendBeacon && navigator.sendBeacon(u))) { var i = new Image(); i.src = u; }
+  }, true);
 })();
 </script>
 </body>

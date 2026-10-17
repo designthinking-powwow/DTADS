@@ -7,7 +7,7 @@
 <!--
   官網首頁 ②「一句話定位」（2026/10/15 製作）
   - 官網內頁原頁開啟（target=_top）；外站另開分頁
-  - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/intro.html" width="100%" height="400" style="border:0;" frameborder="0" scrolling="no"></iframe>
+  - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/intro.html" width="100%" height="460" style="border:0;" frameborder="0" scrolling="no"></iframe>
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
@@ -43,8 +43,39 @@
   <p>我們為企業、學校與公部門規劃設計思考與創意思考工作坊。不講空泛的理論，整天動手做：訪談、定義問題、發想、做原型、測試，下課時團隊手上就有能拿去試的東西。</p>
   <div class="row">
     <a class="cob" target="_top" href="https://www.designthinking.com.tw/contactus">企業工作坊洽詢 →</a>
-    <a class="ghost" target="_blank" rel="noopener" href="https://www.pressplay.cc/link/s/DE956453?utm_content=home-intro">自己學：線上課程</a>
+    <a class="ghost" target="_blank" rel="noopener" data-course="home-intro" href="https://www.pressplay.cc/link/s/DE956453?utm_content=home-intro">自己學：線上課程</a>
   </div>
 </div>
+<script>
+  // 課程連結只改這一行（之後換「第一門課_官網頁面」短網址時用）
+  var COURSE_URL = "https://www.pressplay.cc/link/s/DE956453";
+  document.querySelectorAll("a[data-course]").forEach(function (a) { a.href = COURSE_URL + (COURSE_URL.indexOf("?") < 0 ? "?" : "&") + "utm_content=" + a.getAttribute("data-course"); });
+</script>
+<!-- 課程點擊追蹤（2026/10/17）：點到 PressPlay 連結時，只送一個 pressplay_click 事件到官網 GA4。
+     不載入 gtag.js（避免 GA 自動記錄捲動、瀏覽，灌水官網流量）；不含個人資料。測試時網址加 ?ga=off 可關閉。 -->
+<script>
+(function () {
+  var SITE_GA4_ID = "G-Y0VX6H9PVX";   // 官網 GA4（DT POW WOW - GA4-New）；空字串＝關閉
+  var WIDGET = "home-intro";
+  var qs = new URLSearchParams(location.search);
+  if (!SITE_GA4_ID || qs.get("ga") === "off") return;
+  function cid() {
+    var id = "";
+    try { id = localStorage.getItem("dt_pp_cid") || ""; } catch (e) {}
+    if (!id) { id = Math.floor(Math.random() * 2147483647) + "." + Math.floor(Date.now() / 1000); try { localStorage.setItem("dt_pp_cid", id); } catch (e) {} }
+    return id;
+  }
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest ? e.target.closest("a[href*='pressplay']") : null;
+    if (!a) return;
+    var now = Math.floor(Date.now() / 1000);
+    var p = new URLSearchParams({ v: "2", tid: SITE_GA4_ID, cid: cid(), sid: String(now), sct: "1", seg: "1", _et: "1",
+      en: "pressplay_click", dl: location.href.slice(0, 300), dr: document.referrer.slice(0, 300),
+      "ep.widget": WIDGET, "ep.link_url": a.href.slice(0, 100), "ep.parent_page": (qs.get("post") || document.referrer || "").slice(0, 100) });
+    var u = "https://www.google-analytics.com/g/collect?" + p.toString();
+    if (!(navigator.sendBeacon && navigator.sendBeacon(u))) { var i = new Image(); i.src = u; }
+  }, true);
+})();
+</script>
 </body>
 </html>
