@@ -45,9 +45,20 @@
 <script>
   // 課程連結只改這一行（之後換「第一門課_官網頁面」短網址時用）
   var COURSE_URL = "https://www.pressplay.cc/link/s/DE956453";
-  document.querySelectorAll("a[data-course]").forEach(function (a) { a.href = COURSE_URL + (COURSE_URL.indexOf("?") < 0 ? "?" : "&") + "utm_content=" + a.getAttribute("data-course"); });
+  // 11/01 00:00（台北）前：連到 LINE 官方帳號、按鈕字換成 LINE 版（10/20）；之後自動回到 PressPlay 原本的連結與文字。預覽：?date=2026-11-02
+  var LINE_URL = "https://lin.ee/ZqJ9P7N";
+  var today = new URLSearchParams(location.search).get("date") || new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);
+  var live = today >= "2026-11-01";
+  document.querySelectorAll("a[data-course]").forEach(function (a) {
+    if (live) { a.href = COURSE_URL + (COURSE_URL.indexOf("?") < 0 ? "?" : "&") + "utm_content=" + a.getAttribute("data-course"); return; }
+    a.href = LINE_URL;
+    var go = a.querySelector(".go span");
+    if (go) go.textContent = "加 LINE 收開賣提醒 ";
+    var p = a.querySelector("p");
+    if (p) p.textContent = "線上課程 11/01 在 PressPlay 開賣，加 LINE 輸入「早鳥」，開賣第一個通知你。";
+  });
 </script>
-<!-- 課程點擊追蹤（2026/10/17）：點到 PressPlay 連結時，只送一個 pressplay_click 事件到官網 GA4。
+<!-- 課程點擊追蹤（2026/10/17；10/20 加 LINE）：點到 PressPlay 連結送 pressplay_click、點到 LINE（lin.ee）送 line_click，每次點擊只送一個事件到官網 GA4。
      不載入 gtag.js（避免 GA 自動記錄捲動、瀏覽，灌水官網流量）；不含個人資料。測試時網址加 ?ga=off 可關閉。 -->
 <script>
 (function () {
@@ -62,11 +73,11 @@
     return id;
   }
   document.addEventListener("click", function (e) {
-    var a = e.target.closest ? e.target.closest("a[href*='pressplay']") : null;
+    var a = e.target.closest ? e.target.closest("a[href*='pressplay'], a[href*='lin.ee']") : null;
     if (!a) return;
     var now = Math.floor(Date.now() / 1000);
     var p = new URLSearchParams({ v: "2", tid: SITE_GA4_ID, cid: cid(), sid: String(now), sct: "1", seg: "1", _et: "1",
-      en: "pressplay_click", dl: location.href.slice(0, 300), dr: document.referrer.slice(0, 300),
+      en: /lin\.ee/.test(a.href) ? "line_click" : "pressplay_click", dl: location.href.slice(0, 300), dr: document.referrer.slice(0, 300),
       "ep.widget": WIDGET, "ep.link_url": a.href.slice(0, 100), "ep.parent_page": (qs.get("post") || document.referrer || "").slice(0, 100) });
     var u = "https://www.google-analytics.com/g/collect?" + p.toString();
     if (!(navigator.sendBeacon && navigator.sendBeacon(u))) { var i = new Image(); i.src = u; }

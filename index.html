@@ -237,6 +237,8 @@
   // PressPlay 課程審核通過後，填入課程頁網址；空字串＝不顯示課程廣告
   var PRESSPLAY_URL = "https://www.pressplay.cc/project/22CABB62FE270EA6FC8BA722381C75F3/about?utm_source=website&utm_medium=dtads&utm_campaign=course1";
 
+  // 10/20：課程開賣前（C1，到 10/31）連到 LINE 官方帳號；lin.ee 不加 UTM
+  var LINE_URL = "https://lin.ee/ZqJ9P7N";
   var SUBSCRIBE_URL = "https://chachacreative101.substack.com/subscribe";
   var EMBED_URL = "https://chachacreative101.substack.com/embed";
   var CONTACT_URL = "https://www.designthinking.com.tw/contactus";
@@ -323,10 +325,10 @@
       title: "別急著找答案，先聽一個工作坊現場的故事",
       sub: "《別急著找答案｜跟 Cha Cha 一起思考》陪你換個角度想問題。",
       proof: "每週三更新・Spotify、KKBOX、YouTube 都能聽", btn: "收聽最新一集" },
-    { id: "C1", cat: "C", url: PRESSPLAY_URL, from: "2026-10-14", to: "2026-10-31", kicker: "線上課程・11/01 開課", accent: "#FF3B5C", on: "#0F0E0E",
+    { id: "C1", cat: "C", url: LINE_URL, from: "2026-10-14", to: "2026-10-31", kicker: "線上課程・11/01 開課", accent: "#FF3B5C", on: "#0F0E0E",
       title: "別急著找答案！善用設計思考，打造你自己的人生藍圖",
-      sub: "先追蹤課程，開課第一時間通知你。",
-      proof: "錄影課＋學習單・隨時開始", btn: "搶先追蹤課程" },
+      sub: "加 LINE 輸入「早鳥」，11/01 開賣第一個通知你",
+      proof: "錄影課＋學習單・隨時開始", btn: "加 LINE 收開賣提醒" },
     { id: "C2", cat: "C", url: PRESSPLAY_URL, from: "2026-11-01", kicker: "線上課程・開課了", accent: "#FF3B5C", on: "#0F0E0E",
       title: "別急著找答案！善用設計思考，打造你自己的人生藍圖",
       sub: "線上課程開課了，前 50 位享早鳥優惠。",
@@ -431,6 +433,7 @@
   function withUtm(url, id) {
     if (!url) return "#";                     // 只會在 ?ad= 測試尚未填網址的廣告時發生
     var u = new URL(url);
+    if (u.hostname === "lin.ee") return url;   // LINE 加好友短網址不加 UTM
     u.searchParams.set("utm_source", "website");
     u.searchParams.set("utm_medium", "dtads");
     u.searchParams.set("utm_content", id);
@@ -961,7 +964,7 @@
   }, Math.floor(Math.random() * 250));
 })();
 </script>
-<!-- 課程點擊追蹤（2026/10/17）：點到 PressPlay 連結時，只送一個 pressplay_click 事件到官網 GA4。
+<!-- 課程點擊追蹤（2026/10/17；10/20 加 LINE）：點到 PressPlay 連結送 pressplay_click、點到 LINE（lin.ee）送 line_click，每次點擊只送一個事件到官網 GA4。
      不載入 gtag.js（避免 GA 自動記錄捲動、瀏覽，灌水官網流量）；不含個人資料。測試時網址加 ?ga=off 可關閉。 -->
 <script>
 (function () {
@@ -976,11 +979,11 @@
     return id;
   }
   document.addEventListener("click", function (e) {
-    var a = e.target.closest ? e.target.closest("a[href*='pressplay']") : null;
+    var a = e.target.closest ? e.target.closest("a[href*='pressplay'], a[href*='lin.ee']") : null;
     if (!a) return;
     var now = Math.floor(Date.now() / 1000);
     var p = new URLSearchParams({ v: "2", tid: SITE_GA4_ID, cid: cid(), sid: String(now), sct: "1", seg: "1", _et: "1",
-      en: "pressplay_click", dl: location.href.slice(0, 300), dr: document.referrer.slice(0, 300),
+      en: /lin\.ee/.test(a.href) ? "line_click" : "pressplay_click", dl: location.href.slice(0, 300), dr: document.referrer.slice(0, 300),
       "ep.widget": WIDGET, "ep.link_url": a.href.slice(0, 100), "ep.parent_page": (qs.get("post") || document.referrer || "").slice(0, 100) });
     var u = "https://www.google-analytics.com/g/collect?" + p.toString();
     if (!(navigator.sendBeacon && navigator.sendBeacon(u))) { var i = new Image(); i.src = u; }
