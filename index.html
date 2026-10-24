@@ -227,6 +227,17 @@
   }
 </style>
 </head>
+<style>
+  /* 10/24 文字卡：不像廣告，像文章裡作者多說的一段話 */
+  html.tc, html.tc body { background: transparent !important; }
+  #stage.textcard { box-sizing: border-box; width: 100%; max-width: 100%; overflow: hidden; height: 250px; padding: 18px 8px 18px 16px; border-left: 3px solid #1F4BFF;
+    display: flex; flex-direction: column; justify-content: center; gap: 10px; background: transparent;
+    font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif; color: #22252b; }
+  #stage.textcard .tk { margin: 0; font-size: 13px; letter-spacing: .08em; color: #6b6f78; }
+  #stage.textcard .tp { margin: 0; font-size: 16.5px; line-height: 1.85; overflow-wrap: anywhere; }
+  #stage.textcard .ta { align-self: flex-start; font-size: 16px; font-weight: 600; color: #1F4BFF; text-decoration: underline; text-underline-offset: 4px; }
+  @media (max-width: 420px) { #stage.textcard { gap: 8px; } #stage.textcard .tp { font-size: 14.5px; line-height: 1.7; } #stage.textcard .ta { font-size: 15px; } }
+</style>
 <body>
 <div id="root"></div>
 <script>
@@ -698,7 +709,8 @@
   var trackAd = null;                                  // 目前顯示中的廣告
   function track(name, extra) {
     if (!gaReady || !trackAd) return;
-    var p = { ad_id: trackAd.id, category: trackAd.cat };
+    var p = { ad_id: trackAd.id, category: trackAd.cat, slot: SLOT_END ? 2 : 1, topic: params.get("topic") || "general",
+              post: params.get("post") || "", ab: SLOT_END ? "end" : AB };
     for (var k in extra || {}) p[k] = extra[k];
     gtag("event", name, p);
   }
@@ -712,8 +724,7 @@
         vis.impTimer = 0;
         if (visibleNow() && !vis.impSent) {
           vis.impSent = true;
-          track("ad_impression", { slot: SLOT_END ? 2 : 1, topic: params.get("topic") || "general",
-            time_variant: daypart(), end_of_article: SLOT_END });
+          track("dtads_impression", { time_variant: daypart(), end_of_article: SLOT_END });
         }
       }, 1000);
     } else {
@@ -752,7 +763,31 @@
   // ===== 畫出廣告 =====
   function markSubscribed() { store("dtads_subscribed", Date.now()); }
 
+  // ===== 10/24 對照測試：文章中段（第 1 格）一半讀者看原本的廣告，一半看「像文章一部分」的文字卡，11/07 比點擊率 =====
+  var AB = params.get("ab") || (Math.random() < 0.5 ? "text" : "banner");
+  var BIZ_TOPICS = ["dt", "ai", "general"];          // 職場／管理／AI／設計思考 → 企業工作坊；career、edu → LINE 早鳥（開賣後→課程頁）
+  function renderText() {
+    var topic = params.get("topic") || "general", biz = BIZ_TOPICS.indexOf(topic) >= 0;
+    var noCourse = params.get("nocourse") === "1" || NO_COURSE_POSTS.indexOf(params.get("post") || "") >= 0;
+    if (!biz && noCourse) return false;               // 寫到 DYL 的文章不放課程相關文字 → 改回原本的廣告
+    var today = params.get("date") || new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Taipei" }).format(new Date());
+    var launched = today >= "2026-11-01" && typeof PRESSPLAY_URL === "string" && PRESSPLAY_URL;
+    var t = biz
+      ? { id: "T-biz", k: "Cha Cha｜企業工作坊", p: "讀到這裡，如果你也想讓團隊一起把問題找清楚、想出真的能落地的點子——這正是我在設計思考與創意思考工作坊裡，陪企業團隊做的事。", a: "聊聊你們團隊的狀況", u: withUtm(CONTACT_URL, "T-biz") }
+      : launched
+        ? { id: "T-course", k: "Cha Cha｜線上課", p: "如果這篇讓你想重新整理自己的方向，我把整套方法錄成了線上課《別急著找答案！》，一步一步帶你畫出自己的人生藍圖。", a: "看看課程內容", u: withUtm(PRESSPLAY_URL, "T-course") }
+        : { id: "T-line", k: "Cha Cha｜11/01 新課", p: "想先拿到新課的早鳥名額？加 LINE（@929tyoeu）輸入「早鳥」，開賣當天第一時間通知你；輸入「20題」，還能先拿免費的「認識自己 20 題」工作單。", a: "加 LINE，輸入「早鳥」", u: LINE_URL };
+    var root = document.getElementById("root");
+    document.documentElement.classList.add("tc");
+    root.innerHTML = '<div id="stage" class="textcard"><p class="tk">' + esc(t.k) + '</p><p class="tp">' + esc(t.p) +
+      '</p><a class="ta" href="' + esc(t.u) + '" target="_blank" rel="noopener">' + esc(t.a) + ' →</a></div>';
+    analyticsAttach({ id: t.id, cat: "T" });
+    return true;
+  }
+
   function render(ad) {
+    if (!SLOT_END && AB === "text" && !params.get("ad") && renderText()) return;
+    if (!SLOT_END && AB === "text") AB = "banner";
     var root = document.getElementById("root");
     var c = copyFor(ad);
     if (ad.seasonProof && inSeason(ad.seasonProof.season)) ad = Object.assign({}, ad, { proof: ad.seasonProof.proof });
