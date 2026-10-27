@@ -83,7 +83,7 @@
   // ===== 需要時才改的設定 =====
   var COURSE_URL = "https://www.pressplay.cc/link/s/DE956453";   // 第一門課_官網部落格 短網址
   var EP00_URL = "https://youtu.be/UnSkHuQmk7o";                    // 11/01 前（10/27 起）：按鈕連到 EP00 免費課程介紹（取代 LINE）
-  var LAUNCH = "2026-11-01";                                       // 台北日期，這天起顯示「現正上線」
+  var LAUNCH = "2026-11-01";                                       // 台北日期，這天中午 12:00 起顯示「現正上線」
   // ★ 早鳥 50 名賣完時：把 "early" 改成 "regular"，再上傳 hero.html
   var COURSE_PLAN = "early";
   var PLANS = {
@@ -94,10 +94,9 @@
   var q = new URLSearchParams(location.search);
   if (q.get("plan") && PLANS[q.get("plan")]) COURSE_PLAN = q.get("plan");
   var today = q.get("date") || new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);  // 台北日期
-  var live = today >= LAUNCH;
-  var days = Math.round((Date.parse(LAUNCH) - Date.parse(today)) / 864e5);
+  var live = q.get("date") ? today >= LAUNCH : Date.now() >= Date.parse(LAUNCH + "T12:00:00+08:00");   // 10/27：PressPlay 改 11/01 中午 12:00 開賣
 
-  document.getElementById("status").textContent = live ? "現正上線" : (days <= 1 ? "明天開賣" : "11/01（日）開賣");
+  document.getElementById("status").textContent = live ? "現正上線" : (today === LAUNCH ? "今天中午 12:00 開賣" : "11/01（日）中午開賣");
   document.getElementById("btn").textContent = live ? "看課程 →" : "免費看 5 分鐘課程介紹 →";
   document.getElementById("price").innerHTML = PLANS[COURSE_PLAN];
   document.getElementById("hero").href = live ? COURSE_URL + (COURSE_URL.indexOf("?") < 0 ? "?" : "&") + "utm_content=home-hero" : EP00_URL;

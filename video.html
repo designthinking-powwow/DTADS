@@ -46,7 +46,7 @@
   var COURSE_URL = "https://www.pressplay.cc/link/s/DE956453";
   var EP00_URL = "https://youtu.be/UnSkHuQmk7o";   // 11/01 前（10/27 起）：按鈕連到 EP00 完整 5 分鐘課程介紹
   var today = new URLSearchParams(location.search).get("date") || new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);   // 預覽：?date=2026-11-02
-  var live = today >= "2026-11-01";
+  var live = (new URLSearchParams(location.search).get("date") ? today >= "2026-11-01" : Date.now() >= Date.parse("2026-11-01T12:00:00+08:00"));
   document.getElementById("yt").src = "https://www.youtube-nocookie.com/embed/" + VIDEO_ID + "?rel=0";
   document.getElementById("btn").href = live ? COURSE_URL + "?utm_content=home-video" : EP00_URL;
   document.getElementById("btn").textContent = live ? "看課程 →" : "看完整 5 分鐘課程介紹 →";

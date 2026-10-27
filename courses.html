@@ -79,7 +79,7 @@
   function utm(u) { return u + (u.indexOf("?") < 0 ? "?" : "&") + "utm_content=home-courses"; }
   function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
 
-  var live1 = today >= "2026-11-01";
+  var live1 = (new URLSearchParams(location.search).get("date") ? today >= "2026-11-01" : Date.now() >= Date.parse("2026-11-01T12:00:00+08:00"));
   var c1chip = (live1 ? "現正上線" : "11/01 上線") + "・" + (COURSE1_PLAN === "regular" ? "3 人團 每人 NT$1,190" : "早鳥 NT$990");
   var html = '<a class="cc" target="_blank" rel="noopener" href="' + (live1 ? utm(COURSE1_URL) : EP00_URL) + '">' +
     '<img src="img/course1_cover.webp" alt="別急著找答案！課程封面">' +
@@ -87,7 +87,7 @@
     '<h3>別急著找答案！善用設計思考，打造你自己的人生藍圖</h3>' +
     '<p>不知道下一步往哪走？8 堂課、8 份學習單，用設計思考的方法，一步一步做出屬於你的人生原型。</p>' +
     '<span class="go" style="color:var(--coral)">' + (live1 ? "看課程 →" : "免費看 5 分鐘課程介紹 →") + '</span>' +
-    (live1 ? "" : '<span class="go-sub">11/01（日）在 PressPlay 開賣</span>') + '</div></a>';
+    (live1 ? "" : '<span class="go-sub">11/01（日）中午在 PressPlay 開賣</span>') + '</div></a>';
 
   // 第二門課：11/17 起才出現
   if (today >= "2026-11-17") {

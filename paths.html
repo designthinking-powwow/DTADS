@@ -45,17 +45,17 @@
 <script>
   // 課程連結只改這一行（之後換「第一門課_官網頁面」短網址時用）
   var COURSE_URL = "https://www.pressplay.cc/link/s/DE956453";
-  // 11/01 00:00（台北）前：連到 LINE 官方帳號、按鈕字換成 LINE 版（10/20）；之後自動回到 PressPlay 原本的連結與文字。預覽：?date=2026-11-02
+  // 11/01 12:00（台北，PressPlay 中午開賣）前：連到 LINE 官方帳號、按鈕字換成 LINE 版（10/20）；之後自動回到 PressPlay 原本的連結與文字。預覽：?date=2026-11-02
   var EP00_URL = "https://youtu.be/UnSkHuQmk7o";   // 10/27：LINE 換成 EP00
   var today = new URLSearchParams(location.search).get("date") || new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);
-  var live = today >= "2026-11-01";
+  var live = (new URLSearchParams(location.search).get("date") ? today >= "2026-11-01" : Date.now() >= Date.parse("2026-11-01T12:00:00+08:00"));
   document.querySelectorAll("a[data-course]").forEach(function (a) {
     if (live) { a.href = COURSE_URL + (COURSE_URL.indexOf("?") < 0 ? "?" : "&") + "utm_content=" + a.getAttribute("data-course"); return; }
     a.href = EP00_URL;
     var go = a.querySelector(".go span");
     if (go) go.textContent = "免費看 5 分鐘課程介紹 ";
     var p = a.querySelector("p");
-    if (p) p.textContent = "線上課程 11/01（日）在 PressPlay 開賣，先免費看 5 分鐘課程介紹。";
+    if (p) p.textContent = "線上課程 11/01（日）中午在 PressPlay 開賣，先免費看 5 分鐘課程介紹。";
   });
 </script>
 <!-- 課程點擊追蹤（2026/10/17；10/20 加 LINE；10/27 加 EP00 送 ep00_click、小測驗送 quiz_click）：點到 PressPlay 連結送 pressplay_click、點到 LINE（lin.ee）送 line_click，每次點擊只送一個事件到官網 GA4。

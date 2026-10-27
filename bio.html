@@ -43,9 +43,9 @@
   // 第二門課：11/17 預熱開始出現；url 等查查建好「第二門課_官網部落格」短網址再填（沒填之前不會出現）
   var COURSES = [
     { name: "別急著找答案！善用設計思考，打造你自己的人生藍圖", short: "別急著找答案！",
-      show: "2026-10-01", launch: "2026-11-01T00:00:00+08:00", date: "11/01",
+      show: "2026-10-01", launch: "2026-11-01T12:00:00+08:00", date: "11/01",
       url: "https://www.pressplay.cc/link/s/DE956453",
-      pre: "https://lin.ee/ZqJ9P7N" },   // pre＝開課前連到 LINE 官方帳號（10/20），按鈕寫「加 LINE 收開賣提醒」；開課後自動回 PressPlay
+      pre: "https://youtu.be/UnSkHuQmk7o" },   // pre＝開課前連到 EP00 免費課程介紹（10/27 取代 LINE）；11/01 中午 12:00 開賣後自動回 PressPlay
     { name: "設計思考：每個人都能用的問題解決術", short: "設計思考問題解決術",
       show: "2026-11-17", launch: "2026-12-15T00:00:00+08:00", date: "12/15",
       url: "" }
@@ -62,10 +62,10 @@
     if (!c.url || now < new Date(c.show + "T00:00:00+08:00")) return;
     var live = now >= new Date(c.launch);
     var u = new URL(c.url); u.searchParams.set("utm_content", "bio-card" + (post ? "-" + post : ""));
-    var line = !live && c.pre;                       // 開課前、有填 pre：連到 LINE（lin.ee 不加 UTM）
+    var line = !live && c.pre;                       // 開課前、有填 pre：連到 EP00（不加 UTM）
     var href = line ? c.pre : u.toString();
     var p = document.createElement("p");
-    var a = '<a href="' + href + '">' + (live ? "看課程 →" : line ? "加 LINE 收開賣提醒 →" : "追蹤課程 →") + '</a>';
+    var a = '<a href="' + href + '">' + (live ? "看課程 →" : line ? "免費看 5 分鐘介紹 →" : "追蹤課程 →") + '</a>';
     p.className = "fit";
     p.innerHTML = '<b>線上課程</b>'
       + '<span class="v">《' + c.name + '》' + (live ? "已在 PressPlay 開課，" : c.date + " 在 PressPlay 開課，") + a + '</span>'
@@ -130,11 +130,11 @@
     return id;
   }
   document.addEventListener("click", function (e) {
-    var a = e.target.closest ? e.target.closest("a[href*='pressplay'], a[href*='lin.ee']") : null;
+    var a = e.target.closest ? e.target.closest("a[href*='pressplay'], a[href*='lin.ee'], a[href*='youtu']") : null;
     if (!a) return;
     var now = Math.floor(Date.now() / 1000);
     var p = new URLSearchParams({ v: "2", tid: SITE_GA4_ID, cid: cid(), sid: String(now), sct: "1", seg: "1", _et: "1",
-      en: /lin\.ee/.test(a.href) ? "line_click" : "pressplay_click", dl: location.href.slice(0, 300), dr: document.referrer.slice(0, 300),
+      en: /lin\.ee/.test(a.href) ? "line_click" : /youtu/.test(a.href) ? "ep00_click" : "pressplay_click", dl: location.href.slice(0, 300), dr: document.referrer.slice(0, 300),
       "ep.widget": WIDGET, "ep.link_url": a.href.slice(0, 100), "ep.parent_page": (qs.get("post") || document.referrer || "").slice(0, 100) });
     var u = "https://www.google-analytics.com/g/collect?" + p.toString();
     if (!(navigator.sendBeacon && navigator.sendBeacon(u))) { var i = new Image(); i.src = u; }
