@@ -38,20 +38,20 @@
     <div class="k">1 MINUTE</div>
     <h2>為什麼你越努力，反而越模糊？</h2>
     <p>一分鐘看懂《別急著找答案！》在上什麼。</p>
-    <a class="btn" id="btn" target="_blank" rel="noopener">加 LINE 收開賣提醒 →</a>
+    <a class="btn" id="btn" target="_blank" rel="noopener">看完整 5 分鐘課程介紹 →</a>
   </div>
 </div>
 <script>
   var VIDEO_ID = "Y9Z9FiUggQM";
   var COURSE_URL = "https://www.pressplay.cc/link/s/DE956453";
-  var LINE_URL = "https://lin.ee/ZqJ9P7N";   // 11/01 前：按鈕連到 LINE 官方帳號（不加 UTM）
+  var EP00_URL = "https://youtu.be/UnSkHuQmk7o";   // 11/01 前（10/27 起）：按鈕連到 EP00 完整 5 分鐘課程介紹
   var today = new URLSearchParams(location.search).get("date") || new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);   // 預覽：?date=2026-11-02
   var live = today >= "2026-11-01";
   document.getElementById("yt").src = "https://www.youtube-nocookie.com/embed/" + VIDEO_ID + "?rel=0";
-  document.getElementById("btn").href = live ? COURSE_URL + "?utm_content=home-video" : LINE_URL;
-  document.getElementById("btn").textContent = live ? "看課程 →" : "加 LINE 收開賣提醒 →";
+  document.getElementById("btn").href = live ? COURSE_URL + "?utm_content=home-video" : EP00_URL;
+  document.getElementById("btn").textContent = live ? "看課程 →" : "看完整 5 分鐘課程介紹 →";
 </script>
-<!-- 課程點擊追蹤（2026/10/17；10/20 加 LINE）：點到 PressPlay 連結送 pressplay_click、點到 LINE（lin.ee）送 line_click，每次點擊只送一個事件到官網 GA4。
+<!-- 課程點擊追蹤（2026/10/17；10/20 加 LINE；10/27 加 EP00 送 ep00_click、小測驗送 quiz_click）：點到 PressPlay 連結送 pressplay_click、點到 LINE（lin.ee）送 line_click，每次點擊只送一個事件到官網 GA4。
      不載入 gtag.js（避免 GA 自動記錄捲動、瀏覽，灌水官網流量）；不含個人資料。測試時網址加 ?ga=off 可關閉。 -->
 <script>
 (function () {
@@ -66,11 +66,11 @@
     return id;
   }
   document.addEventListener("click", function (e) {
-    var a = e.target.closest ? e.target.closest("a[href*='pressplay'], a[href*='lin.ee']") : null;
+    var a = e.target.closest ? e.target.closest("a[href*='pressplay'], a[href*='lin.ee'], a[href*='youtu'], a[href*='playground']") : null;
     if (!a) return;
     var now = Math.floor(Date.now() / 1000);
     var p = new URLSearchParams({ v: "2", tid: SITE_GA4_ID, cid: cid(), sid: String(now), sct: "1", seg: "1", _et: "1",
-      en: /lin\.ee/.test(a.href) ? "line_click" : "pressplay_click", dl: location.href.slice(0, 300), dr: document.referrer.slice(0, 300),
+      en: /lin\.ee/.test(a.href) ? "line_click" : /youtu/.test(a.href) ? "ep00_click" : /playground/.test(a.href) ? "quiz_click" : "pressplay_click", dl: location.href.slice(0, 300), dr: document.referrer.slice(0, 300),
       "ep.widget": WIDGET, "ep.link_url": a.href.slice(0, 100), "ep.parent_page": (qs.get("post") || document.referrer || "").slice(0, 100) });
     var u = "https://www.google-analytics.com/g/collect?" + p.toString();
     if (!(navigator.sendBeacon && navigator.sendBeacon(u))) { var i = new Image(); i.src = u; }
