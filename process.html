@@ -74,33 +74,28 @@
   </div>
   <div class="cta"><a class="btn" target="_top" href="https://www.designthinking.com.tw/contactus">聊聊你們的題目 →</a><span>費用依人數、時數與題目規劃，請來信洽詢。</span></div>
 </div>
-<!-- 10/27 UI/UX：把內容的實際高度傳給官網，官網（GTM「iframe 自動高度」）把這個區塊調成剛好的高度，拿掉上下大片空白。官網沒有接收時，照舊用嵌入碼的固定高度。 -->
+<!-- 10/27 UI/UX：把內容的實際高度傳給官網，官網（GTM「內嵌區塊自動高度」）把這個區塊調成剛好的高度，拿掉上下大片空白。官網沒有接收時，照舊用嵌入碼的固定高度。
+     量高度時先暫時把 html／body 的 100% 高度拿掉，量到的是「內容本身」的高度，不會跟著 iframe 一起長高。 -->
+<style>html.dt-measure, html.dt-measure body { height:auto !important; min-height:0 !important; }</style>
 <script>
 (function () {
   if (window.parent === window) return;
-  var last = 0;
+  var last = 0, root = document.documentElement;
   function measure() {
-    var b = document.body, cs = getComputedStyle(b), top = Infinity, bot = -Infinity;
-    [].forEach.call(b.children, function (el) {
-      if (el.tagName === "SCRIPT" || el.tagName === "STYLE") return;
-      var s = getComputedStyle(el);
-      if (s.display === "none" || s.position === "fixed" || s.position === "absolute") return;
-      var r = el.getBoundingClientRect();
-      if (!r.height) return;
-      top = Math.min(top, r.top - (parseFloat(s.marginTop) || 0));
-      bot = Math.max(bot, r.bottom + (parseFloat(s.marginBottom) || 0));
-    });
-    if (!(bot > top)) return;
-    var room = window.innerWidth < 700 ? 48 : 72;   // 上下各留的空間（不夠時補足）
-    var h = Math.ceil(bot - top + Math.max(room, parseFloat(cs.paddingTop) || 0) + Math.max(room, parseFloat(cs.paddingBottom) || 0));
-    if (Math.abs(h - last) < 2) return;
+    var b = document.body;
+    root.classList.add("dt-measure");
+    var cs = getComputedStyle(b), pt = parseFloat(cs.paddingTop) || 0, pb = parseFloat(cs.paddingBottom) || 0;
+    var inner = b.getBoundingClientRect().height - pt - pb;
+    root.classList.remove("dt-measure");
+    var room = window.innerWidth < 700 ? 48 : 72;   // 上下各留的空間（原本的 padding 比較大就用原本的）
+    var h = Math.ceil(inner + Math.max(room, pt) + Math.max(room, pb));
+    if (!(inner > 40) || Math.abs(h - last) < 2) return;
     last = h;
     parent.postMessage({ dtadsHeight: h }, "*");
   }
   window.addEventListener("load", measure);
   window.addEventListener("resize", measure);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
-  if (window.ResizeObserver) { var ro = new ResizeObserver(measure); [].forEach.call(document.body.children, function (el) { if (el.tagName !== "SCRIPT") ro.observe(el); }); }
   setTimeout(measure, 800); setTimeout(measure, 2500);
 })();
 </script>
