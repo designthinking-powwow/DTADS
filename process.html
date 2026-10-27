@@ -30,6 +30,11 @@
   .in p { font:400 15px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); }
   .cta { margin-top:36px; display:flex; align-items:center; gap:18px; flex-wrap:wrap; font:500 15px "Noto Sans TC",sans-serif; color:var(--muted); }
   .btn { display:inline-flex; background:var(--cobalt); color:#fff; text-decoration:none; font:700 16px/1 "Noto Sans TC",sans-serif; padding:15px 24px; border-radius:999px; }
+  /* 10/27 學員回饋 */
+  .quotes { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:36px; }
+  .qt { background:var(--soft); border-radius:14px; padding:20px 22px 18px; }
+  .qt p { font:500 15px/1.75 "Noto Sans TC",sans-serif; color:var(--ink); }
+  .qt span { display:block; margin-top:10px; font:700 13px "Noto Sans TC",sans-serif; color:var(--muted); }
   @media (max-width: 860px) {
     .wrap { padding:0 16px; }
     h2 { font-size:26px; } .lead { font-size:15px; }
@@ -41,6 +46,7 @@
     .info::-webkit-scrollbar { display:none; }
     .in { flex:0 0 min(72%, 260px); scroll-snap-align:start; }
     .in h3 { font-size:16px; } .in p { font-size:13.5px; }
+    .quotes { grid-template-columns:1fr; gap:8px; margin-top:22px; } .qt { padding:14px 16px; } .qt p { font-size:14px; }
     .cta { margin-top:22px; } .btn { font-size:15px; padding:13px 20px; }
   }
 </style>
@@ -62,7 +68,41 @@
     <div class="in"><h3>上課時間</h3><p>3 小時、半天、一天到兩天以上，也可以拆成幾次、分週上。</p></div>
     <div class="in"><h3>上課地點</h3><p>可以到企業內部上課。需要能分組的桌椅、投影設備，以及可以貼東西的牆面或白板。</p></div>
   </div>
+  <div class="quotes">
+    <div class="qt"><p>「我的問題超多，老師都很有耐心，一個一個陪我釐清，感覺思考的任督二脈被打通了。」</p><span>— 老師</span></div>
+    <div class="qt"><p>「老師一直鼓勵我們學了就要用，所以我回去馬上教給學生，他們上得超開心！」</p><span>— 大學老師</span></div>
+  </div>
   <div class="cta"><a class="btn" target="_top" href="https://www.designthinking.com.tw/contactus">聊聊你們的題目 →</a><span>費用依人數、時數與題目規劃，請來信洽詢。</span></div>
 </div>
+<!-- 10/27 UI/UX：把內容的實際高度傳給官網，官網（GTM「iframe 自動高度」）把這個區塊調成剛好的高度，拿掉上下大片空白。官網沒有接收時，照舊用嵌入碼的固定高度。 -->
+<script>
+(function () {
+  if (window.parent === window) return;
+  var last = 0;
+  function measure() {
+    var b = document.body, cs = getComputedStyle(b), top = Infinity, bot = -Infinity;
+    [].forEach.call(b.children, function (el) {
+      if (el.tagName === "SCRIPT" || el.tagName === "STYLE") return;
+      var s = getComputedStyle(el);
+      if (s.display === "none" || s.position === "fixed" || s.position === "absolute") return;
+      var r = el.getBoundingClientRect();
+      if (!r.height) return;
+      top = Math.min(top, r.top - (parseFloat(s.marginTop) || 0));
+      bot = Math.max(bot, r.bottom + (parseFloat(s.marginBottom) || 0));
+    });
+    if (!(bot > top)) return;
+    var room = window.innerWidth < 700 ? 48 : 72;   // 上下各留的空間（不夠時補足）
+    var h = Math.ceil(bot - top + Math.max(room, parseFloat(cs.paddingTop) || 0) + Math.max(room, parseFloat(cs.paddingBottom) || 0));
+    if (Math.abs(h - last) < 2) return;
+    last = h;
+    parent.postMessage({ dtadsHeight: h }, "*");
+  }
+  window.addEventListener("load", measure);
+  window.addEventListener("resize", measure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(measure); [].forEach.call(document.body.children, function (el) { if (el.tagName !== "SCRIPT") ro.observe(el); }); }
+  setTimeout(measure, 800); setTimeout(measure, 2500);
+})();
+</script>
 </body>
 </html>

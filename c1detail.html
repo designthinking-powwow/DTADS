@@ -45,12 +45,20 @@
   .cta span { font:500 14px "Noto Sans TC",sans-serif; color:var(--muted); }
   .cta-sub { font:500 14px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); margin-top:12px; }
   .cta-sub a { color:var(--muted); text-decoration:underline; text-underline-offset:3px; white-space:nowrap; }
+  /* 10/27 學員回饋 */
+  .quotes { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:22px; }
+  .qt { background:var(--soft); border-radius:14px; padding:20px 20px 18px; display:flex; flex-direction:column; justify-content:space-between; gap:14px; }
+  .qt p { font:500 15px/1.75 "Noto Sans TC",sans-serif; color:var(--ink); }
+  .qt span { font:700 13px "Noto Sans TC",sans-serif; color:var(--muted); }
   .swipe-hint { display:none; }
   @media (max-width: 860px) {
     .wrap { padding:0 16px; }
     h2 { font-size:20px; } .lead { font-size:14.5px; }
     .who, .eps, .price { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scroll-padding:0 16px; margin-left:-16px; margin-right:-16px; padding:0 16px; gap:10px; scrollbar-width:none; }
     .who::-webkit-scrollbar, .eps::-webkit-scrollbar, .price::-webkit-scrollbar { display:none; }
+    .quotes { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scroll-padding:0 16px; margin-left:-16px; margin-right:-16px; padding:0 16px; gap:10px; scrollbar-width:none; }
+    .quotes::-webkit-scrollbar { display:none; }
+    .qt { flex:0 0 min(78%, 280px); scroll-snap-align:start; }
     .who div { flex:0 0 min(78%, 280px); scroll-snap-align:start; }
     .ep { flex:0 0 min(60%, 220px); scroll-snap-align:start; }
     .pr { flex:0 0 min(70%, 250px); scroll-snap-align:start; }
@@ -91,6 +99,16 @@
     </div>
     <div class="swipe-hint">← 左右滑動看更多 →</div>
     <p class="note">八步走完，剛好是設計思考的一整圈：同理、定義、發想、原型、測試。</p>
+  </div>
+
+  <div class="sec">
+    <div class="k">上過 Cha Cha 工作坊的人說</div>
+    <div class="quotes">
+      <div class="qt"><p>「本來以為就是一般上課，結果完全不一樣！原來邊玩邊學也是上課的一部分，玩著玩著，就懂了很多道理。」</p><span>— PM</span></div>
+      <div class="qt"><p>「當初卡在一個怎麼想都想不出答案的問題，抱著試試看的心情來報名，結果真的找到一個我從來沒想過的解法！」</p><span>— 工程師</span></div>
+      <div class="qt"><p>「之前一直被同一個問題卡住，沒想到答案這麼簡單就解開了！」</p><span>— 企劃</span></div>
+    </div>
+    <div class="swipe-hint">← 左右滑動看更多 →</div>
   </div>
 
   <div class="sec">
@@ -151,6 +169,36 @@
     var u = "https://www.google-analytics.com/g/collect?" + p.toString();
     if (!(navigator.sendBeacon && navigator.sendBeacon(u))) { var i = new Image(); i.src = u; }
   }, true);
+})();
+</script>
+<!-- 10/27 UI/UX：把內容的實際高度傳給官網，官網（GTM「iframe 自動高度」）把這個區塊調成剛好的高度，拿掉上下大片空白。官網沒有接收時，照舊用嵌入碼的固定高度。 -->
+<script>
+(function () {
+  if (window.parent === window) return;
+  var last = 0;
+  function measure() {
+    var b = document.body, cs = getComputedStyle(b), top = Infinity, bot = -Infinity;
+    [].forEach.call(b.children, function (el) {
+      if (el.tagName === "SCRIPT" || el.tagName === "STYLE") return;
+      var s = getComputedStyle(el);
+      if (s.display === "none" || s.position === "fixed" || s.position === "absolute") return;
+      var r = el.getBoundingClientRect();
+      if (!r.height) return;
+      top = Math.min(top, r.top - (parseFloat(s.marginTop) || 0));
+      bot = Math.max(bot, r.bottom + (parseFloat(s.marginBottom) || 0));
+    });
+    if (!(bot > top)) return;
+    var room = window.innerWidth < 700 ? 48 : 72;   // 上下各留的空間（不夠時補足）
+    var h = Math.ceil(bot - top + Math.max(room, parseFloat(cs.paddingTop) || 0) + Math.max(room, parseFloat(cs.paddingBottom) || 0));
+    if (Math.abs(h - last) < 2) return;
+    last = h;
+    parent.postMessage({ dtadsHeight: h }, "*");
+  }
+  window.addEventListener("load", measure);
+  window.addEventListener("resize", measure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(measure); [].forEach.call(document.body.children, function (el) { if (el.tagName !== "SCRIPT") ro.observe(el); }); }
+  setTimeout(measure, 800); setTimeout(measure, 2500);
 })();
 </script>
 </body>
