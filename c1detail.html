@@ -8,6 +8,7 @@
   /online-courses 第一門課詳細介紹（2026/10/15 製作）：適合誰＋八集＋價格
   - 早鳥 50 名賣完：COURSE_PLAN 改 "regular"（早鳥那格變灰、標「已售完」）
   - 不寫各集分鐘數（避免和實際長度不符的消費爭議）
+  - 10/28：最下面加「常見問題」5 題；退費題等 REFUND_TEXT 填好才出現（預覽加 ?faq=draft）
   - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/c1detail.html" width="100%" height="1180" style="border:0;" frameborder="0" scrolling="no"></iframe>
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,6 +52,14 @@
   .qt p { font:500 15px/1.75 "Noto Sans TC",sans-serif; color:var(--ink); }
   .qt span { font:700 13px "Noto Sans TC",sans-serif; color:var(--muted); }
   .swipe-hint { display:none; }
+  /* 10/28 UI/UX 第二批：線上課常見問題（全部展開，不做折疊：折疊會讓區塊高度一直變，官網的自動高度最多只調 6 次） */
+  .faq { display:grid; grid-template-columns:repeat(2,1fr); gap:12px 14px; margin-top:22px; }
+  .fq { border:1px solid var(--line); border-radius:14px; padding:18px 20px 20px; }
+  .fq h3 { font:900 16.5px/1.5 "Noto Sans TC",sans-serif; color:var(--ink); margin-bottom:6px; }
+  .fq p { font:400 14.5px/1.75 "Noto Sans TC",sans-serif; color:var(--muted); }
+  .fq p a { color:var(--ink); font-weight:700; text-underline-offset:3px; }
+  .fq.todo { border-style:dashed; border-color:var(--coral); background:var(--soft); }
+  .fq.todo p { color:var(--coral); font-weight:700; }
   @media (max-width: 860px) {
     .wrap { padding:0 16px; }
     h2 { font-size:20px; } .lead { font-size:14.5px; }
@@ -66,6 +75,9 @@
     .pr b { font-size:26px; }
     .btn { font-size:15px; padding:14px 22px; }
     .swipe-hint { display:block; font:500 12px "Noto Sans TC",sans-serif; color:#9A928D; margin-top:6px; }
+    .faq { grid-template-columns:1fr; gap:10px; }
+    .fq { padding:16px 16px 18px; }
+    .fq h3 { font-size:15.5px; } .fq p { font-size:14px; }
   }
 </style>
 </head>
@@ -118,6 +130,19 @@
     <div class="cta"><a class="btn" id="btn" target="_blank" rel="noopener"></a><span id="when"></span></div>
     <p class="cta-sub" id="ctasub" hidden></p>
   </div>
+  <!-- 10/28 UI/UX 第二批：線上課常見問題。退費那一題等查查提供 PressPlay 退費規則後才填，REFUND_TEXT 是空的時候，那一題不會出現在官網上。 -->
+  <div class="sec" id="faqsec">
+    <div class="k">常見問題</div>
+    <div class="faq" id="faq">
+      <div class="fq"><h3>買了可以看多久？</h3><p>購買後不限時間、不限次數觀看。想重看哪一堂，隨時回去看。</p></div>
+      <div class="fq"><h3>每堂課要花多少時間？</h3><p>每堂課是一段錄影加一份學習單。建議一週一堂：看完影片，再找一段完整的時間把學習單寫完。想走快一點或慢一點都可以，照自己的節奏。</p></div>
+      <div class="fq"><h3>有作業嗎？</h3><p>有。每堂課都有一份學習單，8 堂共 8 份，帶你一步一步動手做。第 7 堂會請你帶著自己畫的路徑，真的去找人聊一聊。</p></div>
+      <div class="fq"><h3>需要先懂設計思考嗎？</h3><p>不用。課程從「把說不出口的寫下來」開始，一步一步帶。八堂走完，你也剛好把設計思考完整走過一圈。</p></div>
+      <div class="fq"><h3>這門課不適合誰？</h3><p>想要有人直接告訴你「該選哪條路」的人，可能會失望。這門課不給標準答案，而是陪你把問題問對，再用自己的方式試出下一步。</p></div>
+      <div class="fq" id="faq-refund" hidden><h3>可以退費嗎？</h3><p id="refund-text"></p></div>
+    </div>
+    <p class="note">想讓團隊一起學？<a href="https://www.designthinking.com.tw/workshops" target="_top" style="color:var(--ink);font-weight:700;text-underline-offset:3px">看企業工作坊 →</a></p>
+  </div>
 </div>
 <script>
 (function () {
@@ -142,6 +167,11 @@
       '<a target="_blank" rel="noopener" href="' + COURSE_URL + '?utm_content=online-courses">到 PressPlay 追蹤課程</a>';
     sub.hidden = false;
   }
+  // ★ 退費規則：查查提供 PressPlay 的退費規則後，填在這裡（照 PressPlay 原文，不要自己改寫規則）。空字串＝退費這題先不出現。
+  var REFUND_TEXT = "";   // 〔待查查提供 PressPlay 退費規則〕
+  var refund = document.getElementById("faq-refund");
+  if (REFUND_TEXT) { document.getElementById("refund-text").textContent = REFUND_TEXT; refund.hidden = false; }
+  else if (q.get("faq") === "draft") { document.getElementById("refund-text").textContent = "〔待查查提供 PressPlay 退費規則〕"; refund.className = "fq todo"; refund.hidden = false; }   // 預覽：網址加 ?faq=draft 看得到空位
   document.getElementById("when").textContent = live ? "現正上線・在 PressPlay 上課" : "2026/11/01（日）中午 12:00 在 PressPlay 上線" + (early ? "・早鳥限量 50 名" : "");
 })();
 </script>

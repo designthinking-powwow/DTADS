@@ -6,6 +6,7 @@
 <title>週報訂閱</title>
 <!--
   官網首頁 ⑩「未來思考週報」訂閱（2026/10/15 製作）：鈷藍色整塊＋Substack 官方訂閱框
+  - 10/28 UI/UX 第二批：拿掉 Substack 官方訂閱框（橘色按鈕在藍底上太突兀，也不用橘色當主色），改成自己的白色「免費訂閱 →」按鈕，連到 Substack 訂閱頁；點擊送 newsletter_click
   - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/news.html" width="100%" height="600" style="border:0;" frameborder="0" scrolling="no"></iframe>
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,9 +20,10 @@
   .k { font:800 13px/1 Inter,sans-serif; letter-spacing:.16em; opacity:.8; }
   h2 { font:900 36px/1.3 "Noto Sans TC",sans-serif; margin:14px 0 10px; }
   p { font:500 17px/1.7 "Noto Sans TC",sans-serif; color:#DCE3FF; }
-  .box { margin:26px auto 0; max-width:480px; border-radius:14px; overflow:hidden; background:#fff; }
-  .box iframe { display:block; width:100%; height:320px; border:0; }
-  @media (max-width: 480px) { h2 { font-size:26px; } p { font-size:14.5px; } }
+  .btn { display:inline-flex; align-items:center; margin-top:26px; background:#fff; color:var(--ink,#0F0E0E); text-decoration:none; font:700 17px/1 "Noto Sans TC",sans-serif; padding:16px 28px; border-radius:999px; border:2px solid #0F0E0E; transition:transform .2s; }
+  .btn:hover { transform:translateY(-2px); }
+  .fine { font:500 13.5px/1.7 "Noto Sans TC",sans-serif; color:#DCE3FF; margin-top:12px; opacity:.9; }
+  @media (max-width: 480px) { h2 { font-size:26px; } p { font-size:14.5px; } .btn { font-size:15px; padding:14px 24px; } .fine { font-size:12.5px; } }
 </style>
 </head>
 <body>
@@ -29,8 +31,34 @@
   <div class="k">NEWSLETTER</div>
   <h2>《未來思考週報》</h2>
   <p>每週三早上 7 點，3 分鐘讀完一週值得想的事。免費。</p>
-  <div class="box"><iframe src="https://chachacreative101.substack.com/embed" scrolling="no" title="訂閱未來思考週報"></iframe></div>
+  <a class="btn" target="_blank" rel="noopener" href="https://chachacreative101.substack.com/subscribe?utm_source=website&amp;utm_medium=home-news">免費訂閱 →</a>
+  <div class="fine">在 Substack 填 Email 就能訂閱，隨時可以取消。</div>
 </div>
+<!-- 10/28 點擊追蹤：點「免費訂閱」送 newsletter_click 到官網 GA4（同其他區塊的做法，不載入 gtag.js、不含個人資料；網址加 ?ga=off 可關閉） -->
+<script>
+(function () {
+  var SITE_GA4_ID = "G-Y0VX6H9PVX";
+  var WIDGET = "home-news";
+  var qs = new URLSearchParams(location.search);
+  if (!SITE_GA4_ID || qs.get("ga") === "off") return;
+  function cid() {
+    var id = "";
+    try { id = localStorage.getItem("dt_pp_cid") || ""; } catch (e) {}
+    if (!id) { id = Math.floor(Math.random() * 2147483647) + "." + Math.floor(Date.now() / 1000); try { localStorage.setItem("dt_pp_cid", id); } catch (e) {} }
+    return id;
+  }
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest ? e.target.closest("a[href*='substack']") : null;
+    if (!a) return;
+    var now = Math.floor(Date.now() / 1000);
+    var p = new URLSearchParams({ v: "2", tid: SITE_GA4_ID, cid: cid(), sid: String(now), sct: "1", seg: "1", _et: "1",
+      en: "newsletter_click", dl: location.href.slice(0, 300), dr: document.referrer.slice(0, 300),
+      "ep.widget": WIDGET, "ep.link_url": a.href.slice(0, 100) });
+    var u = "https://www.google-analytics.com/g/collect?" + p.toString();
+    if (!(navigator.sendBeacon && navigator.sendBeacon(u))) { var i = new Image(); i.src = u; }
+  }, true);
+})();
+</script>
 <!-- 10/27 UI/UX：把內容的實際高度傳給官網，官網（GTM「內嵌區塊自動高度」）把這個區塊調成剛好的高度，拿掉上下大片空白。官網沒有接收時，照舊用嵌入碼的固定高度。
      量高度時先暫時把 html／body 的 100% 高度拿掉，量到的是「內容本身」的高度，不會跟著 iframe 一起長高。 -->
 <style>html.dt-measure, html.dt-measure body { height:auto !important; min-height:0 !important; }</style>

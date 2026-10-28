@@ -6,7 +6,8 @@
 <title>首頁一分鐘看懂</title>
 <!--
   官網首頁 ⑥「一分鐘看懂這門課」（2026/10/15 製作）：第一門課宣傳影片（版本一）＋按鈕
-  - 換影片：改 VIDEO_ID
+  - 換影片：改 VIDEO_ID，並換掉同資料夾的 video_cover.jpg（1280×720）
+  - 10/28：先顯示封面 video_cover.jpg（YouTube 縮圖拿掉「11.01 上線」字樣），按了才載入 YouTube
   - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/video.html" width="100%" height="560" style="border:0;" frameborder="0" scrolling="no" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,6 +20,16 @@
   .g { display:grid; grid-template-columns:1.5fr 1fr; gap:44px; align-items:center; max-width:1120px; width:100%; margin:0 auto; padding:0 48px; }
   .ph { aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:#000; }
   .ph iframe { width:100%; height:100%; border:0; display:block; }
+  /* 10/28 UI/UX 第二批：先顯示乾淨封面，按了才載入 YouTube（不會出現被切掉的標題和「觀看平台」字樣，手機也開得比較快） */
+  .ph { position:relative; }
+  .cover { position:absolute; inset:0; width:100%; height:100%; border:0; padding:0; cursor:pointer; background:#F7F2EC; display:block; }
+  .cover img { width:100%; height:100%; object-fit:cover; display:block; }
+  /* 播放鍵放右下角（放正中間會蓋到封面的「很模糊」） */
+  .play { position:absolute; right:16px; bottom:16px; display:inline-flex; align-items:center; gap:10px; background:var(--coral); color:#fff; font:700 16px/1 "Noto Sans TC",sans-serif; padding:10px 18px 10px 10px; border-radius:999px; box-shadow:0 6px 18px rgba(0,0,0,.22); transition:transform .2s; }
+  .play i { position:relative; width:34px; height:34px; border-radius:50%; background:#fff; flex:none; }
+  .play i::after { content:""; position:absolute; left:13px; top:10px; border-style:solid; border-width:7px 0 7px 11px; border-color:transparent transparent transparent var(--coral); }
+  .cover:hover .play, .cover:focus-visible .play { transform:scale(1.05); }
+  .cover:focus-visible { outline:3px solid #fff; outline-offset:-3px; }
   .k { font:800 13px/1 Inter,sans-serif; letter-spacing:.16em; color:var(--coral); }
   h2 { font:900 34px/1.3 "Noto Sans TC",sans-serif; margin:14px 0 12px; }
   p { font:500 17px/1.7 "Noto Sans TC",sans-serif; color:#CFC8C3; }
@@ -28,12 +39,15 @@
     h2 { font-size:22px; margin:8px 0 4px; }
     p { font-size:14px; }
     .btn { margin-top:12px; font-size:15px; padding:12px 20px; }
+    .play { right:10px; bottom:10px; font-size:13px; gap:7px; padding:6px 12px 6px 6px; }
+    .play i { width:26px; height:26px; }
+    .play i::after { left:10px; top:7px; border-width:6px 0 6px 9px; }
   }
 </style>
 </head>
 <body>
 <div class="g">
-  <div class="ph"><iframe id="yt" title="別急著找答案！課程介紹" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+  <div class="ph" id="ph"><button class="cover" id="cover" type="button" aria-label="播放一分鐘課程介紹影片"><img src="video_cover.jpg" alt="都試了，還是很模糊：別急著找答案！一分鐘課程介紹" width="1280" height="720"><span class="play" aria-hidden="true"><i></i>播放 1 分鐘</span></button></div>
   <div>
     <div class="k">1 MINUTE</div>
     <h2>為什麼你越努力，反而越模糊？</h2>
@@ -47,7 +61,17 @@
   var EP00_URL = "https://youtu.be/UnSkHuQmk7o";   // 11/01 前（10/27 起）：按鈕連到 EP00 完整 5 分鐘課程介紹
   var today = new URLSearchParams(location.search).get("date") || new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);   // 預覽：?date=2026-11-02
   var live = (new URLSearchParams(location.search).get("date") ? today >= "2026-11-01" : Date.now() >= Date.parse("2026-11-01T12:00:00+08:00"));
-  document.getElementById("yt").src = "https://www.youtube-nocookie.com/embed/" + VIDEO_ID + "?rel=0";
+  // 10/28：按封面才載入 YouTube（autoplay=1 讓按一次就開始播）
+  document.getElementById("cover").addEventListener("click", function () {
+    var f = document.createElement("iframe");
+    f.title = "別急著找答案！課程介紹";
+    f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+    f.allowFullscreen = true;
+    f.src = "https://www.youtube-nocookie.com/embed/" + VIDEO_ID + "?rel=0&autoplay=1&playsinline=1";
+    var ph = document.getElementById("ph");
+    ph.innerHTML = "";
+    ph.appendChild(f);
+  });
   document.getElementById("btn").href = live ? COURSE_URL + "?utm_content=home-video" : EP00_URL;
   document.getElementById("btn").textContent = live ? "看課程 →" : "看完整 5 分鐘課程介紹 →";
 </script>
