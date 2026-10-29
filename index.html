@@ -5,6 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DT POW WOW 文章輪播廣告</title>
 <!--
+  ★ v7 內容卡版（2026/10/29 製作，查查 10/29 同意）：11/01（日）12:00 起，文章裡的兩個廣告位都換成「跟文章融合的內容卡」。
+    ・查查 10/29 規則：文章裡所有行動只導兩個地方——企業內訓（/contactus）和 PressPlay 第一門課（短網址 DE956453／EP00 試看）。
+    ・中段（第 1 格）＝內容卡池（CARDS，10 張：內訓 5、課程 5）：依文章 topic 挑相關的，每週一換一次（週數＋post 決定，同一人同一週同一篇看到同一張），
+      同一個人不會連續看到同一張（localStorage 記最近看過）。
+    ・文末（第 2 格）＝主要行動卡（MAIN），依 topic 只放一個：dt/ai→企業內訓、其他→線上課（新文章依「對應產品 A／B」）。
+      中段不會挑到跟文末同一種行動（文末是課程，中段就不放課程卡）。
+    ・時間：10/31 23:59 前＝原本的對照測試（完全沒變）；11/01 00:00–12:00 中段只放企業內訓卡、文末維持原本廣告；12:00 起全部切換。
+    ・追蹤：dtads_impression／ad_click／ad_view_time 照舊送到 G-F759ZE2XD3，ad_id＝卡片代號（K-bizdt…），category＝K（中段卡）或 M（文末主要行動），
+      ab＝pool 或 main，topic、post、slot 不變。各卡點擊率：07_開發部/數據API/dtads_cards_report.py。
+    ・測試：?now=2026-11-01T09:00（模擬台北時間）、?date=2026-11-02（＝那天中午）、?card=K-bizdt（指定中段卡）、?slot=end（文末）、
+      ?v=7（新文章）、?main=course／biz（新文章的文末行動）、?theme=dark／auto（深色）、?ga=off。
+    ・換卡：改下面 CARDS（RESERVE 放候補）；每月汰換點擊率最差的 2 張；新卡也只能導企業內訓或 PressPlay 課程。
   官網文章輪播廣告 v5 課程風格版（2026/10/13，改成第二門課的視覺：粗黑體標題、單一藍色、白卡線條人物插圖；v4 設計版 2026/10/06）
   ─────────────────────────────────────────────
   設計：照〈插畫風格規範〉——米白底、黑色線條、暖灰，每則廣告只用「一個」鮮豔強調色，
@@ -237,6 +249,33 @@
   #stage.textcard .tp { margin: 0; font-size: 16.5px; line-height: 1.85; overflow-wrap: anywhere; }
   #stage.textcard .ta { align-self: flex-start; font-size: 16px; font-weight: 600; color: #1F4BFF; text-decoration: underline; text-underline-offset: 4px; }
   @media (max-width: 420px) { #stage.textcard { gap: 8px; } #stage.textcard .tp { font-size: 14.5px; line-height: 1.7; } #stage.textcard .ta { font-size: 15px; } }
+
+  /* ===== v7 內容卡：像文章裡的一小段，左邊一條細色線＋一句問題＋一行說明＋一個「行動 →」連結；沒有底色、圖片、動畫 ===== */
+  html.kc, html.kc body { background: transparent !important; height: auto; overflow: hidden; }
+  html.kc body { min-height: 100vh; display: flex; align-items: center; }
+  html.kc #root { width: 100%; }
+  .kcard { --line: #1F4BFF; --q: #1f2328; --t: #585858; --muted: #7c818a; --link: #1F4BFF;
+    box-sizing: border-box; width: 100%; margin: 10px 0; padding: 2px 6px 2px 18px; border-left: 3px solid var(--line);
+    font-family: Roboto, "Noto Sans TC", -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", sans-serif; -webkit-font-smoothing: antialiased; }
+  #stage.kcard { display: block; height: auto; overflow: visible; background: transparent; color: inherit; }
+  .kcard p { margin: 0; }
+  .kcard .kl { font-family: Inter, "Noto Sans TC", sans-serif; font-size: 12.5px; font-weight: 600; letter-spacing: .05em; color: var(--muted); margin-bottom: 6px; }
+  .kcard .kq { font-size: 18px; line-height: 1.55; font-weight: 700; color: var(--q); margin-bottom: 6px; text-wrap: pretty; overflow-wrap: anywhere; }
+  .kcard .kt { font-size: 15.5px; line-height: 1.75; color: var(--t); margin-bottom: 10px; text-wrap: pretty; overflow-wrap: anywhere; }
+  .kcard .kr { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+  .kcard .ka { font-size: 15.5px; font-weight: 600; color: var(--link); text-decoration: none; border-bottom: 1.5px solid currentColor; padding-bottom: 1px; }
+  .kcard .ka .ar { display: inline-block; transition: transform .2s ease; }
+  .kcard .ka:hover .ar, .kcard .ka:focus-visible .ar { transform: translateX(3px); }
+  .kcard .ka:focus-visible, .kcard .ka2:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; border-radius: 2px; }
+  .kcard .ka2 { font-size: 14px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+  html.dark .kcard { --q: #eceef1; --t: #b7bbc2; --muted: #8f949c; --link: #8FA8FF; }
+  @media (max-width: 420px) {
+    .kcard { padding-left: 14px; }
+    .kcard .kq { font-size: 16.5px; line-height: 1.55; }
+    .kcard .kt { font-size: 14.5px; line-height: 1.7; margin-bottom: 8px; }
+    .kcard .ka { font-size: 15px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .kcard .ka .ar { transition: none; } }
 </style>
 <body>
 <div id="root"></div>
@@ -246,17 +285,23 @@
   // 10/14 Podcast 公開後，填入節目頁網址；空字串＝不顯示 Podcast 廣告
   var PODCAST_URL = "https://open.spotify.com/show/6G9ORPWiRvZEcRvT6Uax8y";
   // PressPlay 課程審核通過後，填入課程頁網址；空字串＝不顯示課程廣告
-  var PRESSPLAY_URL = "https://www.pressplay.cc/project/22CABB62FE270EA6FC8BA722381C75F3/about?utm_source=website&utm_medium=dtads&utm_campaign=course1";
+  // v7：改用官網部落格短網址（第一門課_官網部落格，UTM 已含 blog/article/course1），程式再加 utm_content=dtads-卡片代號
+  var PRESSPLAY_URL = "https://www.pressplay.cc/link/s/DE956453";
 
   // 10/20：課程開賣前（C1，到 10/31）連到 LINE 官方帳號；lin.ee 不加 UTM
   var LINE_URL = "https://lin.ee/ZqJ9P7N";
   // 10/27：開賣前改連 EP00 免費課程介紹（取代 LINE）；PressPlay 11/01 中午 12:00 開賣，課程廣告 12:00 才換成「開課了」
   var EP00_URL = "https://youtu.be/UnSkHuQmk7o";
-  function launched() {
-    var d = params.get("date");
-    if (d && /^\d{4}-\d{2}-\d{2}$/.test(d)) return d >= "2026-11-01";
-    return Date.now() >= Date.parse("2026-11-01T12:00:00+08:00");
+  // v7：現在時間（台北）。測試用 ?now=2026-11-01T09:00 或 ?date=2026-11-02（＝那天中午 12:00）
+  function nowMs() {
+    var n = params.get("now"), d = params.get("date");
+    if (n && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(n)) return Date.parse(n + ":00+08:00");
+    if (d && /^\d{4}-\d{2}-\d{2}$/.test(d)) return Date.parse(d + "T12:00:00+08:00");
+    return Date.now();
   }
+  var LAUNCH_AT = Date.parse("2026-11-01T12:00:00+08:00");      // 第一門課開賣
+  var POOL_AT = Date.parse("2026-11-01T00:00:00+08:00");        // 對照測試 10/31 23:59 結束，中段改內容卡
+  function launched() { return nowMs() >= LAUNCH_AT; }
   var SUBSCRIBE_URL = "https://chachacreative101.substack.com/subscribe";
   var EMBED_URL = "https://chachacreative101.substack.com/embed";
   var CONTACT_URL = "https://www.designthinking.com.tw/contactus";
@@ -446,12 +491,16 @@
   function taipeiToday() {
     var d = params.get("date");
     if (d && /^\d{4}-\d{2}-\d{2}$/.test(d)) return d;
-    return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Taipei", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+    return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Taipei", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(nowMs()));
   }
   function withUtm(url, id) {
     if (!url) return "#";                     // 只會在 ?ad= 測試尚未填網址的廣告時發生
     var u = new URL(url);
     if (u.hostname === "lin.ee" || u.hostname === "youtu.be") return url;   // LINE 加好友短網址不加 UTM
+    if (/\/link\/s\//.test(u.pathname)) {   // v7：PressPlay 短網址保留自己的 UTM（blog/article/course1），只加上是哪一張卡
+      u.searchParams.set("utm_content", "dtads-" + id);
+      return u.toString();
+    }
     u.searchParams.set("utm_source", "website");
     u.searchParams.set("utm_medium", "dtads");
     u.searchParams.set("utm_content", id);
@@ -719,7 +768,7 @@
   function track(name, extra) {
     if (!gaReady || !trackAd) return;
     var p = { ad_id: trackAd.id, category: trackAd.cat, slot: SLOT_END ? 2 : 1, topic: params.get("topic") || "general",
-              post: params.get("post") || "", ab: SLOT_END ? "end" : AB };
+              post: params.get("post") || "", ab: trackAd.ab || (SLOT_END ? "end" : AB) };
     for (var k in extra || {}) p[k] = extra[k];
     gtag("event", name, p);
   }
@@ -763,7 +812,7 @@
     if (stage) stage.addEventListener("click", function (e) {
       var t = e.target.closest ? e.target.closest("a, button.qopt, #q-start, #q-again") : null;
       if (!t) return;
-      if (t.tagName === "A") track("ad_click", { cta: (t.querySelector && t.querySelector(".btn") ? t.querySelector(".btn").textContent : t.textContent).replace("→", "").trim().slice(0, 40) });
+      if (t.tagName === "A") track("ad_click", { transport_type: "beacon", link_url: (t.href || "").slice(0, 100), cta: (t.querySelector && t.querySelector(".btn") ? t.querySelector(".btn").textContent : t.textContent).replace("→", "").trim().slice(0, 40) });
     }, true);
   }
   document.addEventListener("visibilitychange", function () { visTick(); if (document.visibilityState === "hidden") sendViewTime(); });
@@ -974,6 +1023,203 @@
     analyticsAttach(ad);
   }
 
+  // ===================================================================================================
+  // 前後兩格不放同一種行動：文末是課程（career／general／edu），中段就放企業內訓卡；文末是內訓（dt／ai，或對應產品 B），中段就放課程卡
+  // ===== v7 內容卡池（中段）＋主要行動卡（文末）：11/01 00:00 起中段、12:00 起全部（文案改這裡就好）=====
+  // ===================================================================================================
+  // 查查 10/29 規則：文章裡所有行動只導兩個地方——企業內訓（/contactus）和 PressPlay 第一門課（短網址 DE956453 或 EP00 試看）
+  // 每張卡：id、group（biz 企業內訓／course 線上課）、label（小字）、q（一句問題）、t（一行說明）、
+  //         a（行動文字）、u（連結）、topics（跟哪些文章主題相關，數字越大越常出現）、course:true＝課程卡（11/01 12:00 開賣後、非 DYL 文章才出現）
+  // topic：dt 設計思考、ai AI、career 職場／轉職／找方向、edu 教育／孩子、general 其他
+  var CARDS = [
+    // ---- 企業內訓（/contactus）----
+    { id: "K-bizdt", group: "biz", line: "#2B59C3", label: "企業內訓・設計思考",
+      q: "同一場會議裡，每個人心中的「問題」，是不是其實都不一樣？",
+      t: "設計思考企業內訓：先陪團隊把問題說成同一句話，再一起動手找解法。",
+      a: "聊聊你們的題目", u: CONTACT_URL, topics: { dt: 3, ai: 2, general: 1, career: 1 } },
+    { id: "K-bizmgr", group: "biz", line: "#14213D", label: "企業內訓・給主管和團隊",
+      q: "開會時大家都點頭，散會後卻各做各的？",
+      t: "設計思考企業內訓：讓主管和團隊先對「要解決的是什麼」有共識，再一起動手。",
+      a: "聊聊你們的題目", u: CONTACT_URL, topics: { career: 2, dt: 2, ai: 1, general: 1 } },
+    { id: "K-bizidea", group: "biz", line: "#FFB800", label: "企業內訓・創意思考",
+      q: "大家都用 AI 想點子，怎麼想出來的都差不多？",
+      t: "創意思考工作坊練的是團隊自己的想法：讓每個人都敢開口，也想得出不一樣的選項。",
+      a: "聊聊你們的題目", u: CONTACT_URL, topics: { ai: 3, dt: 1, general: 1 } },
+    { id: "K-bizfront", group: "biz", line: "#00A86B", label: "企業內訓・從第一線出發",
+      q: "第一線同仁每天看到的問題，有被聽見嗎？",
+      t: "設計思考企業內訓：把顧客和第一線同仁的真實經驗帶進會議室，一起找出真正該解的問題。",
+      a: "聊聊你們的題目", u: CONTACT_URL, topics: { general: 2, career: 1, dt: 1 } },
+    { id: "K-school", group: "biz", line: "#00897B", label: "學校工作坊",
+      q: "學生不缺答案，缺的是自己找問題的機會？",
+      t: "設計思考與創意思考的學校工作坊，從小學到大學，讓學生在課堂上動手解決真實的問題。",
+      a: "聊聊學校的需求", u: CONTACT_URL, topics: { edu: 3 } },
+    // ---- PressPlay 第一門課（12:00 開賣後才出現；不寫價格、早鳥，不透露課程方法）----
+    { id: "K-ep00", group: "course", course: true, line: "#1F4BFF", label: "線上課《別急著找答案！》・免費試看",
+      q: "如果先不急著找答案，你會先問自己什麼？",
+      t: "課程介紹免費開放，花 5 分鐘看看：用設計思考整理人生方向，是怎麼一回事。",
+      a: "免費看 5 分鐘介紹", u: EP00_URL, topics: { career: 2, general: 2, edu: 1, dt: 2, ai: 2 } },
+    { id: "K-course", group: "course", course: true, line: "#1F4BFF", label: "線上課・PressPlay",
+      q: "想換個方向，又怕一步走錯？",
+      t: "我把用設計思考整理人生方向的方法，錄成了線上課《別急著找答案！》，現在就能開始上。",
+      a: "看看課程內容", u: PRESSPLAY_URL, topics: { career: 3, general: 1, dt: 1 } },
+    { id: "K-cwork", group: "course", course: true, line: "#FF3B5C", label: "線上課《別急著找答案！》",
+      q: "工作沒有不好，可是你也說不出它哪裡好？",
+      t: "這門線上課陪你用設計思考，先看清楚自己現在站在哪裡，再決定下一步。",
+      a: "看看課程內容", u: PRESSPLAY_URL, topics: { career: 3, ai: 2, dt: 2 } },
+    { id: "K-cmany", group: "course", course: true, line: "#7B2FF7", label: "線上課《別急著找答案！》",
+      q: "想做的事很多，卻不知道該先從哪一件開始？",
+      t: "線上課《別急著找答案！》不給標準答案，陪你一步一步，整理出自己的方向。",
+      a: "看看課程內容", u: PRESSPLAY_URL, topics: { general: 3, career: 1, ai: 1, dt: 1 } },
+    { id: "K-cparent", group: "course", course: true, line: "#FF2D87", label: "給大人的線上課",
+      q: "總在幫孩子想未來，上一次幫自己想，是什麼時候？",
+      t: "線上課《別急著找答案！》寫給大人：用設計思考，重新整理你自己的人生方向。",
+      a: "看看課程內容", u: PRESSPLAY_URL, topics: { edu: 3, general: 1 } }
+  ];
+  var RESERVE = [];   // 候補：每月汰換最差 2 張時，在這裡先寫好新卡（只能導企業內訓或 PressPlay 課程）
+  // 文末主要行動（一篇只放一個）：只有線上課、企業內訓兩種
+  var MAIN = {
+    course: { id: "M-course", group: "course", line: "#1F4BFF", label: "線上課《別急著找答案！》",
+      q: "這篇的問題，如果換成你自己的人生，要從哪裡開始拆？",
+      t: "線上課用設計思考，陪你一步一步把方向想清楚。不確定適不適合，先看 5 分鐘的免費介紹。",
+      a: "看看課程內容", u: PRESSPLAY_URL, a2: "先免費看介紹", u2: EP00_URL },
+    biz: { id: "M-biz", group: "biz", line: "#2B59C3", label: "企業內訓｜設計思考・創意思考",
+      q: "你們團隊也卡在這裡嗎？",
+      t: "把你們正在處理的題目告訴我，一起看看設計思考或創意思考工作坊可以怎麼幫上忙。",
+      a: "聊聊你們的題目", u: CONTACT_URL }
+  };
+  var TOPIC_MAIN = { career: "course", dt: "biz", ai: "biz", edu: "course", general: "course" };
+  // 舊文章（沒有 &main=）：主管／團隊類文章的 topic 也是 career，用文章代稱（&post=）查這張表改成企業內訓（或反過來）
+  // >>> POST_MAIN（產生舊文對照表.py 自動產生，不要手改）
+  var POST_MAIN = {"ai-deskilling-bcg-executives": "biz",
+    "brands-in-house-content-production-forrester": "biz",
+    "creative-ideation-methods": "biz",
+    "cross-department-collaboration": "biz",
+    "doctors-ai-disclosure-patients-survey": "biz",
+    "employee-motivation-deloitte-four-trust-pillars": "biz",
+    "employee-trust-leaders-bcg-dropbox": "biz",
+    "enterprise-ai-adoption-how-to-start": "biz",
+    "esg-employee-engagement": "biz",
+    "esg-training-how-to-plan": "biz",
+    "experience-gifts-holiday-shopping-survey": "biz",
+    "hard-to-reach-service-design": "biz",
+    "how-to-give-negative-feedback": "biz",
+    "intelligence-trap": "biz",
+    "korn-ferry-manager-exhaustion": "biz",
+    "leader-sleep-deprivation-performance": "biz",
+    "manager-delegation": "biz",
+    "meeting-interruptions-organizational-culture-mit": "biz",
+    "office-design-collaboration": "biz",
+    "pisa-2025-hasty-readers": "biz",
+    "psychological-safety-scale": "biz",
+    "remote-work-relational-capital-newcomers": "biz",
+    "rust-out-vs-burnout-workplace": "biz",
+    "school-refusal-attendance-problems-oecd": "biz",
+    "training-needs-analysis": "biz",
+    "user-interview-how-to": "biz",
+    "variable-pay-employee-turnover": "biz",
+    "what-is-a-workshop": "biz",
+    "why-organizational-change-fails-deloitte": "biz",
+    "why-young-people-dont-want-to-be-managers": "biz"};
+  // <<< POST_MAIN
+
+  function poolOn() {
+    if (params.get("pool") === "1") return true;
+    if (params.get("ab") === "text" || params.get("ab") === "banner") return false;   // 測試舊版對照組
+    return nowMs() >= POOL_AT;
+  }
+  function articleTopic() { var t = params.get("topic") || "general"; return TOPIC_MAIN[t] ? t : "general"; }
+  function noCourseHere() { return params.get("nocourse") === "1" || NO_COURSE_POSTS.indexOf(params.get("post") || "") >= 0; }
+  function courseOk() { return launched() && !noCourseHere(); }
+  // 文末要放哪一個主要行動（中段也用這個來避開同一種行動）
+  // career／general／edu → 線上課；dt／ai → 企業內訓；新文章 build.py 依「對應產品 A／B」給 &main=course／biz。DYL 文章（不放課程）→ 企業內訓
+  function mainFor() {
+    if (!launched()) return null;                      // 12:00 前文末維持原本的廣告
+    var k = TOPIC_MAIN[articleTopic()];
+    var pm = params.get("main") || POST_MAIN[params.get("post") || ""];   // 新文章：build.py 給 &main=；舊文章：查 POST_MAIN
+    if (pm && MAIN[pm]) k = pm;
+    if (k === "course" && !courseOk()) k = "biz";
+    return MAIN[k];
+  }
+  function hash(str) {                                 // FNV-1a，回傳 0–1 之間
+    var h = 2166136261;
+    for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return ((h >>> 0) + 0.5) / 4294967296;
+  }
+  function weekNo() { return Math.floor((Math.floor((nowMs() + 8 * 3600e3) / 864e5) + 3) / 7); }   // 台北時間，每週一 00:00 換
+  function pickCard() {
+    var forced = params.get("card");
+    if (forced) { var f = CARDS.concat(RESERVE).filter(function (c) { return c.id === forced; })[0]; if (f) return f; }
+    var topic = articleTopic(), main = mainFor(), avoid = main ? main.group : "";
+    var allowed = CARDS.filter(function (c) { return !(c.course && !courseOk()); });   // 12:00 前、DYL 文章：只有企業內訓卡
+    var ok = allowed.filter(function (c) { return c.group !== avoid; });
+    if (!ok.length) ok = allowed;                      // 兩格都只能放企業內訓時（DYL 文章），中段放另一張內訓卡
+    var rel = ok.filter(function (c) { return (c.topics[topic] || 0) > 0; });
+    if (rel.length < 3) rel = rel.concat(ok.filter(function (c) { return rel.indexOf(c) < 0 && (c.topics.general || 0) > 0; }));
+    if (!rel.length) rel = ok.length ? ok : CARDS.slice(0, 1);
+    var post = params.get("post") || "", key = post + "|" + weekNo();
+    // 依權重的固定隨機順序：同一篇、同一週，每個人算出來的順序都一樣
+    var order = rel.map(function (c) { return { c: c, k: -Math.log(hash(key + "|" + c.id)) / (c.topics[topic] || 0.5) }; })
+                   .sort(function (a, b) { return a.k - b.k; }).map(function (x) { return x.c; });
+    var picks = store("dtads_k_picks") || {}, seen = store("dtads_k_seen") || [];
+    var mine = post && picks[key];
+    var chosen = mine && order.filter(function (c) { return c.id === mine; })[0];
+    if (!chosen) {
+      var recent = seen.slice(-2);                     // 最近看過的 2 張先跳過，避免連續看到同一張
+      chosen = order.filter(function (c) { return recent.indexOf(c.id) < 0; })[0] || order[0];
+      if (post) {
+        picks[key] = chosen.id;
+        var ks = Object.keys(picks); if (ks.length > 40) ks.slice(0, ks.length - 40).forEach(function (x) { delete picks[x]; });
+        store("dtads_k_picks", picks);
+      }
+    }
+    if (seen[seen.length - 1] !== chosen.id) { seen.push(chosen.id); store("dtads_k_seen", seen.slice(-6)); }
+    return chosen;
+  }
+  function cardHref(c, url, suffix) {
+    var u = withUtm(url, c.id + (suffix || ""));
+    try {                                               // 加上是哪一篇文章（PressPlay 短網址保留自己的 UTM，只改 utm_content）
+      var x = new URL(u), post = params.get("post");
+      if (post && x.hostname.indexOf("designthinking") >= 0 || post && x.hostname.indexOf("github.io") >= 0) x.searchParams.set("utm_term", post.slice(0, 60));
+      return x.toString();
+    } catch (e) { return u; }
+  }
+  function postHeight() {                               // 告訴官網（GTM 內嵌區塊自動高度）這張卡實際多高，iframe 會縮成剛好，不留空白
+    try {
+      var el = document.querySelector(".kcard"); if (!el || !window.parent || window.parent === window) return;
+      var cs = getComputedStyle(el), h = Math.ceil(el.getBoundingClientRect().height + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom));
+      if (h > 0) window.parent.postMessage({ dtadsHeight: Math.max(h, 96), dtadsKind: "card" }, "*");
+    } catch (e) {}
+  }
+  function renderCard(c, kind) {
+    var root = document.getElementById("root");
+    var th = params.get("theme");
+    document.documentElement.classList.add("kc");
+    if (th === "dark" || (th === "auto" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)) document.documentElement.classList.add("dark");
+    root.innerHTML = '<div id="stage" class="kcard" style="--line:' + esc(c.line) + '" data-card="' + esc(c.id) + '">' +
+      '<p class="kl">' + esc(c.label) + '</p>' +
+      '<p class="kq">' + esc(c.q) + '</p>' +
+      '<p class="kt">' + esc(c.t) + '</p>' +
+      '<p class="kr"><a class="ka" href="' + esc(cardHref(c, c.u)) + '" target="_blank" rel="noopener">' + esc(c.a) + ' <span class="ar">→</span></a>' +
+      (c.a2 ? '<a class="ka2" href="' + esc(cardHref(c, c.u2, "-2")) + '" target="_blank" rel="noopener">' + esc(c.a2) + '</a>' : "") + '</p>' +
+    '</div>';
+    analyticsAttach({ id: c.id, cat: kind === "main" ? "M" : "K", ab: kind === "main" ? "main" : "pool" });
+    postHeight();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(postHeight);
+    var lastW = window.innerWidth;
+    window.addEventListener("resize", function () { if (Math.abs(window.innerWidth - lastW) > 40) { lastW = window.innerWidth; postHeight(); } });
+    return true;
+  }
+
+  function earlierAdFrame() {                        // 同一篇文章裡，排在我前面的 iframe 是不是也是 DTADS 文章廣告（同網域才讀得到網址）
+    try {
+      var fs = window.parent.frames;
+      for (var i = 0; i < fs.length; i++) {
+        if (fs[i] === window) return false;
+        try { if (fs[i].location.pathname === location.pathname) return true; } catch (e) {}
+      }
+    } catch (e) {}
+    return false;
+  }
   // ===== 同一頁兩個版位不重複 =====
   // 兩個 iframe 幾乎同時載入：各自登記「我顯示哪一則」到 localStorage。
   // 若另一個版位剛好選了同一則，號碼較大的那個改選別則（storage 事件會通知另一個 iframe）。
@@ -990,6 +1236,7 @@
   window.addEventListener("storage", function (e) {
     if (e.key !== "dtads_page" || !current || params.get("ad")) return;
     var slots = freshSlots();
+    if (current && current.kcard) return;             // v7：內容卡／主要行動卡不跟另一格搶（兩格已經用不同規則挑，不會重複）
     var clash = slots.some(function (x) { return x.k !== myKey && x.id === current.id && x.k < myKey; });
     if (!clash) return;
     var taken = slots.filter(function (x) { return x.k !== myKey; }).map(function (x) { return x.id; });
@@ -1002,6 +1249,27 @@
     // 功能：同一頁第二個登記的版位＝文章結尾那一格，用結尾版文案
     // 只算 3 秒內剛登記的版位（同一頁的兩格幾乎同時載入；避免把「上一頁」誤認為同一頁）
     if (!params.get("slot") && slots.some(function (x) { return x.k !== myKey && x.t && Date.now() - x.t < 3000; })) SLOT_END = true;
+    // v7：11/01 00:00 起中段＝內容卡；12:00 起文末＝主要行動卡（?ad= 指定廣告時照舊顯示廣告，方便測試）
+    if (poolOn() && !params.get("ad")) {
+      // v7：哪一格是文末，改用「文章裡排在我前面的 iframe 有沒有另一個 DTADS 文章廣告」判斷（比誰先載入可靠；兩格載入順序可能顛倒）
+      if (!params.get("slot")) SLOT_END = false;
+      var tries = 0;
+      (function decide() {
+        if (!params.get("slot") && !SLOT_END && earlierAdFrame()) SLOT_END = true;
+        if (!params.get("slot") && !SLOT_END && ++tries < 10) { setTimeout(decide, 80); return; }   // 前一格可能還在載入，最多等約 0.7 秒
+        var kc = SLOT_END ? mainFor() : pickCard();
+        if (kc) {
+          current = { id: kc.id, kcard: true };
+          claim(slots, current);
+          renderCard(kc, SLOT_END ? "main" : "pool");
+        } else {
+          current = pickAd(slots.map(function (x) { return x.id; }));
+          claim(slots, current);
+          render(current);
+        }
+      })();
+      return;
+    }
     current = pickAd(slots.map(function (x) { return x.id; }));
     claim(slots, current);
     render(current);

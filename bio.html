@@ -11,6 +11,10 @@
   網址參數：&nocourse=1 不顯示課程（寫到 DYL 的文章用）；&post=文章代稱（記錄用）；&date=2026-11-01 預覽某天的樣子
   每門課的那行依日期自動出現、自動從「追蹤課程」換成「已開課」，不用手動改（設定在下面 COURSES）。
   10/20：第一門課開課前改成「加 LINE 收開賣提醒 →」連到 LINE 官方帳號；11/01 00:00 起自動回到「看課程 →」連 PressPlay。
+  ★ v7（10/29，查查同意）：11/01（日）12:00 開賣起縮成「一行」：線上課在前＋Podcast（查查 10/29：課程放前面；DYL 文章 &nocourse=1 只有 Podcast）。
+    卡片會把實際高度告訴官網（postMessage dtadsHeight），官網 GTM「內嵌區塊自動高度」把舊文的 100／50 iframe 縮成一行高，不留空白
+    （GTM 要先放寬最小高度，見 v7_內容卡/上傳說明.md）。測試：&date=2026-11-02 看一行版；&lines=3 強制舊的三行版。
+    第二門課上線後要不要回到兩行，到時再決定（COURSES 第二門課的設定保留著）。
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,6 +31,7 @@
   a { color: var(--accent); text-decoration: none; font-weight: 500; white-space: nowrap; }
   a:hover, a:focus-visible { text-decoration: underline; outline: none; }
   .dot { color: #b8bec8; margin: 0 3px; }
+  .gap { display: inline-block; width: 1.1em; }
   .v { display: none; }
   /* 每行都要一行放得下：每行有幾個長短版本，程式 fit() 依實際寬度挑放得下的最長版本，全部最短還放不下才縮字 */
     body.small { font-size: 14px; line-height: 1.7; } body.small .dot, body.tiny .dot { margin: 0 1px; } body.small b, body.tiny b { margin-right: 4px; letter-spacing: 0; }
@@ -58,7 +63,33 @@
   var now = q.get("date") ? new Date(q.get("date") + "T12:00:00+08:00") : new Date();
   var post = q.get("post") || "";
   var box = document.getElementById("courses");
-  if (q.get("nocourse") !== "1") COURSES.forEach(function (c, i) {
+  // v7：開賣後一行版
+  var ONE = q.get("lines") !== "3" && now >= new Date(COURSES[0].launch);
+  if (ONE) {
+    var first = document.querySelector("p.fit");
+    var A = function (h, t) { return '<a href="' + h + '">' + t + '</a>'; }, D = '<span class="dot">・</span>';
+    var AP = "https://podcasts.apple.com/tw/podcast/id6819133837", SP = "https://open.spotify.com/show/6G9ORPWiRvZEcRvT6Uax8y",
+        YT = "https://www.youtube.com/channel/UC-qiZ2NTmw8uukEF1LY1Jvg/podcasts", SS = "https://chachacreative101.substack.com/podcast";
+    var pods = [A(AP, "Apple") + D + A(SP, "Spotify") + D + A(YT, "YouTube") + D + A(SS, "Substack"),
+                A(AP, "Apple") + D + A(SP, "Spotify") + D + A(YT, "YouTube"), A(AP, "Apple") + D + A(SP, "Spotify"), A(SS, "收聽")];
+    var gap = '<span class="gap"></span>', v = [];
+    if (q.get("nocourse") === "1") {
+      v = ['<b>Podcast</b>《別急著找答案｜跟 Cha Cha 一起思考》每週五更新：' + pods[0],
+           '<b>Podcast</b>《別急著找答案》每週五更新：' + pods[0], '<b>Podcast</b>《別急著找答案》：' + pods[1],
+           '<b>Podcast</b>《別急著找答案》：' + pods[2], '<b>Podcast</b>' + pods[3]];
+    } else {
+      var cu = new URL(COURSES[0].url); cu.searchParams.set("utm_content", "bio-card" + (post ? "-" + post : ""));
+      var C = cu.toString();
+      // 查查 10/29：課程放前面，Podcast 在後
+      v = ['<b>線上課</b>《' + COURSES[0].short + '》已在 PressPlay 開課，' + A(C, "看課程 →") + gap + '<b>Podcast</b>《別急著找答案》每週五更新：' + pods[0],
+           '<b>線上課</b>《' + COURSES[0].short + '》已在 PressPlay 開課，' + A(C, "看課程 →") + gap + '<b>Podcast</b>' + pods[1],
+           '<b>線上課</b>《' + COURSES[0].short + '》已開課，' + A(C, "看課程 →") + gap + '<b>Podcast</b>' + pods[2],
+           '<b>線上課</b>' + A(C, "《" + COURSES[0].short + "》看課程 →") + gap + '<b>Podcast</b>' + pods[3],
+           '<b>線上課</b>' + A(C, "看課程 →") + gap + '<b>Podcast</b>' + pods[3]];
+    }
+    first.innerHTML = v.map(function (x) { return '<span class="v">' + x + '</span>'; }).join("");
+  }
+  if (!ONE && q.get("nocourse") !== "1") COURSES.forEach(function (c, i) {
     if (!c.url || now < new Date(c.show + "T00:00:00+08:00")) return;
     var live = now >= new Date(c.launch);
     var u = new URL(c.url); u.searchParams.set("utm_content", "bio-card" + (post ? "-" + post : ""));
@@ -75,7 +106,7 @@
               : '<span class="v"><a href="' + href + '">《' + c.short + '》' + (live ? "已開課 →" : c.date + " 開課 →") + '</a></span>');
     box.appendChild(p);
   });
-  if (q.get("nocourse") !== "1" && box.children.length < 2) {
+  if (!ONE && q.get("nocourse") !== "1" && box.children.length < 2) {
     var p2 = document.createElement("p");
     var fu = new URL(FILLER.url); fu.searchParams.set("utm_source", "blog"); fu.searchParams.set("utm_medium", "bio-card"); if (post) fu.searchParams.set("utm_content", post);
     var a2 = '<a href="' + fu.toString() + '">' + FILLER.btn + '</a>';
@@ -109,8 +140,14 @@
       [].forEach.call(p.querySelectorAll(".v"), function (v, j) { v.style.display = j === best.pick[k] ? "inline" : "none"; });
     });
   }
-  fit(); window.addEventListener("resize", fit);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  // v7：把實際高度告訴官網（GTM 內嵌區塊自動高度），一行版才送，舊的三行版維持原本的 iframe 高度
+  function postH() {
+    if (!ONE || window.parent === window) return;
+    try { window.parent.postMessage({ dtadsHeight: Math.ceil(document.querySelector("p.fit").getBoundingClientRect().bottom + 4), dtadsKind: "bio" }, "*"); } catch (e) {}
+  }
+  function fitAll() { fit(); postH(); }
+  fitAll(); window.addEventListener("resize", fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
   // 連結在新分頁開（在 iframe 裡點才不會卡在小框）
   document.querySelectorAll("a").forEach(function (a) { a.target = "_blank"; a.rel = "noopener"; });
 })();
