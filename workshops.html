@@ -9,6 +9,8 @@
   - 對外文字：只寫團隊帶走什麼，不寫任何工具、遊戲名稱（查查 10/15）
   - 這一頁也可以直接把網址寄給管顧當簡介：https://designthinking-powwow.github.io/DTADS/workshops.html
   - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/workshops.html" width="100%" height="1720" style="border:0;" frameborder="0" scrolling="no"></iframe>
+  - 11/01（查查 10/31 定案）：題目區下面加「看我們帶過的 24 個題目 →」（講師站 problems.html）；外商橫條後面加「依產業看」十大類＋「其他產業也可以」。
+    卡片不放客戶名稱（查查 10/31：名單留在跑馬燈）。實際高度由 GTM「內嵌區塊自動高度」調整；嵌入碼的固定高度是備用值，見上傳說明。
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -46,6 +48,47 @@
   .btn { display:inline-flex; align-items:center; background:var(--cobalt); color:#fff; text-decoration:none; font:700 16px/1 "Noto Sans TC",sans-serif; padding:15px 24px; border-radius:999px; transition:transform .2s; }
   .btn:hover { transform:translateY(-2px); }
   .hint { display:none; }
+  /* 11/01 第三版：四個特色、工作坊之後、學員回饋 */
+  .why { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:28px; }
+  .why div { border-top:3px solid var(--cobalt); padding-top:10px; }
+  .why b { display:block; font:900 16px/1.4 "Noto Sans TC",sans-serif; margin-bottom:4px; }
+  .why span { font:400 14px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); }
+  .after { margin-top:44px; background:#fff; border-radius:14px; padding:26px 28px 22px; }
+  .after h3.t { font:900 24px/1.35 "Noto Sans TC",sans-serif; margin:10px 0 6px; }
+  .after .sub { font:500 15px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); }
+  .a3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:16px; }
+  .a3 div { background:var(--soft); border-radius:12px; padding:16px 18px; }
+  .a3 b { display:block; font:900 17px/1.4 "Noto Sans TC",sans-serif; margin-bottom:4px; }
+  .a3 b small { font:500 13px "Noto Sans TC",sans-serif; color:var(--muted); margin-left:6px; }
+  .a3 span { font:400 14px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); }
+  .after .note { margin-top:12px; font:400 13.5px/1.7 "Noto Sans TC",sans-serif; color:#8A817C; }
+  .voices { margin-top:44px; }
+  .voices h3.t { font:900 24px/1.35 "Noto Sans TC",sans-serif; margin:10px 0 0; }
+  .vq { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px; }
+  .vq div { background:#fff; border-radius:14px; padding:18px 20px 16px; display:flex; flex-direction:column; justify-content:space-between; }
+  .vq p { font:500 15px/1.75 "Noto Sans TC",sans-serif; color:var(--ink); }
+  .vq span { display:block; margin-top:10px; font:700 13px "Noto Sans TC",sans-serif; color:var(--muted); }
+  /* 11/01 新增：題目清單連結＋依產業看 */
+  .more { margin-top:18px; font:700 15px "Noto Sans TC",sans-serif; }
+  .more a, .ind a { color:var(--cobalt); text-decoration:none; }
+  .more a:hover, .ind a:hover { text-decoration:underline; }
+  .inds { margin-top:48px; }
+  .inds h3.t { font:900 26px/1.35 "Noto Sans TC",sans-serif; margin:12px 0 8px; }
+  .inds .sub { font:500 16px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); max-width:760px; }
+  .igrid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:20px; }
+  .ind.other { grid-column:span 2; }
+  .ind { background:#fff; border-radius:14px; padding:18px 20px 16px; }
+  .ichips { display:none; }
+  .ind .hd b { font:900 18px/1.4 "Noto Sans TC",sans-serif; }
+  .ind .hd .tag { display:inline-block; margin-left:8px; vertical-align:2px; font:700 12px/1 "Noto Sans TC",sans-serif; color:var(--cobalt); background:#EAF0FF; padding:5px 8px; border-radius:999px; }
+  .ind .hd small { display:block; margin-top:4px; font:400 13.5px/1.6 "Noto Sans TC",sans-serif; color:#8A817C; }
+  .ind .q { margin-top:10px; font:500 15px/1.7 "Noto Sans TC",sans-serif; color:var(--ink); }
+  .ind .c { margin-top:6px; font:400 14px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); }
+  .ind .c em { font-style:normal; color:#8A817C; margin-right:4px; }
+  .ind .go { margin-top:10px; display:flex; gap:16px; flex-wrap:wrap; font:700 14px "Noto Sans TC",sans-serif; }
+  .ind.other { background:transparent; border:2px dashed #D9D0C9; display:flex; flex-direction:column; justify-content:center; }
+  .ind.other b { font:900 18px/1.4 "Noto Sans TC",sans-serif; }
+  .ind.other p { margin-top:6px; font:500 15px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); }
 
   /* 手機：每一類的題目改成左右滑動，整頁高度和電腦版差不多 */
   @media (max-width: 760px) {
@@ -69,6 +112,33 @@
     .btn { font-size:15px; padding:13px 20px; }
     .foot { font-size:13px; gap:10px; }
     .hint { display:block; font:500 12px "Noto Sans TC",sans-serif; color:#9A928D; margin:6px 16px 0; }
+    .why { grid-template-columns:1fr 1fr; gap:12px 10px; margin:20px 16px 0; }
+    .why b { font-size:14.5px; } .why span { font-size:13px; line-height:1.6; }
+    .after { margin:30px 16px 0; padding:18px 16px 16px; }
+    .after h3.t { font-size:19px; } .after .sub { font-size:14px; }
+    .a3 { grid-template-columns:1fr; gap:8px; margin-top:12px; }
+    .a3 div { padding:12px 14px; } .a3 b { font-size:15.5px; } .a3 span { font-size:13.5px; }
+    .after .note { font-size:12.5px; }
+    .voices { margin:30px 16px 0; } .voices h3.t { font-size:19px; }
+    .vq { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scroll-padding:0 16px; gap:12px; margin:12px -16px 0; padding:0 16px 4px; scrollbar-width:none; }
+    .vq::-webkit-scrollbar { display:none; }
+    .vq div { flex:0 0 min(80%, 300px); scroll-snap-align:start; padding:16px; }
+    .vq p { font-size:14px; line-height:1.7; }
+    .voices .hint { margin:6px 0 0; }
+    .more { margin:14px 16px 0; font-size:14px; }
+    .inds { margin:30px 16px 0; }
+    .inds h3.t { font-size:20px; } .inds .sub { font-size:14px; }
+    /* 手機：上面一排產業按鈕，下面卡片左右滑動（和題目區同一種做法）；高度固定，不會因為點開而改變 */
+    .ichips { display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; }
+    .ichips button { font:500 13px/1 "Noto Sans TC",sans-serif; color:var(--ink); background:#fff; border:1px solid #E4DCD5; border-radius:999px; padding:8px 11px; cursor:pointer; }
+    .ichips button.on { background:var(--cobalt); border-color:var(--cobalt); color:#fff; }
+    .igrid { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scroll-padding:0 16px; gap:12px; margin:12px -16px 0; padding:0 16px 4px; scrollbar-width:none; }
+    .igrid::-webkit-scrollbar { display:none; }
+    .ind, .ind.other { flex:0 0 min(84%, 330px); scroll-snap-align:start; padding:16px 16px 14px; }
+    .ind .hd b { font-size:16px; } .ind .hd small { font-size:12.5px; }
+    .ind .q { font-size:14px; } .ind .c { font-size:13px; } .ind .go { font-size:13.5px; gap:12px; }
+    .inds .hint { margin:6px 0 0; }
+    .ind.other b { font-size:16px; } .ind.other p { font-size:14px; }
   }
 </style>
 </head>
@@ -77,6 +147,14 @@
   <div class="k">WORKSHOPS FOR TEAMS</div>
   <h2>AI 跑得越快，<span style="white-space:nowrap">越需要會想的團隊</span></h2>
   <p class="lead">AI 可以給一百個答案，卻不知道哪個問題值得問、哪個點子值得做。我們練的是 AI 取代不了的三種能力，有了它們，AI 也會用得更快、更準。</p>
+
+  <!-- 11/01 第三版：四個特色（競品分析差異化說法 1–4；正向、不比較；第 4 條不寫課後成果，依 10/27 決定） -->
+  <div class="why">
+    <div><b>十五年、超過三百場</b><span>從 2011 年帶到現在，銀行、藥廠、科技公司、政府部會到國小都帶過。</span></div>
+    <div><b>你們帶問題來</b><span>Cha Cha 聽完再搭配方法：設計思考看懂人，創意思考想得多，未來思考看得遠。</span></div>
+    <div><b>自己研發的教材</b><span>每一堂的流程、學習單和卡牌都是我們自己研發，再依你們的題目調整。</span></div>
+    <div><b>外商的年度主題</b><span>把總部今年的主題，設計成在地團隊當天就做得出行動的一場工作坊。</span></div>
+  </div>
 
   <div class="grp">
     <div class="gh"><span class="gk" style="background:var(--cobalt)">看懂人</span><b>設計思考工作坊</b><em>AI 讀得懂資料，讀不懂人心</em></div>
@@ -104,10 +182,54 @@
     <div class="hint">← 左右滑動看更多 →</div>
   </div>
 
+  <p class="more"><a href="https://designthinking-powwow.github.io/chacha/problems.html" target="_blank" rel="noopener">看我們帶過的 24 個題目 →</a></p>
+
   <div class="mnc">
     <span class="gk" style="background:var(--ink)">外商團隊</span>
     <h3>把總部今年的年度主題，變成在地做得出來的行動</h3>
-    <p>總部今年主打顧客體驗、創新，還是以客為尊？我們把它設計成一場工作坊，讓在地團隊當天就做出具體的行動方案。結束後提供可以直接回報總部的成果素材：現場照片、團隊產出和重點摘要。</p>
+    <p>總部今年主打顧客體驗、創新，還是以客為尊？我們把它設計成一場工作坊，讓在地團隊當天就做出具體的行動方案。</p>
+  </div>
+
+  <!-- 11/01 新增「依產業看」（查查 10/31 定案：產業要寬，不要漏掉；卡片不列合作單位，名單留在 stats.html 跑馬燈） -->
+  <div class="inds" id="industries">
+    <div class="k">BY INDUSTRY</div>
+    <h3 class="t">依產業看：你們的同業，常卡在這裡</h3>
+    <p class="sub">十大類產業我們都帶過。找到你們所在的那一類，看看同業最常帶來的問題。</p>
+    <div class="ichips" role="group" aria-label="選擇產業"><button type="button" data-i="0">科技・電子</button><button type="button" data-i="1">金融・保險</button><button type="button" data-i="2">醫療・生技</button><button type="button" data-i="3">製造・傳產</button><button type="button" data-i="4">零售・服務</button><button type="button" data-i="5">外商</button><button type="button" data-i="6">政府・法人</button><button type="button" data-i="7">學校・教育</button><button type="button" data-i="8">媒體・文創</button><button type="button" data-i="9">交通・營建</button></div>
+    <div class="igrid">
+      <div class="ind"><div class="hd"><b>科技・電子・半導體・軟體網路</b><small>半導體、IC 設計、電子、軟體、網路、電信</small></div>
+        <p class="q">功能一版一版加上去，卻說不清楚使用者到底卡在哪一步。</p>
+        <p class="go"><a target="_top" href="https://www.designthinking.com.tw/contactus">聊聊你們的情況 →</a></p></div>
+      <div class="ind"><div class="hd"><b>金融・保險・證券</b><small>銀行、壽險、產險、證券、投信</small></div>
+        <p class="q">商品和別家差不多，想推新服務，提案常停在「風險太高」。</p>
+        <p class="go"><a target="_top" href="https://www.designthinking.com.tw/contactus">聊聊你們的情況 →</a></p></div>
+      <div class="ind"><div class="hd"><b>醫療・製藥・生技・長照</b><small>醫院、診所、藥廠、生技、醫材、長照</small></div>
+        <p class="q">付出很多卻不容易被看見，流程卡在交接，新人留不住。</p>
+        <p class="go"><a target="_top" href="https://www.designthinking.com.tw/contactus">聊聊你們的情況 →</a><a href="https://designthinking-powwow.github.io/chacha/healthcare.html" target="_blank" rel="noopener">醫院與診所怎麼合作 →</a></p></div>
+      <div class="ind"><div class="hd"><b>製造・傳產・能源・化工</b><small>機械、零組件、傳產、食品、石化、能源</small></div>
+        <p class="q">老師傅的經驗傳不下去，年輕同事想換做法，資深的不買單。</p>
+        <p class="go"><a target="_top" href="https://www.designthinking.com.tw/contactus">聊聊你們的情況 →</a></p></div>
+      <div class="ind"><div class="hd"><b>零售・消費品・餐飲・觀光・服務業</b><small>零售、品牌、電商、餐飲、飯店、休閒</small></div>
+        <p class="q">促銷做了一輪又一輪，還是不知道顧客為什麼沒有再回來。</p>
+        <p class="go"><a target="_top" href="https://www.designthinking.com.tw/contactus">聊聊你們的情況 →</a></p></div>
+      <div class="ind"><div class="hd"><b>外商・跨國企業</b><span class="tag">總部年度主題</span><small>台灣分公司、亞太據點、在台團隊</small></div>
+        <p class="q">總部今年的年度主題，要變成台灣團隊做得出來、回報得了的行動。</p>
+        <p class="go"><a target="_top" href="https://www.designthinking.com.tw/contactus">聊聊你們的情況 →</a></p></div>
+      <div class="ind"><div class="hd"><b>政府・公部門・法人</b><span class="tag">產業創新</span><small>部會、地方政府、財團法人、公協會</small></div>
+        <p class="q">計畫要陪業者做出新產品、新服務，業者卻不知道從哪裡開始。</p>
+        <p class="go"><a target="_top" href="https://www.designthinking.com.tw/contactus">聊聊你們的情況 →</a></p></div>
+      <div class="ind"><div class="hd"><b>學校・教育・非營利組織</b><span class="tag">教師研習・校園工作坊</span><small>大學、高中職、國中小、基金會、協會</small></div>
+        <p class="q">學生的專題做了一整學期，最後還是上網找答案。</p>
+        <p class="go"><a target="_top" href="https://www.designthinking.com.tw/contactus">聊聊你們的情況 →</a></p></div>
+      <div class="ind"><div class="hd"><b>媒體・文創・設計・行銷</b><small>媒體、出版、文創、設計、廣告、行銷</small></div>
+        <p class="q">每個月都要新點子，提案會議卻總是同幾個人在講。</p>
+        <p class="go"><a target="_top" href="https://www.designthinking.com.tw/contactus">聊聊你們的情況 →</a></p></div>
+      <div class="ind"><div class="hd"><b>交通・物流・營建・不動產</b><small>運輸、物流、航空、營建、建設、不動產</small></div>
+        <p class="q">現場和辦公室各說各話，流程改了好幾版，第一線還是卡。</p>
+        <p class="go"><a target="_top" href="https://www.designthinking.com.tw/contactus">聊聊你們的情況 →</a></p></div>
+      <div class="ind other"><b>其他產業也可以。</b><p>我們從你們的問題開始，不是從產業開始。</p></div>
+    </div>
+    <div class="hint">← 左右滑動，或點上面的產業 →</div>
   </div>
 
   <div class="dur">
@@ -119,9 +241,49 @@
     </div>
   </div>
 
+  <!-- 11/01 第三版：工作坊之後（查查 10/31：所有產業都可以延伸；不寫專案期程；不寫課後成果報告） -->
+  <div class="after">
+    <div class="k">AFTER THE WORKSHOP</div>
+    <h3 class="t">一場工作坊之後，還可以繼續走</h3>
+    <p class="sub">大部分團隊從一場工作坊開始，做完再決定要不要往下。每個產業都可以這樣走。</p>
+    <div class="a3">
+      <div><b>工作坊<small>3 小時到兩天以上</small></b><span>把相關的人聚在一起，找出最值得先處理的問題，帶走優先順序和下一步。</span></div>
+      <div><b>顧問專案</b><span>陪團隊去聽顧客或第一線的聲音、整理發現，一起做出原型，小規模試行。需要產業知識的地方，我們和合作的產業專家一起進場。</span></div>
+      <div><b>執行陪跑</b><span>方案開始試行後，定期回來看現場的反應，一起調整。</span></div>
+    </div>
+    <p class="note">多數合作都簽有保密協議，案例不公開；洽談時可以分享相近產業的做法。</p>
+  </div>
+
+  <!-- 11/01 第三版：學員回饋（學員回饋_官網用.md 第 9、10、11、3、4、6 則；查查同意潤飾，只寫身分） -->
+  <div class="voices">
+    <div class="k">VOICES</div>
+    <h3 class="t">上過課的人怎麼說</h3>
+    <div class="vq">
+      <div><p>「非常專業又實用，把 AI 和設計思考結合起來，幫大家開發新的產品和服務，帶來成長的機會。」</p><span>— 企業 CEO</span></div>
+      <div><p>「在短時間內，從概念、應用一路做到產出。課程成效超過參與前的預期。」</p><span>— 新創公司 CEO</span></div>
+      <div><p>「先帶我們用設計思考想生活中大大小小的問題，再用淺顯的方式學怎麼用科技解決，讓思考走在科技前面。」</p><span>— 科技公司 PM</span></div>
+      <div><p>「我的問題超多，老師都很有耐心，一個一個陪我釐清，感覺思考的任督二脈被打通了。」</p><span>— 老師</span></div>
+      <div><p>「老師一直鼓勵我們學了就要用，所以我回去馬上教給學生，他們上得超開心！」</p><span>— 大學老師</span></div>
+      <div><p>「今天的設計思考課程，讓我體驗到從創意思維到落實的樂趣，很有意思。」</p><span>— 工作者與學生</span></div>
+    </div>
+    <div class="hint">← 左右滑動看更多 →</div>
+  </div>
+
   <div class="foot"><a class="btn" target="_top" href="https://www.designthinking.com.tw/contactus">聊聊你們的題目 →</a><span>費用依人數、時數與題目規劃，請來信洽詢。</span></div>
 </div>
 <script>if (window.top === window) document.body.style.overflow = "auto";</script>
+<script>
+// 11/01 依產業看（手機）：點產業按鈕，卡片滑到那一張；滑動時按鈕跟著亮。電腦版按鈕隱藏，十張卡直接排開
+(function () {
+  var row = document.querySelector(".inds .igrid"), chips = [].slice.call(document.querySelectorAll(".ichips button"));
+  var cards = [].slice.call(row.querySelectorAll(".ind:not(.other)"));
+  function mark(i) { chips.forEach(function (c, k) { c.classList.toggle("on", k === i); }); }
+  chips.forEach(function (c, i) { c.addEventListener("click", function () { row.scrollTo({ left: cards[i].offsetLeft - 16, behavior: "smooth" }); mark(i); }); });
+  var t; row.addEventListener("scroll", function () { clearTimeout(t); t = setTimeout(function () {
+    var x = row.scrollLeft + 20, i = 0; cards.forEach(function (c, k) { if (c.offsetLeft - 16 <= x) i = k; }); mark(i); }, 80); });
+  mark(0);
+})();
+</script>
 <!-- 10/27 UI/UX：把內容的實際高度傳給官網，官網（GTM「內嵌區塊自動高度」）把這個區塊調成剛好的高度，拿掉上下大片空白。官網沒有接收時，照舊用嵌入碼的固定高度。
      量高度時先暫時把 html／body 的 100% 高度拿掉，量到的是「內容本身」的高度，不會跟著 iframe 一起長高。 -->
 <style>html.dt-measure, html.dt-measure body { height:auto !important; min-height:0 !important; }</style>
