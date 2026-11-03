@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>首頁個人區</title>
+<!--
+  官網首頁個人區（2026/11/02）：原課程橫幅（hero.html）下移到「自己學：線上課程」上方，右邊封面換成可直接播放的 EP00
+  - EP00 用 youtube-nocookie，按了才載入（平常首頁不載 YouTube）
+  - 首頁上方個人卡按「免費看課程介紹」→ GTM「首頁兩入口轉達」把官網捲到這裡，再叫這裡播放（source=card）
+  - 早鳥 50 名賣完時：把 COURSE_PLAN 的 "early" 改成 "regular"，再上傳 personal.html（只改這一行）
+  - 預覽：?plan=regular
+  - GA4 事件交給官網 dataLayer（GTM 轉送），不另外載入 GA：
+      ep00_play_home {source: poster|card}、pressplay_click {widget: home-personal, after_ep00: true|false}
+  - Kolable 嵌入碼（allow 一定要留，影片才能自動播放、全螢幕）：
+    <iframe src="https://designthinking-powwow.github.io/DTADS/personal.html" width="100%" height="600" style="border:0;" frameborder="0" scrolling="no" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --coral: #FF3B5C; --coral-d: #E8243F; --ink: #0F0E0E; --paper: #FFF8F3; --muted: #5C5552; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); }
+  body { font-family: "Inter", "Noto Sans TC", "PingFang TC", sans-serif; color: var(--ink); overflow: hidden; }
+
+  .solo { padding: 40px 0 56px; }
+  .hero { display: flex; align-items: center; gap: 48px; padding: 0 56px; max-width: 1240px; margin: 0 auto; }
+  .txt { flex: 1 1 44%; min-width: 0; }
+  .vid { flex: 1 1 56%; min-width: 0; }
+  .kicker { display: inline-flex; align-items: center; gap: 10px; font: 800 13px/1 Inter, sans-serif; letter-spacing: .14em; color: var(--coral); white-space: nowrap; }
+  .kicker b { background: var(--coral); color: #fff; letter-spacing: .04em; padding: 6px 10px; border-radius: 999px; font: 700 13px/1 "Noto Sans TC", sans-serif; }
+  .txt h2 { font: 900 44px/1.15 "Noto Sans TC", sans-serif; margin: 18px 0 10px; }
+  .sub { font: 500 19px/1.55 "Noto Sans TC", sans-serif; color: var(--muted); }
+  .meta { font: 500 15px/1.6 "Noto Sans TC", sans-serif; color: var(--muted); margin-top: 14px; }
+  .row { display: flex; align-items: center; flex-wrap: wrap; gap: 14px 18px; margin-top: 26px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; background: var(--coral); color: #fff; font: 700 17px/1 "Noto Sans TC", sans-serif; padding: 16px 26px; border-radius: 999px; text-decoration: none; white-space: nowrap; transition: background .2s; }
+  .btn:hover { background: var(--coral-d); }
+  .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .price { font: 700 16px/1.4 "Noto Sans TC", sans-serif; white-space: nowrap; }
+  .price em { font-style: normal; color: var(--coral); font: 800 22px Inter, sans-serif; }
+  .after { font: 500 14px/1.5 "Noto Sans TC", sans-serif; color: var(--muted); margin-top: 12px; }
+
+  .player { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: #000; box-shadow: 0 18px 40px rgba(15,14,14,.16); }
+  .player button.poster { all: unset; position: absolute; inset: 0; cursor: pointer; display: block; }
+  .player button.poster:focus-visible { outline: 3px solid var(--coral); outline-offset: -3px; }
+  .player img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .35s ease, filter .35s; }
+  .player button.poster:hover img, .player button.poster:focus-visible img { transform: scale(1.02); filter: brightness(.92); }
+  .play { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: inline-flex; align-items: center; gap: 12px; background: var(--ink); color: #fff; padding: 14px 22px 14px 16px; border-radius: 999px; font: 700 16px/1 "Noto Sans TC", sans-serif; box-shadow: 0 10px 24px rgba(0,0,0,.3); white-space: nowrap; }
+  .play .dot { width: 38px; height: 38px; border-radius: 50%; background: var(--coral); display: grid; place-items: center; }
+  .play .dot::before { content: ""; margin-left: 4px; border-left: 13px solid #fff; border-top: 8px solid transparent; border-bottom: 8px solid transparent; }
+  .badge { position: absolute; left: 14px; top: 14px; background: #fff; color: var(--ink); font: 800 12px/1 Inter, "Noto Sans TC", sans-serif; letter-spacing: .06em; padding: 7px 10px; border-radius: 999px; }
+  .player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+  @media (max-width: 1000px) {
+    .hero { gap: 28px; padding: 0 24px; }
+    .txt h2 { font-size: 32px; }
+    .sub { font-size: 16px; }
+  }
+  /* 手機：影片在上、字在下 */
+  @media (max-width: 680px) {
+    .solo { padding: 24px 0 36px; }
+    .hero { flex-direction: column; align-items: stretch; gap: 18px; padding: 0 16px; }
+    .vid { order: -1; }
+    .player { border-radius: 10px; }
+    .play { font-size: 14px; padding: 10px 16px 10px 10px; gap: 10px; }
+    .play .dot { width: 32px; height: 32px; }
+    .badge { left: 10px; top: 10px; font-size: 11px; padding: 6px 9px; }
+    .kicker { font-size: 11px; } .kicker b { font-size: 12px; padding: 5px 8px; }
+    .txt h2 { font-size: 26px; margin: 12px 0 6px; }
+    .sub { font-size: 15px; } .meta { font-size: 13px; margin-top: 6px; }
+    .row { margin-top: 14px; gap: 10px 14px; }
+    .btn { font-size: 15px; padding: 13px 20px; }
+    .price { font-size: 14px; } .price em { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+<main class="solo" id="personal">
+  <div class="hero">
+    <div class="txt">
+      <div class="kicker">ONLINE COURSE <b>現正上線</b></div>
+      <h2>別急著找答案！</h2>
+      <p class="sub">善用設計思考，打造你自己的人生藍圖</p>
+      <p class="meta">8 堂錄影課＋8 份學習單・在 PressPlay 上課</p>
+      <div class="row">
+        <a class="btn" id="course" href="https://www.pressplay.cc/link/s/DE956453?utm_content=home-personal" target="_blank" rel="noopener">看課程 →</a>
+        <span class="price" id="price">早鳥 <em>NT$990</em>・前 50 名</span>
+      </div>
+      <p class="after" id="after">影片是課程第一集 EP00，免費，約 5 分鐘。</p>
+    </div>
+    <div class="vid">
+      <div class="player" id="player">
+        <button class="poster" type="button" id="poster" aria-label="播放 EP00 免費課程介紹（約 5 分鐘）">
+          <img src="https://designthinking-powwow.github.io/DTADS/img/course1_cover.webp" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/UnSkHuQmk7o/hqdefault.jpg'" alt="別急著找答案！課程封面" width="1200" height="675">
+          <span class="badge">EP00・免費試看</span>
+          <span class="play"><span class="dot"></span>播放課程介紹 5 分鐘</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+(function () {
+  // ===== 需要時才改的設定 =====
+  var EP00 = "UnSkHuQmk7o";
+  // ★ 早鳥 50 名賣完時：把 "early" 改成 "regular"，再上傳 personal.html
+  var COURSE_PLAN = "early";
+  var PLANS = {
+    early:   '早鳥 <em>NT$990</em>・前 50 名',
+    regular: '3 人團 每人 <em>NT$1,190</em>'
+  };
+
+  var q = new URLSearchParams(location.search);
+  if (q.get("plan") && PLANS[q.get("plan")]) COURSE_PLAN = q.get("plan");
+  document.getElementById("price").innerHTML = PLANS[COURSE_PLAN];
+
+  var inFrame = window.parent !== window;
+  function track(name, p) { if (inFrame) { try { parent.postMessage({ ccHome: name, p: p || {} }, "*"); } catch (e) {} } }
+
+  var playing = false;
+  function play(source) {
+    if (playing) return;
+    playing = true;
+    var f = document.createElement("iframe");
+    f.title = "別急著找答案！EP00 免費課程介紹";
+    f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen";
+    f.allowFullscreen = true;
+    f.referrerPolicy = "strict-origin-when-cross-origin";   // YouTube 要知道是哪個網站嵌入，少了會出現「錯誤 153」
+    f.src = "https://www.youtube-nocookie.com/embed/" + EP00 + "?rel=0&autoplay=1&playsinline=1&modestbranding=1";
+    var p = document.getElementById("player");
+    p.innerHTML = "";
+    p.appendChild(f);
+    document.getElementById("after").textContent = "看完覺得適合，按「看課程 →」就能報名。";
+    track("ep00_play_home", { source: source });
+  }
+
+  document.getElementById("poster").addEventListener("click", function () { play("poster"); });
+
+  // 首頁上方個人卡 →（官網 GTM 轉達）→ 這裡播放
+  window.addEventListener("message", function (e) {
+    if (e.source !== parent || !/(^|\.)designthinking\.com\.tw$/.test(e.origin.replace(/^https?:\/\//, ""))) return;
+    if (e.data && e.data.ccHomePlay) play("card");
+  });
+
+  document.getElementById("course").addEventListener("click", function () {
+    track("pressplay_click", { widget: "home-personal", after_ep00: playing ? "true" : "false" });
+  });
+})();
+</script>
+<!-- 把內容高度傳給官網（GTM「內嵌區塊自動高度」tag 31 會把嵌入框調成剛好的高度；沒收到時照嵌入碼的固定高度） -->
+<script>
+(function () {
+  if (window.parent === window) return;
+  var last = 0;
+  function measure() {
+    var h = Math.ceil(document.getElementById("personal").getBoundingClientRect().height);
+    if (!(h > 80) || Math.abs(h - last) < 2) return;
+    last = h;
+    parent.postMessage({ dtadsHeight: h, dtadsKind: "personal" }, "*");
+  }
+  window.addEventListener("load", measure);
+  window.addEventListener("resize", measure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  setTimeout(measure, 800); setTimeout(measure, 2500);
+})();
+</script>
+</body>
+</html>

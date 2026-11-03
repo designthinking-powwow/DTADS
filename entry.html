@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>首頁兩入口</title>
+<!--
+  官網首頁第一屏：兩入口卡片（2026/11/02 上線，取代 hero.html 的嵌入位置）
+  - 左：企業（帶團隊的人）→ /workshops 或 /contactus（原頁開啟 target=_top）
+  - 右：個人（自己卡住的人）→ 按「免費看課程介紹」，官網捲到個人區（personal.html）並播放 EP00
+    （兩個嵌入框之間靠 GTM「首頁兩入口轉達」傳話；官網找不到個人區時，改成另開 YouTube 看 EP00）
+  - A/B：每位訪客兩張卡各自 50/50 抽版本一或版本二，記在瀏覽器（localStorage home_ab_b2b／home_ab_b2c），同一人再來看到同一版
+  - GA4 事件都交給官網的 dataLayer（GTM 轉送），這裡不另外載入 GA：
+      home_entry_view {b2b_copy, b2c_copy}、home_entry_b2b {copy}、home_entry_b2c {copy}
+  - 預覽指定版本：?b2b=2&b2c=1（不會寫進瀏覽器紀錄）
+  - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/entry.html" width="100%" height="600" style="border:0;" frameborder="0" scrolling="no"></iframe>
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --coral: #FF3B5C; --coral-d: #E8243F; --ink: #0F0E0E; --paper: #FFF8F3; --muted: #5C5552; --cobalt: #1F4BFF; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--paper); }
+  body { font-family: "Inter", "Noto Sans TC", "PingFang TC", sans-serif; color: var(--ink); overflow: hidden; }
+  a { color: inherit; }
+
+  .entry { padding: 40px 0 48px; }
+  .cards { max-width: 1240px; margin: 0 auto; padding: 0 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .card { border-radius: 20px; padding: 36px 36px 32px; display: flex; flex-direction: column; min-height: 330px; min-width: 0; }
+  .card.b2b { background: var(--ink); color: #fff; }
+  .card.b2c { background: #fff; color: var(--ink); box-shadow: 0 0 0 2px var(--ink) inset; }
+  .k { display: inline-flex; align-items: center; gap: 10px; font: 800 12px/1 Inter, sans-serif; letter-spacing: .16em; }
+  .k i { font-style: normal; font: 700 13px/1 "Noto Sans TC", sans-serif; letter-spacing: .04em; padding: 6px 10px; border-radius: 999px; }
+  .b2b .k { color: #9DB0FF; } .b2b .k i { background: var(--cobalt); color: #fff; }
+  .b2c .k { color: var(--coral); } .b2c .k i { background: var(--coral); color: #fff; }
+  .card h2 { font: 900 34px/1.28 "Noto Sans TC", sans-serif; margin: 20px 0 14px; letter-spacing: .01em; text-wrap: balance; }
+  .card p { font: 500 17px/1.7 "Noto Sans TC", sans-serif; flex: 1; }
+  .b2b p { color: #CFC9C5; } .b2c p { color: var(--muted); }
+  .cta { align-self: flex-start; margin-top: 26px; display: inline-flex; align-items: center; gap: 8px; font: 700 17px/1 "Noto Sans TC", sans-serif; padding: 16px 26px; border-radius: 999px; text-decoration: none; border: 0; cursor: pointer; white-space: nowrap; transition: background .2s, transform .2s; }
+  .b2b .cta { background: var(--cobalt); color: #fff; }
+  .b2b .cta:hover { background: #1236D6; transform: translateY(-2px); }
+  .b2c .cta { background: var(--coral); color: #fff; }
+  .b2c .cta:hover { background: var(--coral-d); transform: translateY(-2px); }
+  .cta:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .b2b .cta:focus-visible { outline-color: #fff; }
+  .cta .tri { width: 0; height: 0; border-left: 10px solid currentColor; border-top: 6px solid transparent; border-bottom: 6px solid transparent; }
+
+  /* A/B：預設先顯示版本一，script 決定版本後切換 */
+  .v2 { display: none; }
+  body.b2b-v2 .b2b .v1, body.b2c-v2 .b2c .v1 { display: none; }
+  body.b2b-v2 .b2b .v2, body.b2c-v2 .b2c .v2 { display: block; }
+  body.b2b-v2 .b2b a.v2 { display: inline-flex; }
+
+  @media (max-width: 1000px) {
+    .cards { padding: 0 24px; gap: 16px; }
+    .card { padding: 28px 24px 24px; min-height: 300px; }
+    .card h2 { font-size: 26px; }
+    .card p { font-size: 15px; }
+  }
+  /* 手機：兩張卡上下排 */
+  @media (max-width: 680px) {
+    .entry { padding: 20px 0 24px; }
+    .cards { grid-template-columns: 1fr; padding: 0 16px; gap: 12px; }
+    .card { min-height: 0; padding: 20px 18px 18px; border-radius: 16px; }
+    .k { font-size: 10px; gap: 8px; } .k i { font-size: 12px; padding: 5px 8px; }
+    .card h2 { font-size: 22px; line-height: 1.35; margin: 12px 0 8px; }
+    .card p { font-size: 14.5px; line-height: 1.65; }
+    .cta { margin-top: 16px; font-size: 15px; padding: 13px 20px; }
+  }
+</style>
+</head>
+<body>
+<main class="entry" id="entry">
+  <div class="cards">
+    <article class="card b2b">
+      <div class="k">FOR TEAMS <i>帶團隊的人</i></div>
+      <h2 class="v1">同一個問題，團隊已經開第三次會了</h2>
+      <h2 class="v2">跨部門開會，每個人講的都不是同一件事</h2>
+      <p class="v1">每個部門都說得有道理，答案就是兜不起來。我們到公司帶一場設計思考工作坊，用你們手上的真題目，讓大家回到顧客身上重新對一次。</p>
+      <p class="v2">業務在講客戶抱怨，產品在講規格，主管只想知道下週要做什麼。AI 能幫你整理會議紀錄，人跟人卡住的地方還是要人來解。我們到公司帶一場工作坊，先把大家要解的題目對齊。</p>
+      <a class="cta v1" href="https://www.designthinking.com.tw/workshops" target="_top" data-entry="b2b">看企業工作坊 →</a>
+      <a class="cta v2" href="https://www.designthinking.com.tw/contactus" target="_top" data-entry="b2b">聊聊你們的題目 →</a>
+    </article>
+    <article class="card b2c">
+      <div class="k">ON YOUR OWN <i>自己卡住的人</i></div>
+      <h2 class="v1">工作還算穩，卻越來越不知道要往哪走</h2>
+      <h2 class="v2">每天都很忙，回頭看卻說不出自己想要什麼</h2>
+      <p class="v1">先別急著換工作，也別急著報一堆課。花 5 分鐘看課程第一集，看看設計思考怎麼拿來處理自己的方向。</p>
+      <p class="v2">想換跑道又怕選錯，想留下又覺得悶。這門線上課陪你一次試一小步，先看 5 分鐘的課程介紹，再決定要不要上。</p>
+      <button class="cta" type="button" data-entry="b2c"><span class="tri" aria-hidden="true"></span>免費看課程介紹</button>
+    </article>
+  </div>
+</main>
+<script>
+(function () {
+  var EP00_URL = "https://youtu.be/UnSkHuQmk7o";   // 官網找不到個人區時，另開 YouTube
+  var inFrame = window.parent !== window;
+  var q = new URLSearchParams(location.search);
+
+  // 送給官網（GTM 轉成 dataLayer 事件）；直接打開這個檔時什麼都不送
+  function tell(msg) { if (inFrame) { try { parent.postMessage(msg, "*"); } catch (e) {} } }
+  function track(name, p) { tell({ ccHome: name, p: p || {} }); }
+
+  // A/B：兩張卡各自 50/50，記在瀏覽器；?b2b=1|2&b2c=1|2 可以指定預覽（不記錄）
+  var shown = {};
+  ["b2b", "b2c"].forEach(function (set) {
+    var v = q.get(set);
+    if (v !== "1" && v !== "2") {
+      v = null;
+      try { v = localStorage.getItem("home_ab_" + set); } catch (e) {}
+      if (v !== "1" && v !== "2") {
+        v = Math.random() < 0.5 ? "1" : "2";
+        try { localStorage.setItem("home_ab_" + set, v); } catch (e) {}
+      }
+    }
+    document.body.classList.toggle(set + "-v2", v === "2");
+    shown[set] = "v" + v;
+  });
+  track("home_entry_view", { b2b_copy: shown.b2b, b2c_copy: shown.b2c });
+
+  // 官網有沒有 GTM 轉達、有沒有個人區：GTM 收到 hello 會回 ccHomeReady（1＝有個人區，0＝沒有）
+  var relayReady = false, personalReady = false;
+  window.addEventListener("message", function (e) {
+    if (e.source !== parent || !/(^|\.)designthinking\.com\.tw$/.test(e.origin.replace(/^https?:\/\//, ""))) return;
+    if (e.data && e.data.ccHomeReady !== undefined) { relayReady = true; personalReady = !!e.data.ccHomeReady; }
+  });
+  tell({ ccHome: "hello" });
+  setTimeout(function () { tell({ ccHome: "hello" }); }, 1500);
+  setTimeout(function () { tell({ ccHome: "hello" }); }, 4000);
+
+  var cards = document.querySelectorAll("[data-entry]");
+  for (var i = 0; i < cards.length; i++) {
+    cards[i].addEventListener("click", function (ev) {
+      var kind = this.getAttribute("data-entry");
+      if (kind === "b2b") {
+        // 企業卡：直接換頁的話，嵌入框會先被關掉，點擊事件送不到官網。
+        // 有 GTM 轉達時，改由官網先記事件再換頁；沒有轉達時照連結原頁開啟。
+        if (relayReady) { ev.preventDefault(); tell({ ccHome: "home_entry_b2b", p: { copy: shown.b2b }, go: this.href }); }
+        else track("home_entry_b2b", { copy: shown.b2b });
+        return;
+      }
+      track("home_entry_b2c", { copy: shown.b2c });
+      ev.preventDefault();
+      if (personalReady) tell({ ccHome: "play_personal" });   // 官網捲到個人區並播放
+      else window.open(EP00_URL, "_blank", "noopener");
+    });
+  }
+})();
+</script>
+<!-- 把內容高度傳給官網（GTM「內嵌區塊自動高度」tag 31 會把嵌入框調成剛好的高度；沒收到時照嵌入碼的固定高度） -->
+<script>
+(function () {
+  if (window.parent === window) return;
+  var last = 0;
+  function measure() {
+    var h = Math.ceil(document.getElementById("entry").getBoundingClientRect().height);
+    if (!(h > 80) || Math.abs(h - last) < 2) return;
+    last = h;
+    parent.postMessage({ dtadsHeight: h, dtadsKind: "entry" }, "*");
+  }
+  window.addEventListener("load", measure);
+  window.addEventListener("resize", measure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  setTimeout(measure, 800); setTimeout(measure, 2500);
+})();
+</script>
+</body>
+</html>
