@@ -275,6 +275,30 @@
     .kcard .kt { font-size: 14.5px; line-height: 1.7; margin-bottom: 8px; }
     .kcard .ka { font-size: 15px; }
   }
+  /* 11/04 查查：「改顏色、設計，比較有變化，一樣的東西看久會煩」→ 4 種版型＋7 種顏色輪流（同一人不會連續看到同版型或同色） */
+  #stage.kcard.sk-tint { background: color-mix(in srgb, var(--line) 8%, #fff); }
+  #stage.kcard.sk-band { overflow: hidden; }
+  html.dark #stage.kcard.sk-tint { background: color-mix(in srgb, var(--line) 20%, #16181b); }
+  .kcard.sk-tint { border-left: 0; padding: 18px 20px; border-radius: 14px; background: color-mix(in srgb, var(--line) 8%, #fff); }
+  .kcard.sk-tint .kl { display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--line); color: #fff; letter-spacing: .03em; margin-bottom: 10px; }
+  .kcard.sk-tint .ka, .kcard.sk-band .ka { display: inline-block; border: 0; padding: 9px 18px; border-radius: 999px; background: var(--line); color: #fff; }
+  .kcard.sk-quote { border-left: 0; padding: 14px 4px 12px; border-top: 1px solid color-mix(in srgb, var(--line) 35%, transparent); border-bottom: 1px solid color-mix(in srgb, var(--line) 35%, transparent); position: relative; }
+  .kcard.sk-quote::before { content: "\201C"; position: absolute; top: -6px; right: 6px; font: 900 72px/1 Georgia, serif; color: color-mix(in srgb, var(--line) 22%, transparent); pointer-events: none; }
+  .kcard.sk-quote .kl { color: var(--line); }
+  .kcard.sk-quote .kq { font-size: 20.5px; line-height: 1.5; padding-right: 40px; }
+  .kcard.sk-quote .ka { color: var(--line); }
+  .kcard.sk-band { border-left: 0; padding: 0; border-radius: 12px; overflow: hidden; border: 1.5px solid color-mix(in srgb, var(--line) 30%, transparent); }
+  .kcard.sk-band .kl { margin: 0; padding: 8px 18px; background: var(--line); color: #fff; letter-spacing: .04em; }
+  .kcard.sk-band .kq { padding: 14px 18px 0; }
+  .kcard.sk-band .kt { padding: 0 18px; }
+  .kcard.sk-band .kr { padding: 0 18px 16px; }
+  .kcard.sk-line .kl { color: var(--line); }
+  html.dark .kcard.sk-tint { background: color-mix(in srgb, var(--line) 20%, #16181b); }
+  html.dark .kcard.sk-quote .ka, html.dark .kcard.sk-quote .kl, html.dark .kcard.sk-line .kl { color: color-mix(in srgb, var(--line) 55%, #fff); }
+  @media (max-width: 420px) {
+    .kcard.sk-tint { padding: 16px; } .kcard.sk-quote .kq { font-size: 18px; }
+    .kcard.sk-band .kq, .kcard.sk-band .kt, .kcard.sk-band .kr { padding-left: 14px; padding-right: 14px; } .kcard.sk-band .kl { padding-left: 14px; }
+  }
   @media (prefers-reduced-motion: reduce) { .kcard .ka .ar { transition: none; } }
 </style>
 <body>
@@ -769,6 +793,7 @@
     if (!gaReady || !trackAd) return;
     var p = { ad_id: trackAd.id, category: trackAd.cat, slot: SLOT_END ? 2 : 1, topic: params.get("topic") || "general",
               post: params.get("post") || "", ab: trackAd.ab || (SLOT_END ? "end" : AB) };
+    if (LOOK) { p.skin = LOOK.skin; p.color = LOOK.color; }
     for (var k in extra || {}) p[k] = extra[k];
     gtag("event", name, p);
   }
@@ -1048,7 +1073,7 @@
     { id: "K-bizfront", group: "biz", line: "#00A86B", label: "企業內訓・從第一線出發",
       q: "第一線同仁每天看到的問題，有被聽見嗎？",
       t: "設計思考企業內訓：把顧客和第一線同仁的真實經驗帶進會議室，一起找出真正該解的問題。",
-      a: "聊聊你們的題目", u: CONTACT_URL, topics: { general: 2, career: 1, dt: 1 } },
+      a: "聊聊你們的題目", u: CONTACT_URL, topics: { general: 1, career: 1, dt: 1 } },   // 11/04 general 2→1：11/01–03 佔中段 65%、0 點擊
     { id: "K-school", group: "biz", line: "#00897B", label: "學校工作坊",
       q: "學生不缺答案，缺的是自己找問題的機會？",
       t: "設計思考與創意思考的學校工作坊，從小學到大學，讓學生在課堂上動手解決真實的問題。",
@@ -1138,6 +1163,9 @@
     var pm = params.get("main") || POST_MAIN[params.get("post") || ""];   // 新文章：build.py 給 &main=；舊文章：查 POST_MAIN
     if (pm && MAIN[pm]) k = pm;
     if (k === "course" && !courseOk()) k = "biz";
+    // 11/04 查查同意「翻轉」：中段（曝光是文末 7 倍）放文章本身對應的產品，文末放另一個
+    // career／general／edu → 中段課程卡、文末企業內訓；dt／ai／主管類 → 中段企業內訓卡、文末課程。DYL 文章（不放課程）維持兩格都是企業內訓
+    if (courseOk()) k = (k === "course") ? "biz" : "course";
     return MAIN[k];
   }
   function hash(str) {                                 // FNV-1a，回傳 0–1 之間
@@ -1190,12 +1218,27 @@
       if (h > 0) window.parent.postMessage({ dtadsHeight: Math.max(h, 96), dtadsKind: "card" }, "*");
     } catch (e) {}
   }
+  // 11/04：版型與顏色輪流。版型 4 種、顏色 7 種（都配白字夠清楚，不用橘色當主色）；記住最近看過的，不連續重複
+  var SKINS = ["line", "tint", "quote", "band"];
+  var COLORS = ["#1F4BFF", "#7B2FF7", "#E5384F", "#0E8F6A", "#14213D", "#D6336C", "#00838F"];
+  var LOOK = null;
+  function pickLook() {
+    if (LOOK) return LOOK;
+    var fs = params.get("skin"), fc = params.get("color");
+    var last = store("dtads_look") || {};
+    var sk = SKINS.filter(function (s) { return s !== last.s; }), co = COLORS.filter(function (x) { return x !== last.c; });
+    LOOK = { skin: SKINS.indexOf(fs) >= 0 ? fs : sk[Math.floor(Math.random() * sk.length)],
+             color: fc ? "#" + fc.replace(/[^0-9a-fA-F]/g, "").slice(0, 6) : co[Math.floor(Math.random() * co.length)] };
+    store("dtads_look", { s: LOOK.skin, c: LOOK.color });
+    return LOOK;
+  }
   function renderCard(c, kind) {
     var root = document.getElementById("root");
     var th = params.get("theme");
     document.documentElement.classList.add("kc");
     if (th === "dark" || (th === "auto" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)) document.documentElement.classList.add("dark");
-    root.innerHTML = '<div id="stage" class="kcard" style="--line:' + esc(c.line) + '" data-card="' + esc(c.id) + '">' +
+    var look = pickLook();
+    root.innerHTML = '<div id="stage" class="kcard sk-' + look.skin + '" style="--line:' + esc(look.color) + '" data-card="' + esc(c.id) + '" data-skin="' + look.skin + '">' +
       '<p class="kl">' + esc(c.label) + '</p>' +
       '<p class="kq">' + esc(c.q) + '</p>' +
       '<p class="kt">' + esc(c.t) + '</p>' +
