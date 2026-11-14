@@ -40,6 +40,12 @@
   .proof { margin-top: 30px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.16); display: flex; flex-wrap: wrap; gap: 8px 28px; align-items: baseline; }
   .proof .n { font: 800 15px/1.5 Inter, "Noto Sans TC", sans-serif; color: #fff; }
   .proof .c { font: 500 15px/1.6 "Noto Sans TC", sans-serif; color: #A8A19D; }
+  .marquee { margin-top: 14px; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+  .track { display: flex; gap: 10px; width: max-content; list-style: none; animation: cc-scroll 60s linear infinite; }
+  .marquee:hover .track { animation-play-state: paused; }
+  .track li { font: 700 14px/1 "Noto Sans TC", sans-serif; color: #E9E4E0; padding: 9px 14px; border-radius: 999px; background: rgba(255,255,255,.07); box-shadow: 0 0 0 1px rgba(255,255,255,.12) inset; white-space: nowrap; }
+  @keyframes cc-scroll { from { transform: translateX(0); } to { transform: translateX(calc(-50% - 5px)); } }
+  @media (prefers-reduced-motion: reduce) { .track { animation: none; flex-wrap: wrap; width: auto; } .track li:nth-child(n+31) { display: none; } }
   .self { margin: 16px 4px 0; font: 500 15px/1.6 "Noto Sans TC", sans-serif; color: var(--muted); }
   .self button { font: inherit; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
   .self button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
@@ -62,6 +68,8 @@
     .proof { margin-top: 20px; padding-top: 16px; gap: 4px 16px; }
     .proof .n, .proof .c { font-size: 13.5px; }
     .self { font-size: 14px; margin-top: 12px; }
+    .track li { font-size: 13px; padding: 8px 12px; }
+    .track { animation-duration: 45s; }
   }
 </style>
 </head>
@@ -78,7 +86,10 @@
       </div>
       <div class="proof">
         <span class="n">15 年・超過三百場工作坊</span>
-        <span class="c">合作過 Google、LINE Taiwan、羅氏藥廠、楊森藥廠與多家金融機構</span>
+        <span class="c">合作過超過 100 個企業、政府與學校單位</span>
+      </div>
+      <div class="marquee" aria-label="合作單位：Google、LINE Taiwan、羅氏藥廠、楊森藥廠、南山人壽、國泰世華銀行、中國信託、新光人壽、台灣人壽、遠傳電信、新思科技、美律實業、iKala、宜睿智慧、織山工作室、第一銀行、合作金庫、土地銀行、精誠資訊、Pinkoi、文化部、教育部、交通部、台灣設計研究院、工研院、台灣大學、政治大學、淡江大學、輔仁大學、明志科大、學學實驗教育機構、兒福聯盟">
+        <ul class="track" aria-hidden="true"><li>Google</li><li>LINE Taiwan</li><li>羅氏藥廠</li><li>楊森藥廠</li><li>南山人壽</li><li>國泰世華銀行</li><li>中國信託</li><li>新光人壽</li><li>台灣人壽</li><li>遠傳電信</li><li>新思科技</li><li>美律實業</li><li>iKala</li><li>宜睿智慧</li><li>織山工作室</li><li>第一銀行</li><li>合作金庫</li><li>土地銀行</li><li>精誠資訊</li><li>Pinkoi</li><li>文化部</li><li>教育部</li><li>交通部</li><li>台灣設計研究院</li><li>工研院</li><li>台灣大學</li><li>政治大學</li><li>淡江大學</li><li>輔仁大學</li><li>明志科大</li><li>學學實驗教育機構</li><li>兒福聯盟</li><li>Google</li><li>LINE Taiwan</li><li>羅氏藥廠</li><li>楊森藥廠</li><li>南山人壽</li><li>國泰世華銀行</li><li>中國信託</li><li>新光人壽</li><li>台灣人壽</li><li>遠傳電信</li><li>新思科技</li><li>美律實業</li><li>iKala</li><li>宜睿智慧</li><li>織山工作室</li><li>第一銀行</li><li>合作金庫</li><li>土地銀行</li><li>精誠資訊</li><li>Pinkoi</li><li>文化部</li><li>教育部</li><li>交通部</li><li>台灣設計研究院</li><li>工研院</li><li>台灣大學</li><li>政治大學</li><li>淡江大學</li><li>輔仁大學</li><li>明志科大</li><li>學學實驗教育機構</li><li>兒福聯盟</li></ul>
       </div>
     </article>
     <p class="self">想自己學設計思考、整理人生方向？<button type="button" data-entry="b2c">看線上課程介紹（5 分鐘）</button></p>
