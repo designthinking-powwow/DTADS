@@ -31,6 +31,7 @@
   .t span { font:500 13px/1.5 "Noto Sans TC",sans-serif; opacity:.9; }
   .t1 { background:var(--cobalt); } .t2 { background:var(--green); } .t3 { background:var(--violet); } .t4 { background:#fff; color:var(--ink); }
   .t4 span { color:var(--muted); opacity:1; }
+  .t b em { font-style:normal; } .t b .sm { display:none; }
   @media (max-width: 860px) {
     .w { grid-template-columns:1fr; gap:26px; padding:0 16px; }
     .big { font-size:32px; margin:12px 0 12px; } p { font-size:15px; }
@@ -38,6 +39,7 @@
     .tiles { grid-template-columns:repeat(4,1fr); gap:8px; }
     .t { min-height:0; padding:12px 10px; border-radius:12px; }
     .t b { font-size:15px; } .t span { display:none; }
+    .t b { white-space:nowrap; } .t b .lg { display:none; } .t b .sm { display:inline; }
   }
 </style>
 </head>
@@ -56,7 +58,7 @@
     <div class="t t1"><b>看懂人</b><span>設計思考工作坊</span></div>
     <div class="t t2"><b>想得多</b><span>創意思考工作坊</span></div>
     <div class="t t3"><b>看得遠</b><span>未來思考工作坊</span></div>
-    <div class="t t4"><b>30 人以內</b><span>半天、一天、兩天</span></div>
+    <div class="t t4"><b><em class="lg">30 人以內</em><em class="sm">限 30 人</em></b><span>半天、一天、兩天</span></div>
   </div>
 </div>
 <style>html.dt-measure, html.dt-measure body { height:auto !important; min-height:0 !important; }</style>
