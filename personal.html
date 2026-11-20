@@ -8,7 +8,7 @@
   官網首頁個人區（2026/11/02）：原課程橫幅（hero.html）下移到「自己學：線上課程」上方，右邊封面換成可直接播放的 EP00
   - EP00 用 youtube-nocookie，按了才載入（平常首頁不載 YouTube）
   - 首頁上方個人卡按「免費看課程介紹」→ GTM「首頁兩入口轉達」把官網捲到這裡，再叫這裡播放（source=card）
-  - 早鳥 50 名賣完時：把 COURSE_PLAN 的 "early" 改成 "regular"，再上傳 personal.html（只改這一行）
+  - 11/20：早鳥只寫截止時間、不寫名額；11/25 00:00（台北）起自動換成 3 人團價
   - 預覽：?plan=regular
   - GA4 事件交給官網 dataLayer（GTM 轉送），不另外載入 GA：
       ep00_play_home {source: poster|card}、pressplay_click {widget: home-personal, after_ep00: true|false}
@@ -84,7 +84,7 @@
       <p class="meta">8 堂錄影課＋8 份學習單・在 PressPlay 上課</p>
       <div class="row">
         <a class="btn" id="course" href="https://www.pressplay.cc/link/s/DE956453?utm_content=home-personal" target="_blank" rel="noopener">看課程 →</a>
-        <span class="price" id="price">早鳥 <em>NT$990</em>・前 50 名</span>
+        <span class="price" id="price">早鳥 <em>NT$990</em>・到 11/24（二）23:59</span>
       </div>
       <p class="after" id="after">影片是課程第一集 EP00，免費，約 5 分鐘。</p>
     </div>
@@ -103,10 +103,9 @@
 (function () {
   // ===== 需要時才改的設定 =====
   var EP00 = "UnSkHuQmk7o";
-  // ★ 早鳥 50 名賣完時：把 "early" 改成 "regular"，再上傳 personal.html
-  var COURSE_PLAN = "early";
+  var COURSE_PLAN = Date.now() < Date.parse("2026-11-25T00:00:00+08:00") ? "early" : "regular";   // 11/20：早鳥到 11/24（二）23:59
   var PLANS = {
-    early:   '早鳥 <em>NT$990</em>・前 50 名',
+    early:   '早鳥 <em>NT$990</em>・到 11/24（二）23:59',
     regular: '3 人團 每人 <em>NT$1,190</em>'
   };
 

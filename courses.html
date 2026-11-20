@@ -7,7 +7,7 @@
 <!--
   官網首頁 ⑤「自己學：線上課程」卡片（2026/10/15 製作）。區塊標題與說明在 Kolable 打字，這裡只放卡片。
   - 依台北日期自動換字：第一門課 11/01 前「11/01 上線」＋連到 EP00「免費看 5 分鐘課程介紹」（10/27）→ 之後「現正上線」＋連到 PressPlay「看課程」；第二門課 11/17 起才出現（之前不曝光，避免搶第一門課）
-  - 早鳥 50 名賣完：COURSE1_PLAN 改 "regular"
+  - 11/20：早鳥只寫截止時間，11/25 00:00（台北）起 COURSE1_PLAN 自動換 "regular"
   - 第二門課短網址做好後填進 COURSE2_URL（空字串＝卡片不能點，只顯示日期）
   - 預覽：?date=2026-11-20、?plan=regular
   - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/courses.html" width="100%" height="760" style="border:0;" frameborder="0" scrolling="no"></iframe>
@@ -67,7 +67,7 @@
   // ===== 需要時才改的設定 =====
   var COURSE1_URL = "https://www.pressplay.cc/link/s/DE956453";   // 第一門課_官網部落格 短網址
   var EP00_URL = "https://youtu.be/UnSkHuQmk7o";                   // 11/01 前（10/27 起）：第一門課卡片連到 EP00 免費課程介紹
-  var COURSE1_PLAN = "early";                                      // ★ 早鳥賣完改 "regular"
+  var COURSE1_PLAN = Date.now() < Date.parse("2026-11-25T00:00:00+08:00") ? "early" : "regular";   // 11/20：早鳥到 11/24 23:59，之後自動換 3 人團價                                      // ★ 早鳥賣完改 "regular"
   var COURSE2_URL = "";                                             // ★ 第二門課短網址（11/17 前做好填入）
   var PODCAST = { Apple: "https://podcasts.apple.com/tw/podcast/id6819133837", Spotify: "https://open.spotify.com/show/6G9ORPWiRvZEcRvT6Uax8y",
                   KKBOX: "https://podcast.kkbox.com/tw/channel/Lab7sI8O4jH_rWU572", YouTube: "https://www.youtube.com/channel/UC-qiZ2NTmw8uukEF1LY1Jvg/podcasts" };

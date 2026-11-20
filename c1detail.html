@@ -6,7 +6,7 @@
 <title>第一門課介紹</title>
 <!--
   /online-courses 第一門課詳細介紹（2026/10/15 製作）：適合誰＋八集＋價格
-  - 早鳥 50 名賣完：COURSE_PLAN 改 "regular"（早鳥那格變灰、標「已售完」）
+  - 11/20：早鳥只寫截止時間、不寫名額；11/25 00:00（台北）起早鳥那格自動變灰、標「已結束」
   - 不寫各集分鐘數（避免和實際長度不符的消費爭議）
   - 10/28：最下面加「常見問題」5 題；退費題等 REFUND_TEXT 填好才出現（預覽加 ?faq=draft）
   - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/c1detail.html" width="100%" height="1180" style="border:0;" frameborder="0" scrolling="no"></iframe>
@@ -148,14 +148,14 @@
 (function () {
   var COURSE_URL = "https://www.pressplay.cc/link/s/DE956453";
   var EP00_URL = "https://youtu.be/UnSkHuQmk7o";   // 11/01 前（10/27 起）：主按鈕連到 EP00 免費課程介紹，小測驗和 PressPlay 追蹤放下面一行小字
-  var COURSE_PLAN = "early";   // ★ 早鳥 50 名賣完改 "regular"
+  var COURSE_PLAN = Date.now() < Date.parse("2026-11-25T00:00:00+08:00") ? "early" : "regular";   // 11/20：早鳥只看截止時間，11/25 起自動換
   var q = new URLSearchParams(location.search);
   if (q.get("plan")) COURSE_PLAN = q.get("plan");
   var today = q.get("date") || new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);
   var live = (new URLSearchParams(location.search).get("date") ? today >= "2026-11-01" : Date.now() >= Date.parse("2026-11-01T12:00:00+08:00"));
   var early = COURSE_PLAN !== "regular";
   document.getElementById("price").innerHTML =
-    '<div class="pr ' + (early ? "hot" : "off") + '"><small>早鳥（前 50 名）' + (early ? "" : "・已售完") + '</small><b>NT$990</b><span>上線後先買先得，額滿就恢復原價</span></div>' +
+    '<div class="pr ' + (early ? "hot" : "off") + '"><small>早鳥' + (early ? "" : "・已結束") + '</small><b>NT$990</b><span>到 11/24（二）23:59</span></div>' +
     '<div class="pr' + (early ? "" : " hot") + '"><small>3 人團</small><b>NT$1,190</b><span>每人價格，3 人一起報名共 NT$3,570，剛好輪流當彼此的訪談對象</span></div>' +
     '<div class="pr"><small>原價</small><b>NT$1,490</b><span>不限時間、不限次數觀看</span></div>';
   var btn = document.getElementById("btn");
@@ -172,7 +172,7 @@
   var refund = document.getElementById("faq-refund");
   if (REFUND_TEXT) { document.getElementById("refund-text").textContent = REFUND_TEXT; refund.hidden = false; }
   else if (q.get("faq") === "draft") { document.getElementById("refund-text").textContent = "〔待查查提供 PressPlay 退費規則〕"; refund.className = "fq todo"; refund.hidden = false; }   // 預覽：網址加 ?faq=draft 看得到空位
-  document.getElementById("when").textContent = live ? "現正上線・在 PressPlay 上課" : "2026/11/01（日）中午 12:00 在 PressPlay 上線" + (early ? "・早鳥限量 50 名" : "");
+  document.getElementById("when").textContent = live ? "現正上線・在 PressPlay 上課" : "2026/11/01（日）中午 12:00 在 PressPlay 上線" + (early ? "・早鳥到 11/24（二）23:59" : "");
 })();
 </script>
 <!-- 課程點擊追蹤（2026/10/17；10/20 加 LINE；10/27 加 EP00 送 ep00_click、小測驗送 quiz_click）：點到 PressPlay 連結送 pressplay_click、點到 LINE（lin.ee）送 line_click，每次點擊只送一個事件到官網 GA4。
