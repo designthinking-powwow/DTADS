@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DT POW WOW 文章輪播廣告</title>
 <!--
+  ★ 11/19 漏斗修正版（查查 11/19「我們來優化他們」）：
+    ・企業內訓卡改寫成同一套說法：問題＋形式（半天、一天或兩天，每場 30 人以內）＋適合誰，換新代號 K-bizdt3／K-bizidea3／K-bizai3／K-bizmgr3／M-biz2。
+    ・文章本身對應企業內訓（dt／ai／general，或 POST_MAIN／&main=biz）時，中段和文末都放企業內訓（不同卡），不再把 HR／主管讀者帶去線上課。
+      對應線上課的文章（career／edu）照舊：中段課程卡、文末企業內訓。
+    ・退回：上傳 備份_線上原版/index.html。
   ★ 11/14 轉企業內訓版（查查 11/14 同意「減少線上課程曝光、增加企業內訓」）：
     ・dt／ai／general 文章中段只放企業內訓卡；general 文末也改成企業內訓（M-biz）。career／edu 照舊：中段課程卡、文末企業內訓。
     ・企業內訓卡改直球文案（問題＋工作坊形式＋適合誰），換新代號 K-bizdt2／K-bizidea2／K-bizai2／K-bizmgr2；K-bizfront 下架（0 點擊）。
@@ -1063,21 +1068,21 @@
   var CARDS = [
     // ---- 企業內訓（/contactus）----
     // 11/14 查查「轉企業內訓」：直球寫法＝卡住的問題＋工作坊形式＋適合誰。換文案所以換代號（舊代號 K-bizdt／K-bizmgr／K-bizidea／K-bizfront 的點擊另計）
-    { id: "K-bizdt2", group: "biz", line: "#2B59C3", label: "企業內訓・設計思考工作坊",
+    { id: "K-bizdt3", group: "biz", line: "#2B59C3", label: "企業內訓・設計思考工作坊",
       q: "新產品、新服務做不出新意，也說不清顧客到底要什麼？",
-      t: "我們到公司帶設計思考工作坊，3 小時到 2 天，用你們手上的真題目訪談顧客、定義問題、做出能拿去試的方案。適合產品、服務、行銷團隊。",
+      t: "我們到公司帶設計思考工作坊，用你們手上的真題目，回到顧客身上把問題看清楚，當天做出可以拿去試的方案。半天、一天或兩天，每場 30 人以內，適合產品、服務、行銷團隊。",
       a: "聊聊你們的題目", u: CONTACT_URL, topics: { dt: 3, ai: 1, general: 2 } },
-    { id: "K-bizidea2", group: "biz", line: "#FFB800", label: "企業內訓・創意思考工作坊",
+    { id: "K-bizidea3", group: "biz", line: "#FFB800", label: "企業內訓・創意思考工作坊",
       q: "開會想不出點子，或總是同樣幾個人在講？",
-      t: "創意思考工作坊到公司上：讓平常不發言的人也開口，先把點子全部攤開，再挑出做得到的。適合跨部門、行銷、研發團隊。",
+      t: "創意思考工作坊到公司上，讓平常不發言的人也開口，先把點子全部攤開，再用團隊自己訂的條件挑出做得到的。半天、一天或兩天，每場 30 人以內，適合跨部門、行銷、研發團隊。",
       a: "聊聊你們的題目", u: CONTACT_URL, topics: { dt: 1, ai: 2, general: 2 } },
-    { id: "K-bizai2", group: "biz", line: "#14213D", label: "企業內訓・AI 導入工作坊",
+    { id: "K-bizai3", group: "biz", line: "#14213D", label: "企業內訓・AI 導入前的工作坊",
       q: "公司要導入 AI，卻還沒想清楚要解決哪一個問題？",
-      t: "設計思考工作坊陪主管和第一線一起，找出哪些工作值得交給 AI、哪些要留給人，當天做出可以試的流程。適合正在導入 AI 的企業團隊。",
+      t: "我們到公司帶設計思考工作坊，讓主管和第一線一起找出哪些工作值得交給 AI、哪些要留給人，當天做出可以試的流程。半天、一天或兩天，每場 30 人以內，適合正在導入 AI 的團隊。",
       a: "聊聊你們的題目", u: CONTACT_URL, topics: { ai: 3, dt: 1, general: 1 } },
-    { id: "K-bizmgr2", group: "biz", line: "#00A86B", label: "企業內訓・給主管和專案團隊",
+    { id: "K-bizmgr3", group: "biz", line: "#00A86B", label: "企業內訓・給主管和專案團隊",
       q: "創新專案做了一輪，最後還是沒有成果？",
-      t: "設計思考工作坊從團隊真正卡住的地方開始：先對準要解決的問題，再一起做原型、找顧客測試。適合主管與專案團隊。",
+      t: "我們到公司帶設計思考工作坊，從團隊真正卡住的地方開始，先對準要解決的問題，再一起把方案做出來、拿去問顧客。半天、一天或兩天，每場 30 人以內，適合主管與專案團隊。",
       a: "聊聊你們的題目", u: CONTACT_URL, topics: { career: 2, dt: 2, ai: 1, general: 2 } },
     { id: "K-school", group: "biz", line: "#00897B", label: "學校工作坊",
       q: "學生不缺答案，缺的是自己找問題的機會？",
@@ -1097,9 +1102,9 @@
       q: "這篇的問題，如果換成你自己的人生，要從哪裡開始拆？",
       t: "線上課用設計思考，陪你一步一步把方向想清楚。不確定適不適合，先看 5 分鐘的免費介紹。",
       a: "看看課程內容", u: PRESSPLAY_URL, a2: "先免費看介紹", u2: EP00_URL },
-    biz: { id: "M-biz", group: "biz", line: "#2B59C3", label: "企業內訓｜設計思考・創意思考",
+    biz: { id: "M-biz2", group: "biz", line: "#2B59C3", label: "企業內訓｜設計思考・創意思考",
       q: "你們團隊也卡在類似的問題嗎？",
-      t: "我們到公司帶設計思考、創意思考工作坊，依題目和人數規劃 3 小時到 2 天。把你們正在處理的題目告訴我們，2 個工作天內回信。",
+      t: "我們到公司帶設計思考、創意思考工作坊，半天、一天或兩天，每場 30 人以內，用你們正在處理的題目來練。把題目告訴我們，2 個工作天內回信。",
       a: "聊聊你們的題目", u: CONTACT_URL }
   };
   var BIZ_MID = ["dt", "ai", "general"];   // 11/14 查查「轉企業內訓」：這三類文章中段只放企業內訓卡；career／edu 維持課程卡（只剩 K-cmany）
@@ -1148,12 +1153,21 @@
   function courseOk() { return launched() && !noCourseHere(); }
   // 文末要放哪一個主要行動（中段也用這個來避開同一種行動）
   // career／general／edu → 線上課；dt／ai → 企業內訓；新文章 build.py 依「對應產品 A／B」給 &main=course／biz。DYL 文章（不放課程）→ 企業內訓
+  function productFor() {                             // 11/19：文章本身對應的產品（翻轉之前）
+    var k = TOPIC_MAIN[articleTopic()];
+    var pm = params.get("main") || POST_MAIN[params.get("post") || ""];
+    if (pm && MAIN[pm]) k = pm;
+    if (k === "course" && !courseOk()) k = "biz";
+    return k;
+  }
   function mainFor() {
     if (!launched()) return null;                      // 12:00 前文末維持原本的廣告
     var k = TOPIC_MAIN[articleTopic()];
     var pm = params.get("main") || POST_MAIN[params.get("post") || ""];   // 新文章：build.py 給 &main=；舊文章：查 POST_MAIN
     if (pm && MAIN[pm]) k = pm;
     if (k === "course" && !courseOk()) k = "biz";
+    // 11/19：文章本身對應企業內訓 → 文末也放企業內訓（中段會放另一張內訓卡），不再把 HR／主管讀者帶去線上課
+    if (k === "biz") return MAIN.biz;
     // 11/04 查查同意「翻轉」：中段（曝光是文末 7 倍）放文章本身對應的產品，文末放另一個
     // career／general／edu → 中段課程卡、文末企業內訓；dt／ai／主管類 → 中段企業內訓卡、文末課程。DYL 文章（不放課程）維持兩格都是企業內訓
     if (courseOk()) k = (k === "course") ? "biz" : "course";
@@ -1170,6 +1184,8 @@
     var forced = params.get("card");
     if (forced) { var f = CARDS.concat(RESERVE).filter(function (c) { return c.id === forced; })[0]; if (f) return f; }
     var topic = articleTopic(), main = mainFor(), avoid = main ? main.group : "";
+    var prod = productFor();                           // 11/19：這篇文章本身對應哪個產品
+    if (prod === "biz") avoid = "course";              // 企業內訓文章：中段也只放內訓卡
     var allowed = CARDS.filter(function (c) { return !(c.course && !courseOk()); });   // 12:00 前、DYL 文章：只有企業內訓卡
     if (BIZ_MID.indexOf(topic) >= 0) allowed = allowed.filter(function (c) { return c.group === "biz"; });   // 11/14：dt／ai／general 中段只放企業內訓卡
     var ok = allowed.filter(function (c) { return c.group !== avoid; });
