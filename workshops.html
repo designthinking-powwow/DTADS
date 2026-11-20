@@ -38,6 +38,8 @@
   .mnc { margin-top:40px; background:#fff; border-left:8px solid var(--cobalt); border-radius:14px; padding:26px 28px; }
   .mnc h3 { font:900 22px/1.4 "Noto Sans TC",sans-serif; margin:12px 0 8px; }
   .mnc p { font:400 15px/1.75 "Noto Sans TC",sans-serif; color:var(--muted); max-width:860px; }
+  .guide { margin-top:22px; background:#fff; border-left:6px solid var(--cobalt); border-radius:12px; padding:14px 18px; font:500 15px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); }
+  .guide b { color:var(--ink); } .guide a { color:var(--cobalt); font-weight:700; text-decoration:none; white-space:nowrap; } .guide a:hover { text-decoration:underline; }
   .dur { margin-top:40px; }
   .dur h3 { font:700 18px/1.5 "Noto Sans TC",sans-serif; margin-bottom:14px; }
   .d3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
@@ -93,7 +95,7 @@
   /* 手機：每一類的題目改成左右滑動，整頁高度和電腦版差不多 */
   @media (max-width: 760px) {
     .wrap { padding:40px 0 40px; }
-    .wrap > .k, h2, .lead, .gh, .mnc, .dur, .foot { margin-left:16px; margin-right:16px; }
+    .wrap > .k, h2, .lead, .gh, .mnc, .dur, .guide, .foot { margin-left:16px; margin-right:16px; }
     h2 { font-size:26px; } .lead { font-size:15px; }
     .grp { margin-top:24px; }
     .gh b { font-size:19px; } .gh em { font-size:13px; flex-basis:100%; }
@@ -147,6 +149,8 @@
   <div class="k">WORKSHOPS FOR TEAMS</div>
   <h2>AI 跑得越快，<span style="white-space:nowrap">越需要會想的團隊</span></h2>
   <p class="lead">AI 可以給一百個答案，卻不知道哪個問題值得問、哪個點子值得做。我們練的是 AI 取代不了的三種能力，有了它們，AI 也會用得更快、更準。</p>
+  <!-- 11/20 分頁：/workshops＝題目與產業；/enterprise＝怎麼進行（長度、人數、流程）。兩頁互指，資訊不重複 -->
+  <p class="guide"><b>這一頁看題目：</b>三個方向各有哪些工作坊、你們產業常卡在哪裡。想知道一場多長、幾個人、怎麼進行，<a target="_top" href="https://www.designthinking.com.tw/enterprise">看企業內訓怎麼進行 →</a></p>
 
   <!-- 11/01 第三版：四個特色（競品分析差異化說法 1–4；正向、不比較；第 4 條不寫課後成果，依 10/27 決定） -->
   <div class="why">
@@ -233,12 +237,8 @@
   </div>
 
   <div class="dur">
-    <h3>依你們的題目與時間量身設計，時間越長，帶走的成果越完整</h3>
-    <div class="d3">
-      <div><b>3 小時</b><span>一個關鍵方法，下一場會議就用得上</span></div>
-      <div><b>半天到一天</b><span>完整走一遍，帶走一個可以測試的原型</span></div>
-      <div><b>兩天以上</b><span>深入一個真實題目，帶走一份可以提案的方案。也可以拆成幾次、分週上，邊學邊做</span></div>
-    </div>
+    <h3>依你們的題目與時間量身設計</h3>
+    <p class="guide" style="margin:0">一場可以是半天、一天或兩天，每場 30 人以內。各種長度能帶走什麼、當天怎麼進行，<a target="_top" href="https://www.designthinking.com.tw/enterprise">看企業內訓怎麼進行 →</a></p>
   </div>
 
   <!-- 11/01 第三版：工作坊之後（查查 10/31：所有產業都可以延伸；不寫專案期程；不寫課後成果報告） -->
@@ -247,7 +247,7 @@
     <h3 class="t">一場工作坊之後，還可以繼續走</h3>
     <p class="sub">大部分團隊從一場工作坊開始，做完再決定要不要往下。每個產業都可以這樣走。</p>
     <div class="a3">
-      <div><b>工作坊<small>3 小時到兩天以上</small></b><span>把相關的人聚在一起，找出最值得先處理的問題，帶走優先順序和下一步。</span></div>
+      <div><b>工作坊<small>半天到兩天</small></b><span>把相關的人聚在一起，找出最值得先處理的問題，帶走優先順序和下一步。</span></div>
       <div><b>顧問專案</b><span>陪團隊去聽顧客或第一線的聲音、整理發現，一起做出原型，小規模試行。需要產業知識的地方，我們和合作的產業專家一起進場。</span></div>
       <div><b>執行陪跑</b><span>方案開始試行後，定期回來看現場的反應，一起調整。</span></div>
     </div>
