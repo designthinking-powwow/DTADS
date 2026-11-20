@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DT POW WOW 文章輪播廣告</title>
 <!--
+  ★ 11/20 POST_OVERRIDE：7 篇自然搜尋熱門文章依讀者類型指定 topic／main／card（網址沒寫才補；topic=general 視為沒寫）。退回：上傳 備份_線上原版/index.html。
   ★ 11/19 漏斗修正版（查查 11/19「我們來優化他們」）：
     ・企業內訓卡改寫成同一套說法：問題＋形式（半天、一天或兩天，每場 30 人以內）＋適合誰，換新代號 K-bizdt3／K-bizidea3／K-bizai3／K-bizmgr3／M-biz2。
     ・文章本身對應企業內訓（dt／ai／general，或 POST_MAIN／&main=biz）時，中段和文末都放企業內訓（不同卡），不再把 HR／主管讀者帶去線上課。
@@ -515,6 +516,23 @@
 
   // ===== 小工具 =====
   var params = new URLSearchParams(location.search);
+  // 11/20 依讀者類型指定卡片（查查看過〈自然搜尋著陸頁〉分析）：只在網址沒有寫 topic／main／card 時補上
+  var POST_OVERRIDE = {
+    "jensen-huang-nvidia-ai-future": { topic: "ai", main: "biz", card: "K-bizai3" },
+    "wgsn-future-consumer-2027-emotional-economy-": { topic: "dt", main: "biz", card: "K-bizidea3" },
+    "wef-top-10-emerging-technologies-2026-beyond-ai": { topic: "general", main: "biz" },
+    "ai-high-school-human-connection": { topic: "edu", main: "biz", card: "K-school" },
+    "situated-grit-environment-duckworth": { topic: "career", main: "course" },
+    "ai-era-truly-important-human-abilities": { topic: "career", main: "course" },
+    "tina-seelig-luck-wind-sail-stanford-creativity": { topic: "career", main: "course" }
+  };
+  (function () {
+    var o = POST_OVERRIDE[params.get("post") || ""];
+    if (!o) return;
+    if (o.topic && (!params.get("topic") || params.get("topic") === "general")) params.set("topic", o.topic);   // 舊嵌入碼常寫 general，視為沒寫
+    if (o.main && !params.get("main")) params.set("main", o.main);
+    if (o.card && !params.get("card")) params.set("card", o.card);
+  })();
   function store(key, val) {               // localStorage 可能被封鎖，一律包起來
     try {
       if (val === undefined) return JSON.parse(localStorage.getItem(key));
