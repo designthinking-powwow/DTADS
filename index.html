@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DT POW WOW 文章輪播廣告</title>
 <!--
+  ★ 11/20 課程全名：線上課一律寫《別急著找答案！善用設計思考，打造你自己的人生藍圖》（查查 11/20）；Podcast《別急著找答案｜跟 Cha Cha 一起思考》不動。退回：上傳 備份_線上原版/index.html。
   ★ 11/20 POST_OVERRIDE：7 篇自然搜尋熱門文章依讀者類型指定 topic／main／card（網址沒寫才補；topic=general 視為沒寫）。退回：上傳 備份_線上原版/index.html。
   ★ 11/19 漏斗修正版（查查 11/19「我們來優化他們」）：
     ・企業內訓卡改寫成同一套說法：問題＋形式（半天、一天或兩天，每場 30 人以內）＋適合誰，換新代號 K-bizdt3／K-bizidea3／K-bizai3／K-bizmgr3／M-biz2。
@@ -885,8 +886,8 @@
     var t = biz
       ? { id: "T-biz", k: "Cha Cha｜企業工作坊", p: "讀到這裡，如果你也想讓團隊一起把問題找清楚、想出真的能落地的點子——這正是我在設計思考與創意思考工作坊裡，陪企業團隊做的事。", a: "聊聊你們團隊的狀況", u: withUtm(CONTACT_URL, "T-biz") }
       : isLive
-        ? { id: "T-course", k: "Cha Cha｜線上課", p: "如果這篇讓你想重新整理自己的方向，我把整套方法錄成了線上課《別急著找答案！》，一步一步帶你畫出自己的人生藍圖。", a: "看看課程內容", u: withUtm(PRESSPLAY_URL, "T-course") }
-        : { id: "T-ep00", k: "Cha Cha｜11/01 新課", p: "新課《別急著找答案！》11/01（日）中午在 PressPlay 開賣。想先知道課裡在做什麼？免費看 5 分鐘課程介紹。", a: "免費看 5 分鐘課程介紹", u: EP00_URL };
+        ? { id: "T-course", k: "Cha Cha｜線上課", p: "如果這篇讓你想重新整理自己的方向，我把整套方法錄成了線上課《別急著找答案！善用設計思考，打造你自己的人生藍圖》，一步一步陪你動手做。", a: "看看課程內容", u: withUtm(PRESSPLAY_URL, "T-course") }
+        : { id: "T-ep00", k: "Cha Cha｜11/01 新課", p: "新課《別急著找答案！善用設計思考，打造你自己的人生藍圖》11/01（日）中午在 PressPlay 開賣。想先知道課裡在做什麼？免費看 5 分鐘課程介紹。", a: "免費看 5 分鐘課程介紹", u: EP00_URL };
     var root = document.getElementById("root");
     document.documentElement.classList.add("tc");
     root.innerHTML = '<div id="stage" class="textcard"><p class="tk">' + esc(t.k) + '</p><p class="tp">' + esc(t.p) +
@@ -1108,15 +1109,15 @@
       a: "聊聊學校的需求", u: CONTACT_URL, topics: { edu: 3 } },
     // ---- PressPlay 第一門課（12:00 開賣後才出現；不寫價格、早鳥，不透露課程方法）----
     // 11/14 查查「減少線上課程曝光」：課程卡只留點擊率最好的 K-cmany，只出現在 career／edu 文章（K-ep00／K-course／K-cwork／K-cparent 下架，原文在 備份_線上原版/index.html）
-    { id: "K-cmany", group: "course", course: true, line: "#7B2FF7", label: "線上課《別急著找答案！》",
+    { id: "K-cmany", group: "course", course: true, line: "#7B2FF7", label: "線上課《別急著找答案！善用設計思考，打造你自己的人生藍圖》",
       q: "想做的事很多，卻不知道該先從哪一件開始？",
-      t: "線上課《別急著找答案！》不給標準答案，陪你一步一步，整理出自己的方向。",
+      t: "這門線上課不給標準答案，陪你一步一步，整理出自己的方向。",
       a: "看看課程內容", u: PRESSPLAY_URL, topics: { career: 3, edu: 2 } }
   ];
   var RESERVE = [];   // 候補：每月汰換最差 2 張時，在這裡先寫好新卡（只能導企業內訓或 PressPlay 課程）
   // 文末主要行動（一篇只放一個）：只有線上課、企業內訓兩種
   var MAIN = {
-    course: { id: "M-course", group: "course", line: "#1F4BFF", label: "線上課《別急著找答案！》",
+    course: { id: "M-course", group: "course", line: "#1F4BFF", label: "線上課《別急著找答案！善用設計思考，打造你自己的人生藍圖》",
       q: "這篇的問題，如果換成你自己的人生，要從哪裡開始拆？",
       t: "線上課用設計思考，陪你一步一步把方向想清楚。不確定適不適合，先看 5 分鐘的免費介紹。",
       a: "看看課程內容", u: PRESSPLAY_URL, a2: "先免費看介紹", u2: EP00_URL },
