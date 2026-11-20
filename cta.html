@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>按鈕</title>
+<!--
+  通用按鈕區塊（2026/11/20 製作）：取代 Kolable 原生按鈕，樣式同 /workshops 的鈷藍膠囊按鈕，置中。
+  參數：label＝按鈕文字（預設「聊聊你們的題目」）；to＝連結，只接受站內路徑（/contactus）或 designthinking.com.tw、pressplay.cc 網址；
+        note＝按鈕下方一行小字（可省略）；bg＝soft（米白底）或 white（預設白底，配 Kolable 原生區塊）。
+  站內連結用 target=_top（整頁換頁）；PressPlay 開新分頁。
+  - Kolable 嵌入碼範例：<iframe src="https://designthinking-powwow.github.io/DTADS/cta.html?label=聊聊你們的題目&to=/contactus" width="100%" height="120" style="border:0;" frameborder="0" scrolling="no" title="聊聊你們的題目"></iframe>
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --cobalt:#1F4BFF; --soft:#F5F1EE; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { background:#fff; }
+  body.soft { background:var(--soft); }
+  body { font-family:"Noto Sans TC","PingFang TC",sans-serif; overflow:hidden; text-align:center; padding:20px 16px; }
+  a { display:inline-flex; align-items:center; background:var(--cobalt); color:#fff; text-decoration:none; font:700 16px/1 "Noto Sans TC",sans-serif; padding:15px 26px; border-radius:999px; transition:transform .2s; }
+  a:hover { transform:translateY(-2px); }
+  .note { margin-top:12px; font:500 14px/1.6 "Noto Sans TC",sans-serif; color:#8A817C; }
+  @media (max-width: 560px) { a { font-size:15px; padding:13px 22px; } .note { font-size:13px; } }
+</style>
+</head>
+<body>
+<a id="go" href="https://www.designthinking.com.tw/contactus" target="_top">聊聊你們的題目 →</a>
+<p class="note" id="note" hidden></p>
+<script>
+(function () {
+  var q = new URLSearchParams(location.search), a = document.getElementById("go");
+  var label = (q.get("label") || "聊聊你們的題目").slice(0, 30);
+  a.textContent = label + " →";
+  var to = q.get("to") || "/contactus", url = null;
+  if (/^\/[A-Za-z0-9\-_\/?=&.%]*$/.test(to)) url = "https://www.designthinking.com.tw" + to;
+  else if (/^https:\/\/(www\.designthinking\.com\.tw|www\.pressplay\.cc)\//.test(to)) url = to;
+  if (url) a.href = url;
+  if (/pressplay\.cc/.test(a.href)) { a.target = "_blank"; a.rel = "noopener"; }
+  var note = q.get("note");
+  if (note) { var n = document.getElementById("note"); n.textContent = note.slice(0, 60); n.hidden = false; }
+  if (q.get("bg") === "soft") document.body.className = "soft";
+})();
+</script>
+<script>
+(function () {
+  if (window.parent === window) return;
+  var last = 0;
+  function measure() {
+    var h = Math.ceil(document.body.getBoundingClientRect().height);
+    if (!(h > 40) || Math.abs(h - last) < 2) return;
+    last = h;
+    parent.postMessage({ dtadsHeight: h }, "*");
+  }
+  window.addEventListener("load", measure);
+  window.addEventListener("resize", measure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  setTimeout(measure, 800); setTimeout(measure, 2500);
+})();
+</script>
+</body>
+</html>
