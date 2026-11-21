@@ -6,6 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>首頁第一屏（兩扇門）</title>
 <!--
+  ★ 11/21 晚（查查：「選擇不是重點，直接買課」）：給自己門只留「到 PressPlay 看課程 →」（短網址 DE956453，官網共用）＋「先看 5 分鐘介紹 ▶」；拿掉看個人學習頁、直接看線上課程、免費 20 題／週報按鈕。
+  ★ 11/21 晚（查查：「活動只有兩項？」）：「想辦活動」改「想找哪一種？」6 顆：設計思考／創意思考／未來思考工作坊（連 /enterprise?go=formats 三個方向段）、共識營（/workshops 題目庫，含年度策略題）、創意團建、創新黑客松；手機併進單位按鈕：多一顆「設計・創意・未來思考工作坊」。退回：上傳 線上原版備份/entry.html。
   ★ 11/21 走查修正：帶團隊門加「想辦活動：創意團建 →、創新黑客松 →」（連 /enterprise?go=teambuilding／hackathon，GTM 捲到那一段）；「醫院・診所」「基金會・NPO 活動」改連 /schools-public-sector?go=sectors，同分頁開。以首頁分眾包的新插畫版為基底。退回：上傳 線上原版備份/DTADS/entry.html。
   ★ 11/21 首頁分眾改版（查查：「分辨不出來個人的是什麼？」）
   - 第一屏＝滿版淡藍頁首（和 /contactus、/enterprise 一樣），不再是白底上浮的圓角卡片。
@@ -62,13 +64,14 @@
   .cta.main { background: var(--c); color: #fff; }
   .cta.main:hover { background: var(--cd); transform: translateY(-2px); }
   .cta.sub { box-shadow: 0 0 0 2px var(--ink) inset; color: var(--ink); }
+  button.cta { border: 0; background: transparent; cursor: pointer; }
   .cta.sub:hover { background: rgba(20,33,61,.06); transform: translateY(-2px); }
   .who { margin-top: auto; padding-top: 18px; }
   .who small { display: block; font: 700 13px/1.4 "Noto Sans TC", sans-serif; color: var(--soft); margin-bottom: 8px; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .chip { font: 700 14px/1 "Noto Sans TC", sans-serif; padding: 10px 13px; border-radius: 999px; text-decoration: none; color: var(--ink); background: var(--sky); box-shadow: 0 0 0 1px var(--line) inset; white-space: nowrap; cursor: pointer; border: 0; transition: background .2s; }
   .chip:hover { background: #E1E7FD; }
-  /* 11/21 走查修正：帶團隊門「想辦活動」一行（創意團建、創新黑客松） */
+  /* 11/21 晚：帶團隊門「想找哪一種？」一行（三種工作坊、共識營、創意團建、創新黑客松）；手機只多一顆「設計・創意・未來思考工作坊」 */
   .also { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; }
   .chip.m-only { display: none; }
   @media (max-width: 760px) { .also { display: none; } .chip.m-only { display: inline-block; } }   /* 手機：團建、黑客松併進單位按鈕最後一列，不多佔一行，讓「給自己」按鈕留在第一屏 */
@@ -166,7 +169,11 @@
           <a class="cta sub" href="https://www.designthinking.com.tw/enterprise" target="_top" data-door="b2b" data-target="enterprise">看工作坊怎麼帶</a>
         </div>
         <div class="also">
-          <small>想辦活動</small>
+          <small>想找哪一種？</small>
+          <a class="chip" href="https://www.designthinking.com.tw/enterprise?go=formats" target="_top" data-door="b2b" data-target="dt">設計思考工作坊 <i>→</i></a>
+          <a class="chip" href="https://www.designthinking.com.tw/enterprise?go=formats" target="_top" data-door="b2b" data-target="creative">創意思考工作坊 <i>→</i></a>
+          <a class="chip" href="https://www.designthinking.com.tw/enterprise?go=formats" target="_top" data-door="b2b" data-target="futures">未來思考工作坊 <i>→</i></a>
+          <a class="chip" href="https://www.designthinking.com.tw/workshops" target="_top" data-door="b2b" data-target="retreat">共識營 <i>→</i></a>
           <a class="chip" href="https://www.designthinking.com.tw/enterprise?go=teambuilding" target="_top" data-door="b2b" data-target="teambuilding">創意團建 <i>→</i></a>
           <a class="chip" href="https://www.designthinking.com.tw/enterprise?go=hackathon" target="_top" data-door="b2b" data-target="hackathon">創新黑客松 <i>→</i></a>
         </div>
@@ -178,6 +185,7 @@
             <a class="chip" href="https://www.designthinking.com.tw/schools-public-sector" target="_top" data-door="b2b" data-target="public">公部門・計畫 <i>→</i></a>
             <a class="chip" href="https://www.designthinking.com.tw/schools-public-sector?go=sectors" target="_top" data-door="b2b" data-target="healthcare">醫院・診所 <i>→</i></a>
             <a class="chip" href="https://www.designthinking.com.tw/schools-public-sector?go=sectors" target="_top" data-door="b2b" data-target="npo">基金會・NPO 活動 <i>→</i></a>
+            <a class="chip m-only" href="https://www.designthinking.com.tw/enterprise?go=formats" target="_top" data-door="b2b" data-target="three">設計・創意・未來思考工作坊 <i>→</i></a>
             <a class="chip m-only" href="https://www.designthinking.com.tw/enterprise?go=teambuilding" target="_top" data-door="b2b" data-target="teambuilding">創意團建 <i>→</i></a>
             <a class="chip m-only" href="https://www.designthinking.com.tw/enterprise?go=hackathon" target="_top" data-door="b2b" data-target="hackathon">創新黑客松 <i>→</i></a>
           </div>
@@ -188,23 +196,15 @@
       <section class="door self" aria-labelledby="d2">
         <div class="dh">
           <div>
-            <div class="tag"><b>給自己</b><span>線上課程與免費資源</span></div>
+            <div class="tag"><b>給自己</b><span>線上課程</span></div>
             <h2 id="d2">自己學，想清楚下一步</h2>
-            <p><span class="long">對工作或人生方向卡住？先免費做「認識自己 20 題」、聽 Podcast，準備好了再上線上課程<b>《別急著找答案！善用設計思考，打造你自己的人生藍圖》</b>，在 PressPlay 照自己的節奏上。</span><span class="short">對工作或人生方向卡住？先免費試，再上線上課程《別急著找答案！善用設計思考，打造你自己的人生藍圖》。</span></p>
+            <p><span class="long">工作或人生方向卡住，想換跑道又怕選錯？線上課程<b>《別急著找答案！善用設計思考，打造你自己的人生藍圖》</b>帶你一步步畫出自己的人生藍圖，在 PressPlay 照自己的節奏上。</span><span class="short">工作或人生方向卡住？線上課程<b>《別急著找答案！善用設計思考，打造你自己的人生藍圖》</b>，在 PressPlay 照自己的節奏上。</span></p>
           </div>
           <img class="ill" src="img/door_self.webp" width="520" height="614" alt="" loading="eager">
         </div>
         <div class="row">
-          <a class="cta main" id="selfMain" href="https://www.designthinking.com.tw/personal" target="_top" data-door="b2c" data-target="personal">看個人學習頁 →</a>
-          <a class="cta sub" href="https://www.designthinking.com.tw/online-courses" target="_top" data-door="b2c" data-target="online-courses">直接看線上課程</a>
-        </div>
-        <div class="who">
-          <small>先免費試試看</small>
-          <div class="chips">
-            <a class="chip" href="https://lin.ee/ZqJ9P7N" target="_blank" rel="noopener" data-door="b2c" data-target="line20">認識自己 20 題（LINE）<i>→</i></a>
-            <button class="chip" type="button" data-door="b2c" data-target="ep00">課程介紹影片 5 分鐘 <i>▶</i></button>
-            <a class="chip" href="https://chachacreative101.substack.com/subscribe?utm_source=website&amp;utm_medium=home-door" target="_blank" rel="noopener" data-door="b2c" data-target="newsletter">《未來思考週報》<i>→</i></a>
-          </div>
+          <a class="cta main" href="https://www.pressplay.cc/link/s/DE956453" target="_blank" rel="noopener" data-door="b2c" data-target="pressplay">到 PressPlay 看課程 →</a>
+          <button class="cta sub" type="button" data-door="b2c" data-target="ep00">先看 5 分鐘介紹 ▶</button>
         </div>
       </section>
     </div>
@@ -234,17 +234,12 @@
   // ★ Kolable 的 /personal 頁建好後改成 true（之前「看個人學習頁」先連 /online-courses）
   var PERSONAL_LIVE = new URLSearchParams(location.search).get("personal") === "1" || true;
   var EP00_URL = "https://youtu.be/UnSkHuQmk7o";
-  if (!PERSONAL_LIVE) {
-    var m = document.getElementById("selfMain");
-    m.href = "https://www.designthinking.com.tw/online-courses"; m.setAttribute("data-target", "online-courses");
-    m.textContent = "看線上課程介紹 →";
-  }
 
   var inFrame = window.parent !== window;
   function tell(msg) { if (inFrame) { try { parent.postMessage(msg, "*"); } catch (e) {} } }
   function track(name, p) { tell({ ccHome: name, p: p || {} }); }
   var COPY = "v4";
-  track("home_entry_view", { b2b_copy: COPY, b2c_copy: "door" });
+  track("home_entry_view", { b2b_copy: COPY, b2c_copy: "buy" });
 
   var relayReady = false, personalReady = false;
   window.addEventListener("message", function (e) {
