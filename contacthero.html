@@ -45,10 +45,28 @@
   @media (max-width: 860px) { .ghost { padding:11px 16px; } }
 </style>
 <style id="palette-c">/* 11/21 配色 C：頁首底部四色條 */ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:6px;background:linear-gradient(90deg,#1F4BFF 0 25%,#007F52 25% 50%,#7B2FF7 50% 75%,#FF3B5C 75%);}</style>
+<style id="hero-ill">/* 11/21 頁首插畫：電腦版右側插畫、原本四格縮成一列放文字下方；手機版插畫在文字下方、四格在最後 */
+  .w { grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); gap:48px; }
+  .ill { display:flex; justify-content:center; align-items:center; }
+  .ill img { display:block; width:auto; height:auto; max-width:100%; max-height:420px; }
+  .tiles { grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-top:28px; }
+  .t { min-height:0; padding:14px 14px 13px; border-radius:14px; justify-content:flex-start; gap:4px; }
+  .t b { font-size:17px; } .t span { font-size:12.5px; overflow-wrap:anywhere; }
+  @media (max-width: 860px) {
+    .col { display:contents; }
+    .w { grid-template-columns:1fr; gap:20px; }
+    .ill { order:1; } .tiles { order:2; margin-top:0; gap:8px; }
+    .ill img { max-height:220px; }
+    .t { padding:12px 10px; border-radius:12px; }
+    .t b { font-size:15px; }
+  }
+</style>
 </head>
 <body>
+<!-- 11/21 頁首插畫：img/hero_contactus.webp（#EEF2FF 實色底，和頁首同色，不加框線陰影）。換圖只要覆蓋同名 webp（工具/壓頁首插畫.sh）。退回：上傳 頁首插畫包 線上原版備份/DTADS/contacthero.html。 -->
 <div class="w">
-  <div>
+  <div class="col">
+  <div class="txt">
     <div class="k">CONTACT</div>
     <div class="big">先聊 30 分鐘，<br>聽聽你們卡在哪裡</div>
     <p>企業內訓、學校工作坊、公部門計畫、醫院與基金會，都從這裡開始。不用先決定要上什麼課。</p>
@@ -63,6 +81,8 @@
     <div class="t t3"><b>03 線上聊聊</b><span>信裡約時間，聽聽你們卡在哪裡</span></div>
     <div class="t t4"><b>也可以直接寫信</b><span>dt@designthinking.com.tw</span></div>
   </div>
+  </div>
+  <div class="ill"><img src="img/hero_contactus.webp" width="640" height="706" alt="兩個人坐在桌前討論，一人用筆電打字，一人托著下巴思考，旁邊有一個問號" loading="eager" decoding="async"></div>
 </div>
 <style>html.dt-measure, html.dt-measure body { height:auto !important; min-height:0 !important; }</style>
 <script>

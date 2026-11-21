@@ -49,10 +49,28 @@
   @media (max-width: 860px) { .ghost { padding:11px 16px; } }
 </style>
 <style id="palette-c">/* 11/21 配色 C：頁首底部四色條 */ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:6px;background:linear-gradient(90deg,#1F4BFF 0 25%,#007F52 25% 50%,#7B2FF7 50% 75%,#FF3B5C 75%);}</style>
+<style id="hero-ill">/* 11/21 頁首插畫：電腦版右側插畫、原本四格縮成一列放文字下方；手機版插畫在文字下方、四格在最後 */
+  .w { grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); gap:48px; }
+  .ill { display:flex; justify-content:center; align-items:center; }
+  .ill img { display:block; width:auto; height:auto; max-width:100%; max-height:420px; }
+  .tiles { grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-top:28px; }
+  .t { min-height:0; padding:14px 14px 13px; border-radius:14px; justify-content:flex-start; gap:4px; }
+  .t b { font-size:17px; } .t span { font-size:12.5px; overflow-wrap:anywhere; }
+  @media (max-width: 860px) {
+    .col { display:contents; }
+    .w { grid-template-columns:1fr; gap:20px; }
+    .ill { order:1; } .tiles { order:2; margin-top:0; gap:8px; }
+    .ill img { max-height:220px; }
+    .t { padding:12px 10px; border-radius:12px; }
+    .t b { font-size:15px; }
+  }
+</style>
 </head>
 <body>
+<!-- 11/21 頁首插畫：img/hero_schools.webp（#EEF2FF 實色底，和頁首同色，不加框線陰影）。換圖只要覆蓋同名 webp（工具/壓頁首插畫.sh）。退回：上傳 頁首插畫包 線上原版備份/DTADS/schoolshero.html。 -->
 <div class="w">
-  <div>
+  <div class="col">
+  <div class="txt">
     <div class="k">SCHOOLS & PUBLIC SECTOR</div>
     <div class="big">從真實的題目開始，<br>當天就做出東西</div>
     <p>學生工作坊、教師研習、公部門計畫，題目由你們帶來，我們先聽，再一起規劃。</p>
@@ -68,6 +86,8 @@
     <div class="t t3"><b>公部門計畫</b><span>陪團隊做出可以試的方案</span></div>
     <div class="t t4"><b>不需要設計背景</b><span>題目由你們帶來</span></div>
   </div>
+  </div>
+  <div class="ill"><img src="img/hero_schools.webp" width="640" height="788" alt="學生圍著桌上的社區模型討論，下方一位公務員拿著流程圖向民眾說明" loading="eager" decoding="async"></div>
 </div>
 <style>html.dt-measure, html.dt-measure body { height:auto !important; min-height:0 !important; }</style>
 <script>

@@ -66,9 +66,21 @@
   }
 </style>
 <style id="palette-c">/* 11/21 配色 C：頁首底部四色條 */ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:6px;background:linear-gradient(90deg,#1F4BFF 0 25%,#007F52 25% 50%,#7B2FF7 50% 75%,#FF3B5C 75%);}</style>
+<style id="hero-ill">/* 11/21 頁首插畫：電腦版 插畫｜文字｜課程封面；手機版 封面→文字→插畫 */
+  .ill { flex:0 0 auto; width:clamp(130px, 15vw, 210px); }
+  .ill img { display:block; width:100%; height:auto; }
+  a.hero { max-width:1320px; }
+  @media (max-width: 900px) { .ill { width:120px; } }
+  @media (max-width: 600px) {
+    .ill { order:2; width:auto; display:flex; justify-content:center; }
+    .ill img { width:auto; max-width:100%; max-height:150px; }
+  }
+</style>
 </head>
 <body>
+<!-- 11/21 頁首插畫：img/hero_online-courses.webp（#EEF2FF 實色底，和頁首同色，不加框線陰影）。換圖只要覆蓋同名 webp（工具/壓頁首插畫.sh）。退回：上傳 頁首插畫包 線上原版備份/DTADS/hero.html。 -->
 <a class="hero" id="hero" target="_blank" rel="noopener">
+  <div class="ill"><img src="img/hero_online-courses.webp" width="640" height="756" alt="一個人坐在窗邊的桌前寫學習單，窗外有一條往前延伸的路" loading="eager" decoding="async"></div>
   <div class="txt">
     <div class="kicker">ONLINE COURSE <b id="status"></b></div>
     <h1>別急著找答案！</h1>
@@ -129,6 +141,28 @@
     var u = "https://www.google-analytics.com/g/collect?" + p.toString();
     if (!(navigator.sendBeacon && navigator.sendBeacon(u))) { var i = new Image(); i.src = u; }
   }, true);
+})();
+</script>
+<!-- 11/21 自動高度：手機版多了插畫，把實際高度傳給官網（GTM「內嵌區塊自動高度」）；電腦版維持原本 480。 -->
+<script>
+(function () {
+  if (window.parent === window) return;
+  var last = 0, root = document.documentElement;
+  function measure() {
+    var h = 480;
+    if (window.innerWidth <= 600) {
+      root.style.height = "auto"; document.body.style.height = "auto"; var a = document.getElementById("hero"); a.style.height = "auto";
+      h = Math.max(480, Math.ceil(a.getBoundingClientRect().height + 16));
+      root.style.height = ""; document.body.style.height = ""; a.style.height = "";
+    }
+    if (Math.abs(h - last) < 2) return;
+    last = h;
+    parent.postMessage({ dtadsHeight: h }, "*");
+  }
+  window.addEventListener("load", measure);
+  window.addEventListener("resize", measure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  setTimeout(measure, 800); setTimeout(measure, 2500);
 })();
 </script>
 </body>
