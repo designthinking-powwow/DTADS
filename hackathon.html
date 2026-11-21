@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>創新黑客松</title>
 <!--
+  ★ 11/21 走查修正：按鈕帶 ?who=…&need=hackathon（企業版 corporate、?for=school 版 school），表單自動勾選。退回：上傳 線上原版備份/DTADS/hackathon.html。
   ★ 11/21 查查：「黑客松」要在頁面露出。同一個檔兩種版本：
     ?for=enterprise（預設，鈷藍）→ 放 /enterprise
     ?for=school（綠）→ 放 /schools-public-sector
@@ -58,7 +59,7 @@
       <li><b>測試與提案</b><span id="s4">找人試用、修改，上台提案</span></li>
     </ol>
     <p class="fit" id="fit"><b>適合：</b>想推新產品、新服務的事業單位；跨部門創新專案的起跑；年度創新提案活動。可以 1 天密集，也可以 2 天含評審與頒獎。</p>
-    <a class="btn" href="https://www.designthinking.com.tw/contactus" target="_top">聊聊你們的黑客松 →</a>
+    <a class="btn" href="https://www.designthinking.com.tw/contactus?who=corporate&amp;need=hackathon" target="_top">聊聊你們的黑客松 →</a>
   </div>
 </main>
 <script>
@@ -75,6 +76,7 @@
   document.getElementById("s4").textContent = "找人試用、修改，上台提案與評審";
   document.getElementById("fit").innerHTML = "<b>適合：</b>大學與高中職的專題課、創新創業課、校內或跨校創新競賽、營隊。老師也可以一起參加，回去帶下一屆。";
   document.querySelector("a.btn").textContent = "聊聊你們的提案競賽 →";
+  document.querySelector("a.btn").href = "https://www.designthinking.com.tw/contactus?who=school&need=hackathon";   // 11/21 走查修正：表單自動選好「學校」＋提案競賽
 })();
 </script>
 <script>

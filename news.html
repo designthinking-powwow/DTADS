@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>週報訂閱</title>
 <!--
+  ★ 11/21 修正2：量高度改成內容一變就重量（ResizeObserver）＋關掉手機字體自動放大，修手機首頁週報區塊被切。退回：上傳 07_開發部/上傳_20261121_首頁修正2/線上原版備份/DTADS/news.html。
   ★ 11/21 配色方案 C（全淺色頁首：淡藍 #EEF2FF、海軍藍字 #14213D、珊瑚 #D91E45、綠 #007F52）。退回：上傳 線上原版備份/DTADS/news.html。
   官網首頁 ⑩「未來思考週報」訂閱（2026/10/15 製作）：鈷藍色整塊＋Substack 官方訂閱框
   - 10/28 UI/UX 第二批：拿掉 Substack 官方訂閱框（橘色按鈕在藍底上太突兀，也不用橘色當主色），改成自己的白色「免費訂閱 →」按鈕，連到 Substack 訂閱頁；點擊送 newsletter_click
@@ -16,7 +17,7 @@
 <style>
   :root { --cobalt:#1F4BFF; }
   * { box-sizing:border-box; margin:0; padding:0; }
-  html, body { height:100%; background:var(--cobalt); }
+  html, body { height:100%; background:var(--cobalt); -webkit-text-size-adjust:100%; text-size-adjust:100%; }
   body { font-family:"Inter","Noto Sans TC","PingFang TC",sans-serif; color:#fff; overflow:hidden; display:flex; align-items:center; justify-content:center; text-align:center; }
   .w { width:100%; max-width:720px; padding:0 16px; }
   .k { font:800 13px/1 Inter,sans-serif; letter-spacing:.16em; opacity:.8; }
@@ -84,6 +85,9 @@
   window.addEventListener("resize", measure);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
   setTimeout(measure, 800); setTimeout(measure, 2500);
+  // 11/21 修正2：手機首頁週報區塊被切（外框 298、內容 401）→ 內容高度一變（字型晚到、手機字體放大、換行）就重量一次，不再只量固定幾個時間點
+  if (window.ResizeObserver) { try { new ResizeObserver(measure).observe(document.querySelector(".w")); } catch (e) {} }
+  setTimeout(measure, 5000);
 })();
 </script>
 </body>

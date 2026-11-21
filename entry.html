@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>首頁第一屏（兩扇門）</title>
 <!--
+  ★ 11/21 走查修正：帶團隊門加「想辦活動：創意團建 →、創新黑客松 →」（連 /enterprise?go=teambuilding／hackathon，GTM 捲到那一段）；「醫院・診所」「基金會・NPO 活動」改連 /schools-public-sector?go=sectors，同分頁開。以首頁分眾包的新插畫版為基底。退回：上傳 線上原版備份/DTADS/entry.html。
   ★ 11/21 首頁分眾改版（查查：「分辨不出來個人的是什麼？」）
   - 第一屏＝滿版淡藍頁首（和 /contactus、/enterprise 一樣），不再是白底上浮的圓角卡片。
   - 兩扇一樣大的門：左「帶團隊」（企業・學校・公部門・醫院・基金會，鈷藍，主推放前面）／右「給自己｜線上課程與免費資源」（珊瑚）。
@@ -67,6 +68,11 @@
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .chip { font: 700 14px/1 "Noto Sans TC", sans-serif; padding: 10px 13px; border-radius: 999px; text-decoration: none; color: var(--ink); background: var(--sky); box-shadow: 0 0 0 1px var(--line) inset; white-space: nowrap; cursor: pointer; border: 0; transition: background .2s; }
   .chip:hover { background: #E1E7FD; }
+  /* 11/21 走查修正：帶團隊門「想辦活動」一行（創意團建、創新黑客松） */
+  .also { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; }
+  .chip.m-only { display: none; }
+  @media (max-width: 760px) { .also { display: none; } .chip.m-only { display: inline-block; } }   /* 手機：團建、黑客松併進單位按鈕最後一列，不多佔一行，讓「給自己」按鈕留在第一屏 */
+  .also small { font: 700 13px/1 "Noto Sans TC", sans-serif; color: var(--muted, #475069); margin-right: 2px; }
   .chip i { font-style: normal; color: var(--c); }
   .self .chip { background: #FFF1F3; box-shadow: 0 0 0 1px #F6CCD5 inset; }
   .self .chip:hover { background: #FFE3E8; }
@@ -141,7 +147,7 @@
         <h1>幫團隊找工作坊，還是想自己學？</h1>
         <p class="lead">我們到企業、學校、公部門帶<b>工作坊</b>，15 年超過三百場；也把同一套方法做成給個人的<b>線上課程</b>。選一扇門，直接看你要的資訊。</p>
       </div>
-      <img class="hero-img" src="img/home_hero.webp" width="960" height="603" alt="三個人圍著白板貼便利貼討論">
+      <img class="hero-img" src="img/home_hero.webp" width="960" height="1180" alt="五個人圍著白板貼便利貼討論">
     </header>
 
     <div class="doors">
@@ -153,11 +159,16 @@
             <h2 id="d1">幫團隊辦一場工作坊</h2>
             <p><span class="long">新產品沒新意、不懂顧客要什麼、開會想不出點子？我們到你們單位帶<b>設計思考、創意思考、未來思考</b>的<b>工作坊、共識營、創意團建、創新黑客松</b>，半天到兩天，用你們的真題目，做出能拿去試的方案。</span><span class="short">到你們單位帶工作坊、共識營、創意團建、創新黑客松，半天到兩天，用真題目做出能試的方案。</span></p>
           </div>
-          <img class="ill" src="img/door_team.webp" width="520" height="484" alt="" loading="eager">
+          <img class="ill" src="img/door_team.webp" width="520" height="586" alt="" loading="eager">
         </div>
         <div class="row">
           <a class="cta main" href="https://www.designthinking.com.tw/contactus" target="_top" data-door="b2b" data-target="contactus">聊聊你們的題目 →</a>
           <a class="cta sub" href="https://www.designthinking.com.tw/enterprise" target="_top" data-door="b2b" data-target="enterprise">看工作坊怎麼帶</a>
+        </div>
+        <div class="also">
+          <small>想辦活動</small>
+          <a class="chip" href="https://www.designthinking.com.tw/enterprise?go=teambuilding" target="_top" data-door="b2b" data-target="teambuilding">創意團建 <i>→</i></a>
+          <a class="chip" href="https://www.designthinking.com.tw/enterprise?go=hackathon" target="_top" data-door="b2b" data-target="hackathon">創新黑客松 <i>→</i></a>
         </div>
         <div class="who">
           <small>你是哪一種單位？直接看對應的介紹</small>
@@ -165,8 +176,10 @@
             <a class="chip" href="https://www.designthinking.com.tw/workshops" target="_top" data-door="b2b" data-target="workshops">企業：工作坊題目庫 <i>→</i></a>
             <a class="chip" href="https://www.designthinking.com.tw/schools-public-sector" target="_top" data-door="b2b" data-target="schools">學校・教師研習 <i>→</i></a>
             <a class="chip" href="https://www.designthinking.com.tw/schools-public-sector" target="_top" data-door="b2b" data-target="public">公部門・計畫 <i>→</i></a>
-            <a class="chip" href="https://designthinking-powwow.github.io/chacha/healthcare.html" target="_blank" rel="noopener" data-door="b2b" data-target="healthcare">醫院・診所 <i>→</i></a>
-            <a class="chip" href="https://www.designthinking.com.tw/contactus" target="_top" data-door="b2b" data-target="npo">基金會・NPO 活動 <i>→</i></a>
+            <a class="chip" href="https://www.designthinking.com.tw/schools-public-sector?go=sectors" target="_top" data-door="b2b" data-target="healthcare">醫院・診所 <i>→</i></a>
+            <a class="chip" href="https://www.designthinking.com.tw/schools-public-sector?go=sectors" target="_top" data-door="b2b" data-target="npo">基金會・NPO 活動 <i>→</i></a>
+            <a class="chip m-only" href="https://www.designthinking.com.tw/enterprise?go=teambuilding" target="_top" data-door="b2b" data-target="teambuilding">創意團建 <i>→</i></a>
+            <a class="chip m-only" href="https://www.designthinking.com.tw/enterprise?go=hackathon" target="_top" data-door="b2b" data-target="hackathon">創新黑客松 <i>→</i></a>
           </div>
         </div>
       </section>
@@ -179,7 +192,7 @@
             <h2 id="d2">自己學，想清楚下一步</h2>
             <p><span class="long">對工作或人生方向卡住？先免費做「認識自己 20 題」、聽 Podcast，準備好了再上線上課程<b>《別急著找答案！善用設計思考，打造你自己的人生藍圖》</b>，在 PressPlay 照自己的節奏上。</span><span class="short">對工作或人生方向卡住？先免費試，再上線上課程《別急著找答案！善用設計思考，打造你自己的人生藍圖》。</span></p>
           </div>
-          <img class="ill" src="img/door_self.webp" width="520" height="602" alt="" loading="eager">
+          <img class="ill" src="img/door_self.webp" width="520" height="614" alt="" loading="eager">
         </div>
         <div class="row">
           <a class="cta main" id="selfMain" href="https://www.designthinking.com.tw/personal" target="_top" data-door="b2c" data-target="personal">看個人學習頁 →</a>
@@ -198,7 +211,7 @@
 
     <!-- 還不確定 -->
     <nav class="learn" aria-label="先了解設計思考">
-      <img src="img/door_learn.webp" width="520" height="406" alt="">
+      <img src="img/door_learn.webp" width="520" height="586" alt="">
       <div class="t"><span>還不確定？</span>先看看設計思考是什麼</div>
       <div class="links">
         <a href="https://www.designthinking.com.tw/designthinking" target="_top" data-door="learn" data-target="designthinking">設計思考是什麼 →</a>

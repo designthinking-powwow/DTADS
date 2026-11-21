@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cha Cha 作者介紹卡</title>
 <!--
+  ★ 11/21 走查修正：一行版課名改用全名《別急著找答案！善用設計思考，打造你自己的人生藍圖》（原本寫短名《別急著找答案！》）。退回：上傳 線上原版備份/DTADS/bio.html。
   ★ 11/21 配色方案 C（全淺色頁首：淡藍 #EEF2FF、海軍藍字 #14213D、珊瑚 #D91E45、綠 #007F52）。退回：上傳 線上原版備份/DTADS/bio.html。
   官網文章「關於文字策展人」下面的小卡：Podcast＋線上課程。所有文章共用這一個檔案，改這裡就全站一起改。
   放在 DTADS 同一個 GitHub 資料夾：https://designthinking-powwow.github.io/DTADS/bio.html
@@ -83,10 +84,13 @@
       var cu = new URL(COURSES[0].url); cu.searchParams.set("utm_content", "bio-card" + (post ? "-" + post : ""));
       var C = cu.toString();
       // 查查 10/29：課程放前面，Podcast 在後
-      v = ['<b>線上課</b>《' + COURSES[0].short + '》已在 PressPlay 開課，' + A(C, "看課程 →") + gap + '<b>Podcast</b>《別急著找答案》每週五更新：' + pods[0],
-           '<b>線上課</b>《' + COURSES[0].short + '》已在 PressPlay 開課，' + A(C, "看課程 →") + gap + '<b>Podcast</b>' + pods[1],
-           '<b>線上課</b>《' + COURSES[0].short + '》已開課，' + A(C, "看課程 →") + gap + '<b>Podcast</b>' + pods[2],
-           '<b>線上課</b>' + A(C, "《" + COURSES[0].short + "》看課程 →") + gap + '<b>Podcast</b>' + pods[3],
+      // 11/21 走查修正：課名一律寫全名（查查 11/20：不用短課名）；放不下全名的窄螢幕，最後一版只寫「看課程 →」不寫課名
+      var N = COURSES[0].name;
+      v = ['<b>線上課</b>《' + N + '》已在 PressPlay 開課，' + A(C, "看課程 →") + gap + '<b>Podcast</b>《別急著找答案》每週五更新：' + pods[0],
+           '<b>線上課</b>《' + N + '》已在 PressPlay 開課，' + A(C, "看課程 →") + gap + '<b>Podcast</b>' + pods[1],
+           '<b>線上課</b>《' + N + '》已開課，' + A(C, "看課程 →") + gap + '<b>Podcast</b>' + pods[2],
+           '<b>線上課</b>' + A(C, "《" + N + "》看課程 →") + gap + '<b>Podcast</b>' + pods[3],
+           '<b>線上課</b>' + A(C, "PressPlay 線上課程，看課程 →") + gap + '<b>Podcast</b>' + pods[3],
            '<b>線上課</b>' + A(C, "看課程 →") + gap + '<b>Podcast</b>' + pods[3]];
     }
     first.innerHTML = v.map(function (x) { return '<span class="v">' + x + '</span>'; }).join("");
