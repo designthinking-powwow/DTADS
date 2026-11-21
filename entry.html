@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>首頁第一屏（兩扇門）</title>
 <!--
+  ★ 11/21 晚（查查：「自己下面空空的」）：給自己門加「課程裡有」三格（8 堂錄影課／8 份學習單／隨時開始），只在電腦版；不放學員回饋（查查選）。
   ★ 11/21 晚（查查：「選擇不是重點，直接買課」）：給自己門只留「到 PressPlay 看課程 →」（短網址 DE956453，官網共用）＋「先看 5 分鐘介紹 ▶」；拿掉看個人學習頁、直接看線上課程、免費 20 題／週報按鈕。
   ★ 11/21 晚（查查：「活動只有兩項？」）：「想辦活動」改「想找哪一種？」6 顆：設計思考／創意思考／未來思考工作坊（連 /enterprise?go=formats 三個方向段）、共識營（/workshops 題目庫，含年度策略題）、創意團建、創新黑客松；手機併進單位按鈕：多一顆「設計・創意・未來思考工作坊」。退回：上傳 線上原版備份/entry.html。
   ★ 11/21 走查修正：帶團隊門加「想辦活動：創意團建 →、創新黑客松 →」（連 /enterprise?go=teambuilding／hackathon，GTM 捲到那一段）；「醫院・診所」「基金會・NPO 活動」改連 /schools-public-sector?go=sectors，同分頁開。以首頁分眾包的新插畫版為基底。退回：上傳 線上原版備份/DTADS/entry.html。
@@ -79,6 +80,13 @@
   .chip i { font-style: normal; color: var(--c); }
   .self .chip { background: #FFF1F3; box-shadow: 0 0 0 1px #F6CCD5 inset; }
   .self .chip:hover { background: #FFE3E8; }
+  /* 11/21 晚：給自己門「課程裡有」三格（只在電腦版，補帶團隊門比較長留下的空白） */
+  .facts { margin-top: 22px; }
+  .facts small { display: block; font: 700 13px/1 "Noto Sans TC", sans-serif; color: var(--muted, #475069); margin-bottom: 10px; }
+  .facts ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .facts li { background: #FFF1F3; box-shadow: 0 0 0 1px #F6CCD5 inset; border-radius: 14px; padding: 14px 12px; text-align: center; font: 700 14px/1.45 "Noto Sans TC", sans-serif; color: var(--ink); }
+  .facts li b { display: block; font: 900 26px/1.1 Inter, "Noto Sans TC", sans-serif; color: #D91E45; margin-bottom: 4px; }
+  @media (max-width: 760px) { .facts { display: none; } }
   a:focus-visible, button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
 
   /* 還不確定 */
@@ -205,6 +213,14 @@
         <div class="row">
           <a class="cta main" href="https://www.pressplay.cc/link/s/DE956453" target="_blank" rel="noopener" data-door="b2c" data-target="pressplay">到 PressPlay 看課程 →</a>
           <button class="cta sub" type="button" data-door="b2c" data-target="ep00">先看 5 分鐘介紹 ▶</button>
+        </div>
+        <div class="facts">
+          <small>課程裡有</small>
+          <ul>
+            <li><b>8</b>堂錄影課</li>
+            <li><b>8</b>份學習單</li>
+            <li><b>隨時</b>買了就能開始</li>
+          </ul>
         </div>
       </section>
     </div>
