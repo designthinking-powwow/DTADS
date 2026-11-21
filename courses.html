@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>首頁線上課程卡</title>
 <!--
+  ★ 11/21 配色方案 C（全淺色頁首：淡藍 #EEF2FF、海軍藍字 #14213D、珊瑚 #D91E45、綠 #007F52）。退回：上傳 線上原版備份/DTADS/courses.html。
   官網首頁 ⑤「自己學：線上課程」卡片（2026/10/15 製作）。區塊標題與說明在 Kolable 打字，這裡只放卡片。
   - 依台北日期自動換字：第一門課 11/01 前「11/01 上線」＋連到 EP00「免費看 5 分鐘課程介紹」（10/27）→ 之後「現正上線」＋連到 PressPlay「看課程」；第二門課 11/17 起才出現（之前不曝光，避免搶第一門課）
   - 11/20：早鳥只寫截止時間，11/25 00:00（台北）起 COURSE1_PLAN 自動換 "regular"
@@ -16,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-  :root { --cobalt:#1F4BFF; --coral:#FF3B5C; --violet:#7B2FF7; --ink:#0F0E0E; --muted:#5C5552; --line:#E9E2DC; --soft:#F5F1EE; }
+  :root { --cobalt:#1F4BFF; --coral:#D91E45; --violet:#7B2FF7; --ink:#14213D; --muted:#475069; --line:#DDE2EE; --soft:#F1F4FB; }
   * { box-sizing:border-box; margin:0; padding:0; }
   html, body { background:#fff; height:100%; }
   body { font-family:"Inter","Noto Sans TC","PingFang TC",sans-serif; color:var(--ink); overflow:hidden; display:flex; flex-direction:column; justify-content:center; }
@@ -28,7 +29,7 @@
   .head .lead { font:500 18px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); flex:none; }
   .row { display:flex; justify-content:flex-start; gap:22px; max-width:1120px; margin:0 auto; padding:8px 48px 24px; }
   .cc { flex:1 1 0; min-width:0; max-width:400px; border:1px solid var(--line); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; background:#fff; transition:transform .25s, box-shadow .25s; }
-  a.cc:hover { transform:translateY(-4px); box-shadow:0 14px 30px rgba(15,14,14,.10); }
+  a.cc:hover { transform:translateY(-4px); box-shadow:0 14px 30px rgba(20,33,61,.10); }
   .cc img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; }
   .b { padding:20px 22px 22px; display:flex; flex-direction:column; flex:1; }
   .chip { align-self:flex-start; font:700 12px/1 "Noto Sans TC",sans-serif; padding:6px 10px; border-radius:999px; color:#fff; white-space:nowrap; }
@@ -46,7 +47,7 @@
   .free hr { border:0; border-top:1px solid var(--line); margin:14px 0; }
   .sub { align-self:flex-start; display:inline-block; margin-top:10px; background:#fff; color:var(--ink); border:2px solid var(--ink); font:700 14px/1 "Noto Sans TC",sans-serif; padding:9px 16px; border-radius:999px; text-decoration:none; }   /* 10/28 UI/UX 第二批：顏色只留給「線上課＝珊瑚紅、企業工作坊＝鈷藍」，其他按鈕一律黑框白底 */
 
-  .hint { display:none; text-align:center; font:500 12px "Noto Sans TC",sans-serif; color:#9A928D; }
+  .hint { display:none; text-align:center; font:500 12px "Noto Sans TC",sans-serif; color:#5F6886; }
   /* 手機：左右滑動 */
   @media (max-width: 760px) {
     .row { justify-content:flex-start; overflow-x:auto; scroll-snap-type:x mandatory; scroll-padding:0 16px; padding:4px 16px 18px; gap:14px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }

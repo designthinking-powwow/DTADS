@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>數字與合作單位</title>
 <!--
+  ★ 11/21 配色方案 C（全淺色頁首：淡藍 #EEF2FF、海軍藍字 #14213D、珊瑚 #D91E45、綠 #007F52）。退回：上傳 線上原版備份/DTADS/stats.html。
   官網首頁 ⑦「數字＋合作單位」（2026/10/15 製作），取代原本的「創意教學里程碑」
   - 名單取自 Google 文件「合作單位」，挑大家認得的；10/29 學校依文件補齊（大學 15＋中小學與實驗教育 11；「臺北護理運動大學」校名待查查確認，先不放）；若有企業提出異議，改成產業別寫法
   - 跑馬燈版（/workshops 用，名單較多、每次隨機排序）：stats.html?wall=1，高度 560
@@ -14,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
-  :root { --cobalt:#1F4BFF; --ink:#0F0E0E; --muted:#5C5552; --line:#E9E2DC; }
+  :root { --cobalt:#1F4BFF; --ink:#14213D; --muted:#475069; --line:#DDE2EE; }
   * { box-sizing:border-box; margin:0; padding:0; }
   html, body { height:100%; background:#fff; }
   body { font-family:"Inter","Noto Sans TC","PingFang TC",sans-serif; color:var(--ink); overflow:hidden; display:flex; flex-direction:column; justify-content:center; }
@@ -30,7 +31,7 @@
   .g:last-child { border-bottom:0; }
   .g b { font:700 14px/2.1 "Noto Sans TC",sans-serif; color:var(--cobalt); }
   .n { white-space:nowrap; }
-  .clients i { font-style:normal; color:#C9C1BB; margin:0 8px; }
+  .clients i { font-style:normal; color:#D5DCEA; margin:0 8px; }
   /* 跑馬燈版 */
   .wall { margin-top:40px; padding-top:26px; border-top:1px solid var(--line); }
   .wall h3 { font:700 15px "Noto Sans TC",sans-serif; color:var(--muted); margin-bottom:14px; }
@@ -38,7 +39,7 @@
   .track { display:flex; gap:10px; width:max-content; animation:run var(--d) linear infinite; }
   .lane.rev .track { animation-direction:reverse; }
   .lane:hover .track { animation-play-state:paused; }
-  .chip { white-space:nowrap; font:500 16px/1 "Noto Sans TC",sans-serif; padding:12px 18px; border-radius:999px; background:#F5F1EE; }
+  .chip { white-space:nowrap; font:500 16px/1 "Noto Sans TC",sans-serif; padding:12px 18px; border-radius:999px; background:#F1F4FB; }
   .chip.c1 { background:#EAF0FF; } .chip.c3 { background:#F1EAFE; }
   @keyframes run { from { transform:translateX(0); } to { transform:translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) { .track { animation:none; flex-wrap:wrap; width:auto; } }

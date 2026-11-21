@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>企業與學校工作坊</title>
 <!--
+  ★ 11/21 配色方案 C（全淺色頁首：淡藍 #EEF2FF、海軍藍字 #14213D、珊瑚 #D91E45、綠 #007F52）。退回：上傳 線上原版備份/DTADS/workshops.html。
   官網首頁 ④「企業工作坊」（2026/10/15 定案雛形）：3 類 6 題＋外商橫條＋時間長度
   - 對外文字：只寫團隊帶走什麼，不寫任何工具、遊戲名稱（查查 10/15）
   - 這一頁也可以直接把網址寄給管顧當簡介：https://designthinking-powwow.github.io/DTADS/workshops.html
@@ -16,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-  :root { --cobalt:#1F4BFF; --green:#00A86B; --violet:#7B2FF7; --ink:#0F0E0E; --muted:#5C5552; --soft:#F5F1EE; }
+  :root { --cobalt:#1F4BFF; --green:#007F52; --violet:#7B2FF7; --ink:#14213D; --muted:#475069; --soft:#F1F4FB; }
   * { box-sizing:border-box; margin:0; padding:0; }
   html, body { background:var(--soft); min-height:100%; }
   body { display:flex; flex-direction:column; justify-content:center; }
@@ -64,7 +65,7 @@
   .a3 b { display:block; font:900 17px/1.4 "Noto Sans TC",sans-serif; margin-bottom:4px; }
   .a3 b small { font:500 13px "Noto Sans TC",sans-serif; color:var(--muted); margin-left:6px; }
   .a3 span { font:400 14px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); }
-  .after .note { margin-top:12px; font:400 13.5px/1.7 "Noto Sans TC",sans-serif; color:#8A817C; }
+  .after .note { margin-top:12px; font:400 13.5px/1.7 "Noto Sans TC",sans-serif; color:#5A6380; }
   .voices { margin-top:44px; }
   .voices h3.t { font:900 24px/1.35 "Noto Sans TC",sans-serif; margin:10px 0 0; }
   .vq { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px; }
@@ -84,12 +85,12 @@
   .ichips { display:none; }
   .ind .hd b { font:900 18px/1.4 "Noto Sans TC",sans-serif; }
   .ind .hd .tag { display:inline-block; margin-left:8px; vertical-align:2px; font:700 12px/1 "Noto Sans TC",sans-serif; color:var(--cobalt); background:#EAF0FF; padding:5px 8px; border-radius:999px; }
-  .ind .hd small { display:block; margin-top:4px; font:400 13.5px/1.6 "Noto Sans TC",sans-serif; color:#8A817C; }
+  .ind .hd small { display:block; margin-top:4px; font:400 13.5px/1.6 "Noto Sans TC",sans-serif; color:#5A6380; }
   .ind .q { margin-top:10px; font:500 15px/1.7 "Noto Sans TC",sans-serif; color:var(--ink); }
   .ind .c { margin-top:6px; font:400 14px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); }
-  .ind .c em { font-style:normal; color:#8A817C; margin-right:4px; }
+  .ind .c em { font-style:normal; color:#5A6380; margin-right:4px; }
   .ind .go { margin-top:10px; display:flex; gap:16px; flex-wrap:wrap; font:700 14px "Noto Sans TC",sans-serif; }
-  .ind.other { background:transparent; border:2px dashed #D9D0C9; display:flex; flex-direction:column; justify-content:center; }
+  .ind.other { background:transparent; border:2px dashed #D5DCEA; display:flex; flex-direction:column; justify-content:center; }
   .ind.other b { font:900 18px/1.4 "Noto Sans TC",sans-serif; }
   .ind.other p { margin-top:6px; font:500 15px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); }
 
@@ -114,7 +115,7 @@
     .d3 b { font-size:17px; margin-bottom:2px; } .d3 span { font-size:13.5px; }
     .btn { font-size:15px; padding:13px 20px; }
     .foot { font-size:13px; gap:10px; }
-    .hint { display:block; font:500 12px "Noto Sans TC",sans-serif; color:#9A928D; margin:6px 16px 0; }
+    .hint { display:block; font:500 12px "Noto Sans TC",sans-serif; color:#5F6886; margin:6px 16px 0; }
     .why { grid-template-columns:1fr 1fr; gap:12px 10px; margin:20px 16px 0; }
     .why b { font-size:14.5px; } .why span { font-size:13px; line-height:1.6; }
     .after { margin:30px 16px 0; padding:18px 16px 16px; }
@@ -133,7 +134,7 @@
     .inds h3.t { font-size:20px; } .inds .sub { font-size:14px; }
     /* 手機：上面一排產業按鈕，下面卡片左右滑動（和題目區同一種做法）；高度固定，不會因為點開而改變 */
     .ichips { display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; }
-    .ichips button { font:500 13px/1 "Noto Sans TC",sans-serif; color:var(--ink); background:#fff; border:1px solid #E4DCD5; border-radius:999px; padding:8px 11px; cursor:pointer; }
+    .ichips button { font:500 13px/1 "Noto Sans TC",sans-serif; color:var(--ink); background:#fff; border:1px solid #D5DCEA; border-radius:999px; padding:8px 11px; cursor:pointer; }
     .ichips button.on { background:var(--cobalt); border-color:var(--cobalt); color:#fff; }
     .igrid { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scroll-padding:0 16px; gap:12px; margin:12px -16px 0; padding:0 16px 4px; scrollbar-width:none; }
     .igrid::-webkit-scrollbar { display:none; }

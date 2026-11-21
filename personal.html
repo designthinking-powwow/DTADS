@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>首頁個人區</title>
 <!--
+  ★ 11/21 配色方案 C（全淺色頁首：淡藍 #EEF2FF、海軍藍字 #14213D、珊瑚 #D91E45、綠 #007F52）。退回：上傳 線上原版備份/DTADS/personal.html。
   官網首頁個人區（2026/11/02）：原課程橫幅（hero.html）下移到「自己學：線上課程」上方，右邊封面換成可直接播放的 EP00
   - EP00 用 youtube-nocookie，按了才載入（平常首頁不載 YouTube）
   - 首頁上方個人卡按「免費看課程介紹」→ GTM「首頁兩入口轉達」把官網捲到這裡，再叫這裡播放（source=card）
@@ -19,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
-  :root { --coral: #FF3B5C; --coral-d: #E8243F; --ink: #0F0E0E; --paper: #FFF8F3; --muted: #5C5552; }
+  :root { --coral:#D91E45; --coral-d:#B8173A; --ink:#14213D; --paper: #FFF8F3; --muted:#475069; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { background: var(--paper); }
   body { font-family: "Inter", "Noto Sans TC", "PingFang TC", sans-serif; color: var(--ink); overflow: hidden; }
@@ -41,7 +42,7 @@
   .price em { font-style: normal; color: var(--coral); font: 800 22px Inter, sans-serif; }
   .after { font: 500 14px/1.5 "Noto Sans TC", sans-serif; color: var(--muted); margin-top: 12px; }
 
-  .player { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: #000; box-shadow: 0 18px 40px rgba(15,14,14,.16); }
+  .player { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: #000; box-shadow: 0 18px 40px rgba(20,33,61,.16); }
   .player button.poster { all: unset; position: absolute; inset: 0; cursor: pointer; display: block; }
   .player button.poster:focus-visible { outline: 3px solid var(--coral); outline-offset: -3px; }
   .player img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .35s ease, filter .35s; }

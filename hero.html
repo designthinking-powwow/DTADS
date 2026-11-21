@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>首頁課程橫幅</title>
 <!--
+  ★ 11/21 配色方案 C（全淺色頁首：淡藍 #EEF2FF、海軍藍字 #14213D、珊瑚 #D91E45、綠 #007F52）。退回：上傳 線上原版備份/DTADS/hero.html。
   官網首頁第一屏：第一門課橫幅（2026/10/15 製作）
   - 依台北日期自動換字：11/01 前「11/01（日）開賣」＋按鈕「免費看 5 分鐘課程介紹」連到 EP00（10/27，不倒數、不再連 LINE），11/01 起「現正上線」＋「看課程」連到 PressPlay
   - 11/20：改成深色底（跟 /workshops、/enterprise 頁首一致）；早鳥只寫截止時間、不寫名額，11/25 00:00（台北）起自動換成 3 人團價（EARLY_END）
@@ -15,23 +16,23 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
-  :root { --coral: #FF3B5C; --ink: #0F0E0E; --paper: #0F0E0E; --muted: #5C5552; }
+  :root { --coral:#D91E45; --ink:#14213D; --paper: #EEF2FF; --muted:#475069; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; background: var(--paper); }
-  body { font-family: "Inter", "Noto Sans TC", "PingFang TC", sans-serif; color: #fff; overflow: hidden; }
+  body { font-family: "Inter", "Noto Sans TC", "PingFang TC", sans-serif; color: var(--ink); overflow: hidden; }
   a.hero { display: flex; align-items: center; gap: 48px; height: 100%; padding: 32px 56px; text-decoration: none; color: inherit; max-width: 1240px; margin: 0 auto; }
   .txt { flex: 1 1 46%; min-width: 0; }
   .pic { flex: 1 1 54%; min-width: 0; }
-  .pic img { display: block; width: 100%; height: auto; border-radius: 14px; box-shadow: 0 18px 40px rgba(0,0,0,.45); transition: transform .3s ease; }
+  .pic img { display: block; width: 100%; height: auto; border-radius: 14px; box-shadow: 0 18px 40px rgba(20,33,61,.18); transition: transform .3s ease; }
   a.hero:hover .pic img { transform: translateY(-4px); }
-  .kicker { display: inline-flex; align-items: center; gap: 10px; font: 800 13px/1 "Inter", sans-serif; letter-spacing: .14em; color: var(--coral); }
+  .kicker { display: inline-flex; align-items: center; gap: 10px; font: 800 13px/1 "Inter", sans-serif; letter-spacing: .14em; color: #B8173A; }
   .kicker b { background: var(--coral); color: #fff; letter-spacing: .04em; padding: 6px 10px; border-radius: 999px; font-family: "Noto Sans TC", sans-serif; font-weight: 700; }
   h1 { font: 900 44px/1.15 "Noto Sans TC", sans-serif; margin: 18px 0 10px; letter-spacing: .01em; }
-  .sub { font: 500 19px/1.55 "Noto Sans TC", sans-serif; color: #CFC8C3; }
-  .meta { font: 500 15px/1.6 "Noto Sans TC", sans-serif; color: #A9A29D; margin-top: 14px; }
+  .sub { font: 500 19px/1.55 "Noto Sans TC", sans-serif; color: #414B66; }
+  .meta { font: 500 15px/1.6 "Noto Sans TC", sans-serif; color: #5A6380; margin-top: 14px; }
   .row { display: flex; align-items: center; flex-wrap: wrap; gap: 14px 18px; margin-top: 26px; }
   .btn { display: inline-flex; align-items: center; gap: 8px; background: var(--coral); color: #fff; font: 700 17px/1 "Noto Sans TC", sans-serif; padding: 16px 26px; border-radius: 999px; transition: background .2s; }
-  a.hero:hover .btn { background: #E8243F; }
+  a.hero:hover .btn { background: #B8173A; }
   .price { font: 700 16px/1.4 "Noto Sans TC", sans-serif; }
   .price em { font-style: normal; color: var(--coral); font-family: "Inter", sans-serif; font-weight: 800; font-size: 22px; }
 
@@ -51,7 +52,7 @@
   @media (max-width: 600px) {
     a.hero { flex-direction: column; align-items: stretch; justify-content: center; gap: 16px; padding: 16px; }
     .pic { flex: none; order: -1; }
-    .pic img { border-radius: 10px; box-shadow: 0 10px 24px rgba(15,14,14,.14); }
+    .pic img { border-radius: 10px; box-shadow: 0 10px 24px rgba(20,33,61,.14); }
     .txt { flex: none; }
     .kicker { font-size: 11px; }
     .kicker b { padding: 5px 8px; }
@@ -64,6 +65,7 @@
     .price em { font-size: 18px; }
   }
 </style>
+<style id="palette-c">/* 11/21 配色 C：頁首底部四色條 */ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:6px;background:linear-gradient(90deg,#1F4BFF 0 25%,#007F52 25% 50%,#7B2FF7 50% 75%,#FF3B5C 75%);}</style>
 </head>
 <body>
 <a class="hero" id="hero" target="_blank" rel="noopener">

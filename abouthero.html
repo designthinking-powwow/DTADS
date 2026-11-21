@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>關於我們頁首</title>
 <!--
+  ★ 11/21 配色方案 C（全淺色頁首：淡藍 #EEF2FF、海軍藍字 #14213D、珊瑚 #D91E45、綠 #007F52）。退回：上傳 線上原版備份/DTADS/abouthero.html。
   /about 頁首＋我們做什麼（2026/10/15 製作；11/20 改成深色底，跟 /workshops、/enterprise 的頁首一致）
   - 官網內頁原頁開啟（target=_top）
   - Kolable 嵌入碼：<iframe src="https://designthinking-powwow.github.io/DTADS/abouthero.html" width="100%" height="700" style="border:0;" frameborder="0" scrolling="no"></iframe>
@@ -13,16 +14,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
-  :root { --cobalt:#1F4BFF; --coral:#FF3B5C; --violet:#7B2FF7; --ink:#0F0E0E; --muted:#5C5552; --cream:#FBF6EF; }
+  :root { --cobalt:#1F4BFF; --coral:#D91E45; --violet:#7B2FF7; --ink:#14213D; --muted:#475069; --cream:#FBF6EF; }
   * { box-sizing:border-box; margin:0; padding:0; }
-  html, body { height:100%; background:var(--ink); }
-  body { font-family:"Inter","Noto Sans TC","PingFang TC",sans-serif; color:#fff; overflow:hidden; display:flex; align-items:center; }
+  html, body { height:100%; background:#EEF2FF; }
+  body { font-family:"Inter","Noto Sans TC","PingFang TC",sans-serif; color:var(--ink); overflow:hidden; display:flex; align-items:center; }
   .w { max-width:1120px; width:100%; margin:0 auto; padding:0 48px; }
-  .k { font:800 13px/1 Inter,sans-serif; letter-spacing:.16em; color:#8FA6FF; }
+  .k { font:800 13px/1 Inter,sans-serif; letter-spacing:.16em; color:var(--cobalt); }
   h1 { font:900 50px/1.25 "Noto Sans TC",sans-serif; margin:16px 0 18px; }
-  .lead { font:500 18px/1.8 "Noto Sans TC",sans-serif; color:#CFC8C3; max-width:760px; }
+  .lead { font:500 18px/1.8 "Noto Sans TC",sans-serif; color:#414B66; max-width:760px; }
   .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:40px; }
-  a.c { display:flex; flex-direction:column; text-decoration:none; color:var(--ink); background:#fff; border-radius:18px; padding:24px 24px 22px; border-top:6px solid; transition:transform .25s; }
+  a.c { display:flex; flex-direction:column; text-decoration:none; color:var(--ink); background:#fff; box-shadow:inset 0 0 0 1px #D5DCF0; border-radius:18px; padding:24px 24px 22px; border-top:6px solid; transition:transform .25s; }
   a.c:hover { transform:translateY(-4px); }
   .c1 { border-color:var(--cobalt) !important; } .c2 { border-color:var(--coral) !important; } .c3 { border-color:var(--violet) !important; }
   .c i { font:800 12px/1 Inter,sans-serif; font-style:normal; letter-spacing:.14em; color:var(--muted); }
@@ -43,6 +44,7 @@
     .c em s { display:none; }
   }
 </style>
+<style id="palette-c">/* 11/21 配色 C：頁首底部四色條 */ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:6px;background:linear-gradient(90deg,#1F4BFF 0 25%,#007F52 25% 50%,#7B2FF7 50% 75%,#FF3B5C 75%);}</style>
 </head>
 <body>
 <div class="w">
