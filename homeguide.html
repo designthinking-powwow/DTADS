@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, indexifembedded">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>首頁分流區塊</title>
+<!--
+  ★ 11/21 查查定案：「首頁精簡，然後按鈕導入到該頁面，再詳細說明。」
+  這一個區塊取代首頁原本的 intro.html、workshops.html（約 3,500px）、personal.html、courses.html、stats.html。
+  每一區只放一句話＋少量證據＋一個主按鈕，細節都在分眾頁：
+    A 帶團隊：三種工作坊卡 → /workshops；怎麼進行 → /enterprise
+    B 學校・公部門・醫院・基金會：四張卡 → /schools-public-sector、healthcare.html、/contactus
+    C 給自己：線上課程＋免費資源 → /personal（個人頁建好前先連 /online-courses，見 PERSONAL_LIVE）
+    D 實績：四個數字＋一行 → /chacha
+  插畫：img/door_schools.webp、img/door_self.webp、img/door_learn.webp
+  Kolable 嵌入碼（放在首頁第一屏 entry.html 下面）：
+  <iframe src="https://designthinking-powwow.github.io/DTADS/homeguide.html" width="100%" height="2200" style="border:0;" frameborder="0" scrolling="no"></iframe>
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --sky:#EEF2FF; --ink:#14213D; --muted:#414B66; --soft:#5A6380; --cobalt:#1F4BFF; --green:#007F52; --coral:#D91E45; --violet:#7B2FF7; --line:#D5DCF0; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { background:#fff; color:var(--ink); }
+  body { font-family:"Inter","Noto Sans TC","PingFang TC",sans-serif; overflow:hidden; }
+  a { color:inherit; } img { display:block; max-width:100%; height:auto; }
+  a:focus-visible { outline:3px solid var(--ink); outline-offset:3px; }
+  .g { padding:64px 0 16px; }
+  .w { max-width:1120px; margin:0 auto; padding:0 48px; }
+  .blk + .blk { margin-top:72px; }
+  .k { font:800 12.5px/1 Inter,sans-serif; letter-spacing:.16em; color:var(--c); }
+  h2 { font:900 30px/1.35 "Noto Sans TC",sans-serif; margin:10px 0 8px; }
+  .lead { font:500 16.5px/1.75 "Noto Sans TC",sans-serif; color:var(--muted); max-width:760px; }
+  .btn { display:inline-flex; align-items:center; gap:6px; font:700 16px/1 "Noto Sans TC",sans-serif; padding:14px 22px; border-radius:999px; text-decoration:none; white-space:nowrap; transition:transform .2s, filter .2s; }
+  .btn:hover { transform:translateY(-2px); filter:brightness(.92); }
+  .btn.main { background:var(--c); color:#fff; }
+  .btn.sub { box-shadow:0 0 0 2px var(--ink) inset; }
+  .row { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
+
+  .team { --c:var(--cobalt); }
+  .schools { --c:var(--green); }
+  .self { --c:var(--coral); }
+  .proof { --c:var(--violet); }
+
+  /* A 三種工作坊 */
+  .three { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:20px; }
+  .three a { display:block; padding:20px 20px 18px; border-radius:16px; background:var(--sky); text-decoration:none; transition:box-shadow .2s, transform .2s; }
+  .three a:hover { box-shadow:0 0 0 2px var(--cobalt) inset; transform:translateY(-2px); }
+  .three small { font:800 12.5px/1 "Noto Sans TC",sans-serif; color:var(--cobalt); }
+  .three b { display:block; font:900 19px/1.4 "Noto Sans TC",sans-serif; margin:8px 0 6px; }
+  .three span { font:500 14.5px/1.65 "Noto Sans TC",sans-serif; color:var(--muted); }
+
+  /* B 學校・公部門・醫院・基金會 */
+  .split { display:grid; grid-template-columns:1fr 280px; gap:28px; align-items:center; }
+  .four { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:20px; }
+  .four a { display:block; padding:16px 18px; border-radius:14px; background:#fff; box-shadow:0 0 0 1px var(--line) inset; text-decoration:none; transition:box-shadow .2s; }
+  .four a:hover { box-shadow:0 0 0 2px var(--green) inset; }
+  .four b { font:900 17px/1.4 "Noto Sans TC",sans-serif; }
+  .four b i { font-style:normal; color:var(--green); }
+  .four span { display:block; font:500 14px/1.6 "Noto Sans TC",sans-serif; color:var(--muted); margin-top:4px; }
+
+  /* C 給自己 */
+  .selfbox { display:grid; grid-template-columns:240px 1fr; gap:28px; align-items:center; padding:30px 32px; border-radius:20px; background:#FFF1F3; box-shadow:0 0 0 1px #F6CCD5 inset; }
+  .selfbox h2 { margin-top:8px; }
+  .course { font:700 16px/1.65 "Noto Sans TC",sans-serif; margin-top:6px; }
+  .free { font:500 15px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); margin-top:6px; }
+
+  /* D 實績 */
+  .nums { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:18px; }
+  .nums div { padding:16px 10px; border-radius:14px; background:var(--sky); text-align:center; }
+  .nums b { display:block; font:800 30px/1.1 Inter,sans-serif; color:var(--violet); }
+  .nums span { font:700 14px/1.6 "Noto Sans TC",sans-serif; color:var(--soft); }
+  .more { margin-top:14px; font:700 15.5px/1.6 "Noto Sans TC",sans-serif; }
+  .more a { color:var(--violet); text-decoration:none; } .more a:hover { text-decoration:underline; text-underline-offset:3px; }
+
+  @media (max-width: 860px) {
+    .g { padding:40px 0 8px; }
+    .w { padding:0 16px; }
+    .blk + .blk { margin-top:48px; }
+    h2 { font-size:22px; }
+    .lead { font-size:15px; }
+    .three { grid-template-columns:1fr; gap:10px; }
+    .three a { padding:14px 16px; } .three b { font-size:17px; margin:6px 0 2px; }
+    .split { grid-template-columns:1fr; }
+    .split > img { display:none; }
+    .four { grid-template-columns:1fr; gap:8px; }
+    .four a { padding:12px 14px; } .four b { font-size:15.5px; } .four span { font-size:13.5px; }
+    .selfbox { grid-template-columns:1fr 96px; gap:12px; padding:20px 16px; }
+    .selfbox img { order:2; width:96px; grid-row:1; grid-column:2; }
+    .selfbox > div { grid-column:1 / -1; grid-row:1; padding-right:100px; }
+    .selfbox .rest { grid-column:1 / -1; padding-right:0; }
+    .nums { grid-template-columns:repeat(2,1fr); gap:8px; }
+    .nums b { font-size:24px; }
+    .btn { font-size:15px; padding:13px 18px; }
+  }
+</style>
+</head>
+<body>
+<main class="g" id="g">
+  <div class="w">
+
+    <!-- A 帶團隊 -->
+    <section class="blk team" aria-labelledby="a">
+      <div class="k">FOR TEAMS・企業內訓</div>
+      <h2 id="a">三種工作坊，看你們卡在哪一種問題</h2>
+      <p class="lead">形式可以是半天到兩天的工作坊、年底共識營、玩得開心也想得出東西的創意團建，或 1–2 天的創新黑客松。</p>
+      <div class="three">
+        <a href="https://www.designthinking.com.tw/workshops" target="_top" data-t="ws-dt"><small>看懂人</small><b>設計思考工作坊</b><span>顧客為什麼不買單、問題到底是什麼。</span></a>
+        <a href="https://www.designthinking.com.tw/workshops" target="_top" data-t="ws-ct"><small>想得多</small><b>創意思考工作坊</b><span>開會想不出點子、總是同幾個人在講。</span></a>
+        <a href="https://www.designthinking.com.tw/workshops" target="_top" data-t="ws-ft"><small>看得遠</small><b>未來思考工作坊</b><span>年度策略、新事業，AI 來了團隊怎麼分工。</span></a>
+      </div>
+      <div class="row">
+        <a class="btn main" href="https://www.designthinking.com.tw/enterprise" target="_top" data-t="enterprise">看企業內訓怎麼進行 →</a>
+        <a class="btn sub" href="https://www.designthinking.com.tw/workshops" target="_top" data-t="workshops">工作坊題目庫</a>
+      </div>
+    </section>
+
+    <!-- B 學校・公部門・醫院・基金會 -->
+    <section class="blk schools" aria-labelledby="b">
+      <div class="split">
+        <div>
+          <div class="k">SCHOOLS・PUBLIC・NPO</div>
+          <h2 id="b">學校、公部門、醫院、基金會</h2>
+          <p class="lead">題目由你們帶來，我們先聽，再一起規劃。可以開立發票或收據，配合採購與核銷流程。</p>
+          <div class="four">
+            <a href="https://www.designthinking.com.tw/schools-public-sector" target="_top" data-t="schools"><b>學校 <i>→</i></b><span>學生工作坊、教師研習、專題課</span></a>
+            <a href="https://www.designthinking.com.tw/schools-public-sector" target="_top" data-t="public"><b>公部門・法人 <i>→</i></b><span>計畫工作坊、陪業者做出新服務</span></a>
+            <a href="https://designthinking-powwow.github.io/chacha/healthcare.html" target="_blank" rel="noopener" data-t="healthcare"><b>醫院・診所 <i>→</i></b><span>跨部門協作、病人體驗、教學培訓</span></a>
+            <a href="https://www.designthinking.com.tw/contactus" target="_top" data-t="npo"><b>基金會・協會・NPO <i>→</i></b><span>志工培訓、共識營、活動規劃，直接留言聊</span></a>
+          </div>
+        </div>
+        <img src="img/door_schools.webp" width="520" height="461" alt="老師在一旁看著學生圍著桌子做房子模型" loading="lazy">
+      </div>
+    </section>
+
+    <!-- C 給自己 -->
+    <section class="blk self" aria-labelledby="c">
+      <div class="selfbox">
+        <img src="img/door_self.webp" width="520" height="602" alt="" loading="lazy">
+        <div>
+          <div class="k">FOR YOU・線上課程與免費資源</div>
+          <h2 id="c">想自己學？從免費的開始</h2>
+          <div class="rest">
+            <p class="course">線上課程《別急著找答案！善用設計思考，打造你自己的人生藍圖》</p>
+            <p class="free">不確定適不適合，先做免費的「認識自己 20 題」、聽 Podcast、讀《未來思考週報》。</p>
+            <div class="row">
+              <a class="btn main" id="selfMain" href="https://www.designthinking.com.tw/personal" target="_top" data-t="personal">看個人學習頁 →</a>
+              <a class="btn sub" href="https://www.designthinking.com.tw/online-courses" target="_top" data-t="online-courses">直接看線上課程</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- D 實績 -->
+    <section class="blk proof" aria-labelledby="d">
+      <div class="k">TRACK RECORD</div>
+      <h2 id="d">2011 年帶到現在</h2>
+      <div class="nums">
+        <div><b>300+</b><span>場工作坊</span></div>
+        <div><b>3000+</b><span>學員</span></div>
+        <div><b>2500+</b><span>教學時數</span></div>
+        <div><b>100+</b><span>合作單位</span></div>
+      </div>
+      <p class="more"><a href="https://www.designthinking.com.tw/chacha" target="_top" data-t="chacha">看講師 Cha Cha 與合作單位 →</a></p>
+    </section>
+
+  </div>
+</main>
+<script>
+(function () {
+  var PERSONAL_LIVE = new URLSearchParams(location.search).get("personal") === "1" || true;   // ★ /personal 建好後改 true
+  if (!PERSONAL_LIVE) { var m = document.getElementById("selfMain"); m.href = "https://www.designthinking.com.tw/online-courses"; m.textContent = "看線上課程介紹 →"; m.nextElementSibling.style.display = "none"; }
+})();
+</script>
+<script>
+(function () {
+  if (window.parent === window) return;
+  var last = 0;
+  function measure() {
+    var h = Math.ceil(document.getElementById("g").getBoundingClientRect().height);
+    if (!(h > 80) || Math.abs(h - last) < 2) return;
+    last = h; parent.postMessage({ dtadsHeight: h }, "*");
+  }
+  window.addEventListener("load", measure); window.addEventListener("resize", measure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  setTimeout(measure, 800); setTimeout(measure, 2500);
+})();
+</script>
+</body>
+</html>

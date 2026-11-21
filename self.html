@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, indexifembedded">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>個人學習：先免費試，再深入</title>
+<!--
+  ★ 11/21 新頁 /personal（個人學習）的主內容，接在 selfhero.html 下面。順序＝先免費試 → 再深入：
+    ① 認識自己 20 題（LINE @929tyoeu 輸入「20題」，免費、不收 Email）
+    ② 《未來思考週報》、Podcast、課程介紹影片 EP00
+    ③ 給個人的文章精選（6 篇，皆為官網課程篇；已排除提到 DYL 的文章）
+    ④ 線上課程：第一門《別急著找答案！善用設計思考，打造你自己的人生藍圖》（PressPlay 短網址＋UTM）；
+       第二門《設計思考：每個人都能用的問題解決術》只寫「即將上線」，不寫日期、價格、不放連結（★ 待查查 11/27 確認後再補）
+  - 早鳥：只寫截止時間、不寫名額；2026-11-25 00:00（台北）起自動拿掉早鳥那行。預覽：?plan=regular
+  - 插畫：img/self_dt.webp（og_designthinking 裁切）
+  Kolable 嵌入碼：
+  <iframe src="https://designthinking-powwow.github.io/DTADS/self.html" width="100%" height="2400" style="border:0;" frameborder="0" scrolling="no"></iframe>
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --sky:#EEF2FF; --ink:#14213D; --muted:#414B66; --soft:#5A6380; --coral:#D91E45; --coral-d:#B8173A; --pink:#FFF1F3; --pinkline:#F6CCD5; --cobalt:#1F4BFF; --violet:#7B2FF7; --green:#007F52; --line:#D5DCF0; --line-green:#06C755; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { background:#fff; color:var(--ink); }
+  body { font-family:"Inter","Noto Sans TC","PingFang TC",sans-serif; overflow:hidden; }
+  a { color:inherit; }
+  a:focus-visible { outline:3px solid var(--ink); outline-offset:3px; }
+  .page { padding:56px 0 64px; }
+  .w { max-width:1120px; margin:0 auto; padding:0 48px; }
+  section + section { margin-top:64px; }
+  .step { display:flex; align-items:center; gap:10px; font:800 12.5px/1 Inter,sans-serif; letter-spacing:.14em; color:var(--coral); }
+  .step b { display:inline-grid; place-items:center; width:26px; height:26px; border-radius:50%; background:var(--coral); color:#fff; letter-spacing:0; font-size:13px; }
+  h2 { font:900 30px/1.35 "Noto Sans TC",sans-serif; margin:12px 0 8px; }
+  .intro { font:500 16.5px/1.75 "Noto Sans TC",sans-serif; color:var(--muted); max-width:760px; }
+  .btn { display:inline-flex; align-items:center; gap:6px; font:700 16px/1 "Noto Sans TC",sans-serif; padding:14px 22px; border-radius:999px; text-decoration:none; white-space:nowrap; transition:transform .2s, background .2s; }
+  .btn:hover { transform:translateY(-2px); }
+  .btn.coral { background:var(--coral); color:#fff; } .btn.coral:hover { background:var(--coral-d); }
+  .btn.line { background:var(--line-green); color:#fff; }
+  .btn.ghost { box-shadow:0 0 0 2px var(--ink) inset; }
+
+  /* ① 20 題 */
+  .free { margin-top:20px; display:grid; grid-template-columns:1fr auto; gap:24px; align-items:center; background:var(--pink); border-radius:18px; padding:28px 30px; box-shadow:0 0 0 1px var(--pinkline) inset; }
+  .free h3 { font:900 22px/1.4 "Noto Sans TC",sans-serif; }
+  .free p { font:500 15.5px/1.75 "Noto Sans TC",sans-serif; color:var(--muted); margin-top:6px; }
+  .free p b { color:var(--ink); }
+  .free .id { font:800 15px/1 Inter,sans-serif; color:var(--ink); }
+
+  /* ② 每週 */
+  .cards { margin-top:20px; display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .card { border-radius:16px; padding:22px 22px 20px; background:#fff; box-shadow:0 0 0 1px var(--line) inset; display:flex; flex-direction:column; gap:8px; }
+  .card .lab { font:800 12px/1 Inter,"Noto Sans TC",sans-serif; letter-spacing:.08em; color:var(--soft); }
+  .card h3 { font:900 18.5px/1.45 "Noto Sans TC",sans-serif; }
+  .card p { font:500 14.5px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); }
+  .card .go { margin-top:auto; padding-top:6px; font:700 15px/1.6 "Noto Sans TC",sans-serif; color:var(--coral); text-decoration:none; }
+  .card .go:hover { text-decoration:underline; text-underline-offset:3px; }
+  .card .plats { margin-top:auto; padding-top:6px; display:flex; flex-wrap:wrap; gap:6px 14px; }
+  .card .plats a { font:700 14.5px/1.6 Inter,"Noto Sans TC",sans-serif; color:var(--coral); text-decoration:none; }
+
+  /* ③ 文章 */
+  .reads { margin-top:20px; display:grid; grid-template-columns:1fr 260px; gap:28px; align-items:start; }
+  .list { list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .list a { display:block; height:100%; padding:16px 18px; border-radius:14px; text-decoration:none; background:#fff; box-shadow:0 0 0 1px var(--line) inset; transition:box-shadow .2s, transform .2s; }
+  .list a:hover { box-shadow:0 0 0 2px var(--coral) inset; transform:translateY(-2px); }
+  .list .q { font:800 12.5px/1.4 "Noto Sans TC",sans-serif; color:var(--coral); }
+  .list .t { font:700 15.5px/1.6 "Noto Sans TC",sans-serif; margin-top:4px; }
+  .reads img { width:100%; height:auto; display:block; }
+  .more { margin-top:14px; font:700 15px/1.6 "Noto Sans TC",sans-serif; }
+  .more a { color:var(--coral); text-decoration:none; } .more a:hover { text-decoration:underline; }
+
+  /* ④ 課程 */
+  .courses { margin-top:20px; display:grid; grid-template-columns:1.25fr 1fr; gap:18px; }
+  .course { border-radius:18px; overflow:hidden; background:#fff; box-shadow:0 0 0 1px var(--line) inset, 0 10px 28px rgba(20,33,61,.06); display:flex; flex-direction:column; }
+  .course img { width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; display:block; }
+  .course .b { padding:20px 22px 22px; display:flex; flex-direction:column; gap:8px; flex:1; }
+  .chip { align-self:flex-start; font:800 12.5px/1 "Noto Sans TC",sans-serif; color:#fff; background:var(--coral); padding:6px 10px; border-radius:999px; }
+  .chip.soon { background:var(--ink); }
+  .course h3 { font:900 20px/1.45 "Noto Sans TC",sans-serif; }
+  .course p { font:500 15px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); }
+  .course .row { margin-top:auto; padding-top:8px; display:flex; flex-wrap:wrap; align-items:center; gap:10px 16px; }
+  .price { font:700 15px/1.4 "Noto Sans TC",sans-serif; }
+  .price em { font:800 20px Inter,sans-serif; font-style:normal; color:var(--coral); }
+  .course.soon { background:#FAFBFF; }
+  .course.soon img { filter:saturate(.75); }
+
+  /* 交叉連結 */
+  .cross { margin-top:56px; display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .cross a { display:block; padding:18px 20px; border-radius:14px; background:var(--sky); text-decoration:none; font:700 15.5px/1.6 "Noto Sans TC",sans-serif; }
+  .cross a span { display:block; font:500 14px/1.6 "Noto Sans TC",sans-serif; color:var(--muted); }
+  .cross a:hover { box-shadow:0 0 0 2px var(--cobalt) inset; }
+
+  @media (max-width: 900px) {
+    .page { padding:36px 0 44px; }
+    .w { padding:0 16px; }
+    section + section { margin-top:44px; }
+    h2 { font-size:23px; }
+    .intro { font-size:15px; }
+    .free { grid-template-columns:1fr; padding:20px 18px; gap:14px; }
+    .free h3 { font-size:19px; }
+    .cards { grid-template-columns:1fr; gap:12px; }
+    .reads { grid-template-columns:1fr; }
+    .reads img { display:none; }
+    .list { grid-template-columns:1fr; gap:10px; }
+    .courses { grid-template-columns:1fr; }
+    .cross { grid-template-columns:1fr; }
+    .btn { font-size:15px; padding:13px 18px; }
+  }
+</style>
+</head>
+<body>
+<main class="page" id="pg">
+  <div class="w">
+
+    <section aria-labelledby="s1">
+      <div class="step"><b>1</b>FREE・5 分鐘</div>
+      <h2 id="s1">先免費做「認識自己 20 題」</h2>
+      <div class="free">
+        <div>
+          <h3>20 個問題，先把自己現在在想什麼寫下來</h3>
+          <p>加 LINE 好友 <span class="id">@929tyoeu</span>，輸入「<b>20題</b>」，就會收到工作單。<b>免費，不用留 Email。</b>寫完再決定要不要往下走。</p>
+        </div>
+        <a class="btn line" href="https://lin.ee/ZqJ9P7N" target="_blank" rel="noopener" data-t="line20">加 LINE 拿 20 題 →</a>
+      </div>
+    </section>
+
+    <section aria-labelledby="s2">
+      <div class="step"><b>2</b>FREE・每週一次</div>
+      <h2 id="s2">每週讀一封、聽一集</h2>
+      <p class="intro">不用一次想清楚。每週花幾分鐘，看別人怎麼面對工作和未來的變化。</p>
+      <div class="cards">
+        <article class="card">
+          <span class="lab">電子報・免費</span>
+          <h3>《未來思考週報》</h3>
+          <p>每週三早上 7 點寄出，3 分鐘讀完一週值得想的事。隨時可以取消。</p>
+          <a class="go" href="https://chachacreative101.substack.com/subscribe?utm_source=website&amp;utm_medium=personal-page" target="_blank" rel="noopener" data-t="newsletter">免費訂閱 →</a>
+        </article>
+        <article class="card">
+          <span class="lab">PODCAST・免費</span>
+          <h3>《別急著找答案｜跟 Cha Cha 一起思考》</h3>
+          <p>一集一個真實故事，聊創意、設計思考，和那些還沒有標準答案的選擇。</p>
+          <div class="plats">
+            <a href="https://podcasts.apple.com/tw/podcast/id6819133837" target="_blank" rel="noopener" data-t="podcast">Apple</a>
+            <a href="https://open.spotify.com/show/6G9ORPWiRvZEcRvT6Uax8y" target="_blank" rel="noopener" data-t="podcast">Spotify</a>
+            <a href="https://podcast.kkbox.com/tw/channel/Lab7sI8O4jH_rWU572" target="_blank" rel="noopener" data-t="podcast">KKBOX</a>
+            <a href="https://www.youtube.com/channel/UC-qiZ2NTmw8uukEF1LY1Jvg/podcasts" target="_blank" rel="noopener" data-t="podcast">YouTube</a>
+          </div>
+        </article>
+        <article class="card">
+          <span class="lab">影片・免費・約 5 分鐘</span>
+          <h3>線上課程第一集 EP00</h3>
+          <p>先看 Cha Cha 怎麼講這門課、適不適合你，再決定要不要買。</p>
+          <a class="go" href="https://youtu.be/UnSkHuQmk7o" target="_blank" rel="noopener" data-t="ep00">在 YouTube 看 →</a>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="s3">
+      <div class="step"><b>3</b>READ・挑你卡住的那一題</div>
+      <h2 id="s3">給個人的文章：從你現在的問題開始讀</h2>
+      <div class="reads">
+        <ul class="list">
+          <li><a href="https://www.designthinking.com.tw/posts/want-to-quit-but-dont-know-what-to-do" target="_top" data-t="post"><span class="q">想離職，卻說不出要去哪</span><div class="t">想離職但不知道要做什麼？很多人清楚要離開什麼，卻說不出要往哪裡去</div></a></li>
+          <li><a href="https://www.designthinking.com.tw/posts/no-passion-for-work-what-to-do" target="_top" data-t="post"><span class="q">對工作提不起勁</span><div class="t">工作沒熱情怎麼辦？先別急著辭職，先分清楚你是對什麼沒了熱情</div></a></li>
+          <li><a href="https://www.designthinking.com.tw/posts/self-exploration-how-to-start" target="_top" data-t="post"><span class="q">不知道自己要什麼</span><div class="t">自我探索怎麼開始？一直往內想，為什麼越想越不清楚</div></a></li>
+          <li><a href="https://www.designthinking.com.tw/posts/career-change-at-30-too-late" target="_top" data-t="post"><span class="q">想轉職又怕太晚</span><div class="t">30 歲轉職會太晚嗎？想換跑道的人，最多就在 30 到 49 歲</div></a></li>
+          <li><a href="https://www.designthinking.com.tw/posts/life-plan-template-design-thinking" target="_top" data-t="post"><span class="q">想做未來規劃</span><div class="t">人生規劃表怎麼做？先給自己兩個分數，再寫一張會改的表</div></a></li>
+          <li><a href="https://www.designthinking.com.tw/posts/ai-era-career-planning-how-to" target="_top" data-t="post"><span class="q">AI 來了，路要怎麼走</span><div class="t">AI 時代的生涯規劃怎麼做？四成職涯新人正在重想自己的路</div></a></li>
+        </ul>
+        <img src="img/self_dt.webp" width="520" height="748" alt="" loading="lazy">
+      </div>
+      <p class="more"><a href="https://www.designthinking.com.tw/blog" target="_top" data-t="blog">看全部知識文章 →</a></p>
+    </section>
+
+    <section aria-labelledby="s4">
+      <div class="step"><b>4</b>ONLINE COURSES・線上課程</div>
+      <h2 id="s4">準備好了，就用線上課程走完一整輪</h2>
+      <p class="intro">錄影課加學習單，在 PressPlay 照自己的節奏上，買了隨時開始。</p>
+      <div class="courses">
+        <article class="course">
+          <img src="img/course1_cover.webp" width="1200" height="675" alt="線上課程《別急著找答案！善用設計思考，打造你自己的人生藍圖》封面" loading="lazy">
+          <div class="b">
+            <span class="chip">現正上線</span>
+            <h3>《別急著找答案！善用設計思考，打造你自己的人生藍圖》</h3>
+            <p>不知道下一步往哪走？8 堂錄影課、8 份學習單，用設計思考的方法，一步一步做出屬於你的人生原型。</p>
+            <div class="row">
+              <a class="btn coral" href="https://www.pressplay.cc/link/s/DE956453?utm_source=website&amp;utm_medium=personal-page&amp;utm_content=course1" target="_blank" rel="noopener" data-t="course1">看課程 →</a>
+              <span class="price" id="early">早鳥 <em>NT$990</em>・到 11/24（二）23:59</span>
+            </div>
+          </div>
+        </article>
+        <!-- ★ 第二門課：待查查 11/27 確認課名寫法、上線時間、價格與連結後再補；現在只寫「即將上線」 -->
+        <article class="course soon">
+          <img src="img/course2_cover.webp" width="800" height="450" alt="線上課程《設計思考：每個人都能用的問題解決術》封面" loading="lazy">
+          <div class="b">
+            <span class="chip soon">即將上線</span>
+            <h3>《設計思考：每個人都能用的問題解決術》</h3>
+            <p>第二門線上課。工作和生活裡的問題，用同一套步驟拆開來想，從找到真正的問題走到做出原型。</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="cross">
+      <a href="https://www.designthinking.com.tw/enterprise" target="_top" data-t="enterprise">想帶整個團隊一起學？<span>到公司帶設計思考、創意思考、未來思考工作坊 →</span></a>
+      <a href="https://www.designthinking.com.tw/designthinking" target="_top" data-t="designthinking">還不確定設計思考是什麼？<span>先看設計思考的五個步驟與常見問題 →</span></a>
+    </div>
+  </div>
+</main>
+<script>
+(function () {
+  var q = new URLSearchParams(location.search);
+  var early = q.get("plan") === "regular" ? false : Date.now() < Date.parse("2026-11-25T00:00:00+08:00");
+  if (!early) { var e = document.getElementById("early"); if (e) e.remove(); }
+})();
+</script>
+<script>
+(function () {
+  if (window.parent === window) return;
+  var last = 0;
+  function measure() {
+    var h = Math.ceil(document.getElementById("pg").getBoundingClientRect().height);
+    if (!(h > 80) || Math.abs(h - last) < 2) return;
+    last = h; parent.postMessage({ dtadsHeight: h }, "*");
+  }
+  window.addEventListener("load", measure); window.addEventListener("resize", measure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  setTimeout(measure, 800); setTimeout(measure, 2500);
+})();
+</script>
+</body>
+</html>

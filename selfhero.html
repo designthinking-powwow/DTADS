@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, indexifembedded">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>個人學習頁首</title>
+<!--
+  ★ 11/21 新頁 /personal（個人學習）的頁首。配色 C：淡藍底、珊瑚主色。插畫 img/self_hero.webp（og_online-courses 去背裁切）。
+  Kolable 嵌入碼（放在新頁第一個區塊，區塊上下間距 0）：
+  <iframe src="https://designthinking-powwow.github.io/DTADS/selfhero.html" width="100%" height="560" style="border:0;" frameborder="0" scrolling="no"></iframe>
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --sky:#EEF2FF; --ink:#14213D; --muted:#414B66; --coral:#D91E45; --coral-d:#B8173A; --cobalt:#1F4BFF; --green:#007F52; --violet:#7B2FF7; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { background:var(--sky); color:var(--ink); }
+  body { font-family:"Inter","Noto Sans TC","PingFang TC",sans-serif; overflow:hidden; }
+  .hero { position:relative; padding:48px 0 54px; }
+  .hero::after { content:""; position:absolute; left:0; right:0; bottom:0; height:6px; background:linear-gradient(90deg,var(--cobalt) 0 25%,var(--green) 25% 50%,var(--violet) 50% 75%,var(--coral) 75%); }
+  .w { max-width:1120px; margin:0 auto; padding:0 48px; display:grid; grid-template-columns:1.3fr 1fr; gap:40px; align-items:center; }
+  .k { display:inline-flex; align-items:center; gap:10px; font:800 13px/1 Inter,sans-serif; letter-spacing:.16em; color:var(--coral); }
+  .k b { font:700 13px/1 "Noto Sans TC",sans-serif; letter-spacing:.04em; background:var(--coral); color:#fff; padding:6px 10px; border-radius:999px; }
+  .big { font:900 46px/1.25 "Noto Sans TC",sans-serif; margin:16px 0 16px; }
+  p { font:500 18px/1.75 "Noto Sans TC",sans-serif; color:var(--muted); }
+  .row { display:flex; gap:12px; flex-wrap:wrap; margin-top:26px; }
+  a.btn { display:inline-flex; align-items:center; font:700 16px/1 "Noto Sans TC",sans-serif; padding:15px 24px; border-radius:999px; text-decoration:none; transition:transform .2s, background .2s; white-space:nowrap; }
+  a.btn:hover { transform:translateY(-2px); }
+  .main { background:var(--coral); color:#fff; } .main:hover { background:var(--coral-d); }
+  .ghost { box-shadow:0 0 0 2px var(--ink) inset; color:var(--ink); }
+  a:focus-visible { outline:3px solid var(--ink); outline-offset:3px; }
+  .steps { display:flex; flex-wrap:wrap; gap:8px; margin-top:22px; list-style:none; counter-reset:s; }
+  .steps li { counter-increment:s; font:700 14px/1 "Noto Sans TC",sans-serif; padding:9px 12px; border-radius:999px; background:#fff; box-shadow:0 0 0 1px #F6CCD5 inset; }
+  .steps li::before { content:counter(s); display:inline-grid; place-items:center; width:20px; height:20px; margin-right:6px; border-radius:50%; background:var(--coral); color:#fff; font:800 12px/1 Inter,sans-serif; }
+  .ill img { height:auto; width:100%; max-width:400px; display:block; margin:0 auto; }
+  @media (max-width: 860px) {
+    .hero { padding:24px 0 30px; }
+    .w { grid-template-columns:1fr 110px; gap:12px; padding:0 16px; align-items:start; }
+    .ill { order:0; } .ill img { width:110px; }
+    .big { font-size:28px; margin:10px 0 10px; }
+    p { font-size:15px; line-height:1.7; grid-column:1 / -1; }
+    .txt { display:contents; }
+    .head { grid-column:1; }
+    .rest { grid-column:1 / -1; }
+    .row { margin-top:16px; } a.btn { font-size:15px; padding:13px 18px; }
+    .steps { margin-top:14px; gap:6px; } .steps li { font-size:12.5px; padding:7px 9px; }
+  }
+</style>
+</head>
+<body>
+<main class="hero" id="h">
+  <div class="w">
+    <div class="txt">
+      <div class="head">
+        <div class="k">FOR YOU <b>個人學習・線上課程</b></div>
+        <h1 class="big">把設計思考<br>用在自己身上</h1>
+      </div>
+      <div class="rest">
+        <p>不知道下一步往哪走、對工作提不起勁、想換跑道又怕選錯？這一頁照「先免費試，再深入」排好：先做 20 題認識自己，聽幾集 Podcast、讀幾篇文章，準備好了再上線上課程。</p>
+        <div class="row">
+          <a class="btn main" href="https://lin.ee/ZqJ9P7N" target="_blank" rel="noopener" data-t="line20">先免費做 20 題（LINE）</a>
+          <a class="btn ghost" href="https://www.designthinking.com.tw/online-courses" target="_top" data-t="online-courses">直接看線上課程</a>
+        </div>
+        <ol class="steps" aria-label="這一頁的順序">
+          <li>免費 20 題</li><li>每週讀・聽</li><li>挑文章看</li><li>上線上課程</li>
+        </ol>
+      </div>
+    </div>
+    <div class="ill"><img src="img/self_hero.webp" width="760" height="879" alt="一個人坐在窗邊的桌前寫筆記，窗外有一條往前延伸的路"></div>
+  </div>
+</main>
+<script>
+(function () {
+  if (window.parent === window) return;
+  var last = 0;
+  function measure() {
+    var h = Math.ceil(document.getElementById("h").getBoundingClientRect().height);
+    if (!(h > 80) || Math.abs(h - last) < 2) return;
+    last = h; parent.postMessage({ dtadsHeight: h }, "*");
+  }
+  window.addEventListener("load", measure); window.addEventListener("resize", measure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  setTimeout(measure, 800); setTimeout(measure, 2500);
+})();
+</script>
+</body>
+</html>

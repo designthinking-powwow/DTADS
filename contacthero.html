@@ -52,7 +52,7 @@
     <div class="big">先聊 30 分鐘，<br>聽聽你們卡在哪裡</div>
     <p>企業內訓、學校工作坊、公部門計畫，都從這裡開始。不用先決定要上什麼課。</p>
     <div class="row">
-      <a class="ghost" target="_top" href="https://www.designthinking.com.tw/enterprise">先看企業內訓怎麼進行</a>
+      <a class="cob" id="goForm" target="_top" href="https://www.designthinking.com.tw/contactus#dt-contactform">開始填寫 ↓</a>
     </div>
     <p class="next">Cha Cha 看過需求後，2 個工作天內回信約時間。</p>
   </div>
@@ -84,6 +84,20 @@
   window.addEventListener("resize", measure);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
   setTimeout(measure, 800); setTimeout(measure, 2500);
+})();
+</script>
+<script>
+// 11/21：第一屏主按鈕改成捲到下面的表單（不再把人帶去 /enterprise）。官網 GTM tag 31 收到 dtadsScrollTo 會捲到表單並回 dtadsScrolled；
+// 0.6 秒沒回應（GTM 還沒更新）就用網址 #dt-contactform 原頁開啟。
+(function () {
+  var a = document.getElementById("goForm"); if (!a || window.parent === window) return;
+  var done = false;
+  window.addEventListener("message", function (e) { if (e.data && e.data.dtadsScrolled) done = true; });
+  a.addEventListener("click", function (ev) {
+    ev.preventDefault(); done = false;
+    try { parent.postMessage({ dtadsScrollTo: "dt-contactform" }, "*"); } catch (err) {}
+    setTimeout(function () { if (!done) window.top.location.href = a.href; }, 600);
+  });
 })();
 </script>
 </body>

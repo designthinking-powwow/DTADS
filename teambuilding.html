@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, indexifembedded">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>創意團建工作坊</title>
+<!--
+  ★ 11/21 查查同意加「創意團建工作坊」。放 /enterprise（形式段）與 /workshops（題目庫），同一個檔。
+  不寫活動工具名、不寫價格。按鈕到 /contactus（表單企業選項有「想辦有收穫的團建」）。
+  Kolable 嵌入碼：
+  <iframe src="https://designthinking-powwow.github.io/DTADS/teambuilding.html" width="100%" height="560" style="border:0;" frameborder="0" scrolling="no" title="創意團建工作坊"></iframe>
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#14213D; --muted:#414B66; --sky:#EEF2FF; --c:#1F4BFF; --cd:#1236D6; --v:#7B2FF7; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { background:#fff; color:var(--ink); }
+  body { font-family:"Inter","Noto Sans TC","PingFang TC",sans-serif; overflow:hidden; }
+  .h { padding:48px 0; }
+  .w { max-width:1120px; margin:0 auto; padding:0 48px; }
+  .box { display:grid; grid-template-columns:1.2fr 1fr; gap:28px; align-items:start; background:var(--sky); border-radius:20px; padding:30px 32px; }
+  .k { font:800 12.5px/1 Inter,sans-serif; letter-spacing:.16em; color:var(--c); }
+  h2 { font:900 28px/1.35 "Noto Sans TC",sans-serif; margin:10px 0 8px; }
+  .lead { font:500 16px/1.75 "Noto Sans TC",sans-serif; color:var(--muted); }
+  .take { margin-top:14px; font:700 15.5px/1.7 "Noto Sans TC",sans-serif; }
+  .take b { color:var(--c); }
+  h3 { font:900 15px/1.4 "Noto Sans TC",sans-serif; color:var(--muted); }
+  ul { list-style:none; margin-top:10px; display:grid; gap:8px; }
+  li { background:#fff; border-radius:12px; padding:12px 14px; font:700 15px/1.5 "Noto Sans TC",sans-serif; }
+  li span { display:block; font:500 13.5px/1.6 "Noto Sans TC",sans-serif; color:var(--muted); }
+  a.btn { display:inline-flex; margin-top:18px; font:700 16px/1 "Noto Sans TC",sans-serif; padding:14px 22px; border-radius:999px; background:var(--c); color:#fff; text-decoration:none; transition:background .2s, transform .2s; }
+  a.btn:hover { background:var(--cd); transform:translateY(-2px); }
+  a:focus-visible { outline:3px solid var(--ink); outline-offset:3px; }
+  @media (max-width: 860px) {
+    .h { padding:28px 0; } .w { padding:0 16px; }
+    .box { grid-template-columns:1fr; padding:20px 16px; gap:16px; }
+    h2 { font-size:21px; } .lead { font-size:14.5px; }
+    a.btn { font-size:15px; padding:13px 18px; }
+  }
+</style>
+</head>
+<body>
+<main class="h" id="h">
+  <div class="w">
+    <div class="box">
+      <div>
+        <div class="k">TEAM BUILDING</div>
+        <h2>創意團建工作坊：玩得開心，也真的一起想出東西</h2>
+        <p class="lead">年底尾牙、共識營或部門活動，不想只是吃飯、玩遊戲？我們用設計思考、創意思考的動手活動，讓平常不太講話、不同部門的人熟起來：分組合作、動手做、上台分享。</p>
+        <p class="take"><b>結束時帶走：</b>團隊一起做出來的點子或提案，可以帶回部門接著討論。</p>
+        <a class="btn" href="https://www.designthinking.com.tw/contactus" target="_top">聊聊你們的團建 →</a>
+      </div>
+      <div>
+        <h3>常見的場合</h3>
+        <ul>
+          <li>年底尾牙、年終活動前的半天<span>先動腦，再吃飯</span></li>
+          <li>部門共識營<span>一邊熟起來，一邊想明年要做什麼</span></li>
+          <li>新團隊成立、組織調整後<span>讓剛湊在一起的人開始合作</span></li>
+          <li>跨部門交流<span>平常不同樓層的人，一起完成一件事</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+(function () {
+  if (window.parent === window) return;
+  var last = 0;
+  function measure() {
+    var h = Math.ceil(document.getElementById("h").getBoundingClientRect().height);
+    if (!(h > 80) || Math.abs(h - last) < 2) return;
+    last = h; parent.postMessage({ dtadsHeight: h }, "*");
+  }
+  window.addEventListener("load", measure); window.addEventListener("resize", measure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  setTimeout(measure, 800); setTimeout(measure, 2500);
+})();
+</script>
+</body>
+</html>

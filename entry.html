@@ -4,75 +4,130 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, indexifembedded">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>首頁第一屏（企業優先）</title>
+<title>首頁第一屏（兩扇門）</title>
 <!--
-  ★ 11/21 配色方案 C（全淺色頁首：淡藍 #EEF2FF、海軍藍字 #14213D、珊瑚 #D91E45、綠 #007F52）。退回：上傳 線上原版備份/DTADS/entry.html。
-  官網首頁第一屏（2026/11/14 改版：企業優先。舊版＝兩張一樣大的入口卡，見 ../備份_線上原版/entry.html）
-  - 查查 11/14「減少線上課程曝光、增加企業內訓」＋「直球對決」：第一屏只對企業說話，寫出問題、工作坊形式、適合誰、15 年超過三百場、合作單位。
-  - 11/20 分頁：「看工作坊怎麼帶」改連 /enterprise（怎麼進行）；長度改「半天到兩天、每場 30 人以內」，跟 /enterprise 一致。
-  - 兩顆按鈕：看工作坊怎麼帶 → /workshops；聊聊你們的題目 → /contactus（原頁開啟 target=_top）
-  - 個人入口縮成最下面一行小字：按了照舊捲到官網個人區（personal.html）播放 EP00；官網找不到個人區時另開 YouTube。
-  - 合作單位只列官網 /designthinking 已公開的名稱（查查 10/13：客戶名稱可以公開，不寫案例細節）。
-  - GA4 事件照舊交給官網 dataLayer（GTM 轉送）：home_entry_view {b2b_copy:"v3", b2c_copy:"line"}、home_entry_b2b {copy:"v3", target}、home_entry_b2c {copy:"line"}
-  - Kolable 嵌入碼不變：<iframe src="https://designthinking-powwow.github.io/DTADS/entry.html" width="100%" height="600" style="border:0;" frameborder="0" scrolling="no"></iframe>
+  ★ 11/21 首頁分眾改版（查查：「分辨不出來個人的是什麼？」）
+  - 第一屏＝滿版淡藍頁首（和 /contactus、/enterprise 一樣），不再是白底上浮的圓角卡片。
+  - 兩扇一樣大的門：左「帶團隊」（企業・學校・公部門・醫院・基金會，鈷藍，主推放前面）／右「給自己｜線上課程與免費資源」（珊瑚）。
+  - 帶團隊門裡有「你是哪一種單位」小按鈕，老師、承辦人、醫院、基金會一次就到對的頁。
+  - 下方一條紫色「還不確定設計思考是什麼？」→ /designthinking、/blog、learn 子網域。
+  - 插畫：img/home_hero.webp（右上）、img/door_team.webp、img/door_self.webp、img/door_learn.webp（查查重新上色後，重跑 工具/壓插畫.sh 覆蓋即可，檔名不變）。
+  - ★ 個人頁 /personal 還沒在 Kolable 建好之前，PERSONAL_LIVE 設 false：「看個人學習頁」會改連 /online-courses。建好後改 true 再上傳。
+  - 早鳥字樣：本檔不寫價格與名額。
+  - 退回：線上原版備份/DTADS/entry.html
+  - GA4 事件（交給官網 GTM tag 57 轉送）：home_entry_view {b2b_copy:"v4", b2c_copy:"door"}、home_entry_b2b {copy, target}、home_entry_b2c {copy, target}
+  - Kolable 嵌入碼不變（高度由 GTM tag 31 自動調；建議把固定高度改成 900 當保底）：
+    <iframe src="https://designthinking-powwow.github.io/DTADS/entry.html" width="100%" height="900" style="border:0;" frameborder="0" scrolling="no"></iframe>
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
-  :root { --coral:#D91E45; --coral-d:#B8173A; --ink:#14213D; --paper: #FFF8F3; --muted:#475069; --cobalt: #1F4BFF; }
+  :root { --sky:#EEF2FF; --ink:#14213D; --muted:#414B66; --soft:#5A6380; --cobalt:#1F4BFF; --cobalt-d:#1236D6; --coral:#D91E45; --coral-d:#B8173A; --green:#007F52; --violet:#7B2FF7; --line:#D5DCF0; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { background: var(--paper); }
+  html, body { background: var(--sky); }
   body { font-family: "Inter", "Noto Sans TC", "PingFang TC", sans-serif; color: var(--ink); overflow: hidden; }
   a { color: inherit; }
+  img { display: block; max-width: 100%; height: auto; }
 
-  .entry { padding: 40px 0 44px; }
+  .entry { position: relative; padding: 40px 0 46px; background: var(--sky); }
+  .entry::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 6px; background: linear-gradient(90deg,var(--cobalt) 0 25%,var(--green) 25% 50%,var(--violet) 50% 75%,var(--coral) 75%); }
   .wrap { max-width: 1240px; margin: 0 auto; padding: 0 56px; }
-  .card { position: relative; overflow: hidden; border-radius: 20px; padding: 44px 48px 36px; background: #EEF2FF; color: var(--ink); }
-  .card::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 6px; background: linear-gradient(90deg,#1F4BFF 0 25%,#007F52 25% 50%,#7B2FF7 50% 75%,#FF3B5C 75%); }
-  .k { display: inline-flex; align-items: center; gap: 10px; font: 800 12px/1 Inter, sans-serif; letter-spacing: .16em; color: var(--cobalt); }
-  .k i { font-style: normal; font: 700 13px/1 "Noto Sans TC", sans-serif; letter-spacing: .04em; padding: 6px 10px; border-radius: 999px; background: var(--cobalt); color: #fff; }
-  .card h1 { font: 900 40px/1.3 "Noto Sans TC", sans-serif; margin: 20px 0 16px; letter-spacing: .01em; text-wrap: balance; max-width: 900px; }
-  .card p { font: 500 18px/1.75 "Noto Sans TC", sans-serif; color: #414B66; max-width: 820px; }
-  .card p b { color: var(--ink); font-weight: 700; }
-  .row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
-  .cta { display: inline-flex; align-items: center; gap: 8px; font: 700 17px/1 "Noto Sans TC", sans-serif; padding: 16px 26px; border-radius: 999px; text-decoration: none; white-space: nowrap; transition: background .2s, transform .2s; }
-  .cta.main { background: var(--cobalt); color: #fff; }
-  .cta.main:hover { background: #1236D6; transform: translateY(-2px); }
+
+  /* 上方：一句話＋插畫 */
+  .top { display: grid; grid-template-columns: 1fr 340px; gap: 32px; align-items: center; }
+  .k { font: 800 12px/1 Inter, sans-serif; letter-spacing: .16em; color: var(--cobalt); }
+  h1 { font: 900 38px/1.3 "Noto Sans TC", sans-serif; margin: 14px 0 12px; letter-spacing: .01em; text-wrap: balance; }
+  .lead { font: 500 17px/1.75 "Noto Sans TC", sans-serif; color: var(--muted); max-width: 720px; }
+  .lead b { color: var(--ink); }
+  .hero-img { width: 340px; margin: -12px 0 -18px; }
+
+  /* 兩扇門 */
+  .doors { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 26px; }
+  .door { position: relative; background: #fff; border-radius: 18px; padding: 26px 26px 24px; box-shadow: 0 0 0 1px var(--line) inset, 0 10px 28px rgba(20,33,61,.06); display: flex; flex-direction: column; overflow: hidden; }
+  .door::before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 6px; background: var(--c); }
+  .door.team { --c: var(--cobalt); --cd: var(--cobalt-d); }
+  .door.self { --c: var(--coral); --cd: var(--coral-d); }
+  .dh { display: grid; grid-template-columns: 1fr 128px; gap: 12px; align-items: start; }
+  .tag { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .tag b { font: 900 15px/1 "Noto Sans TC", sans-serif; color: #fff; background: var(--c); padding: 7px 12px; border-radius: 999px; }
+  .tag span { font: 700 14px/1.4 "Noto Sans TC", sans-serif; color: var(--c); }
+  .door h2 { font: 900 25px/1.35 "Noto Sans TC", sans-serif; margin: 12px 0 8px; }
+  .door p { font: 500 15.5px/1.7 "Noto Sans TC", sans-serif; color: var(--muted); }
+  .door p b { color: var(--ink); }
+  .door .ill { width: 128px; margin-top: -4px; }
+  .short { display: none; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .cta { display: inline-flex; align-items: center; gap: 6px; font: 700 16px/1 "Noto Sans TC", sans-serif; padding: 14px 22px; border-radius: 999px; text-decoration: none; white-space: nowrap; transition: background .2s, transform .2s; }
+  .cta.main { background: var(--c); color: #fff; }
+  .cta.main:hover { background: var(--cd); transform: translateY(-2px); }
   .cta.sub { box-shadow: 0 0 0 2px var(--ink) inset; color: var(--ink); }
   .cta.sub:hover { background: rgba(20,33,61,.06); transform: translateY(-2px); }
-  .cta:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
-  .proof { margin-top: 30px; padding-top: 22px; border-top: 1px solid rgba(20,33,61,.14); display: flex; flex-wrap: wrap; gap: 8px 28px; align-items: baseline; }
-  .proof .n { font: 800 15px/1.5 Inter, "Noto Sans TC", sans-serif; color: var(--ink); }
-  .proof .c { font: 500 15px/1.6 "Noto Sans TC", sans-serif; color: #5A6380; }
-  .marquee { margin-top: 14px; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+  .who { margin-top: auto; padding-top: 18px; }
+  .who small { display: block; font: 700 13px/1.4 "Noto Sans TC", sans-serif; color: var(--soft); margin-bottom: 8px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font: 700 14px/1 "Noto Sans TC", sans-serif; padding: 10px 13px; border-radius: 999px; text-decoration: none; color: var(--ink); background: var(--sky); box-shadow: 0 0 0 1px var(--line) inset; white-space: nowrap; cursor: pointer; border: 0; transition: background .2s; }
+  .chip:hover { background: #E1E7FD; }
+  .chip i { font-style: normal; color: var(--c); }
+  .self .chip { background: #FFF1F3; box-shadow: 0 0 0 1px #F6CCD5 inset; }
+  .self .chip:hover { background: #FFE3E8; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+  /* 還不確定 */
+  .learn { display: flex; align-items: center; gap: 16px; margin-top: 16px; padding: 12px 18px; border-radius: 14px; background: #fff; box-shadow: 0 0 0 1px var(--line) inset; }
+  .learn img { width: 64px; flex: none; }
+  .learn .t { font: 700 15.5px/1.5 "Noto Sans TC", sans-serif; }
+  .learn .t span { color: var(--violet); }
+  .learn .links { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-left: auto; }
+  .learn .links a { font: 700 15px/1.6 "Noto Sans TC", sans-serif; color: var(--violet); text-decoration: none; white-space: nowrap; }
+  .learn .links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+  /* 實績 */
+  .proof { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 4px 24px; align-items: baseline; }
+  .proof .n { font: 800 14.5px/1.5 Inter, "Noto Sans TC", sans-serif; }
+  .proof .c { font: 500 14.5px/1.6 "Noto Sans TC", sans-serif; color: var(--soft); }
+  .marquee { margin-top: 10px; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
   .track { display: flex; gap: 10px; width: max-content; list-style: none; animation: cc-scroll 60s linear infinite; }
   .marquee:hover .track { animation-play-state: paused; }
-  .track li { font: 700 14px/1 "Noto Sans TC", sans-serif; color: var(--ink); padding: 9px 14px; border-radius: 999px; background: #fff; box-shadow: 0 0 0 1px #D5DCF0 inset; white-space: nowrap; }
+  .track li { font: 700 13.5px/1 "Noto Sans TC", sans-serif; padding: 9px 13px; border-radius: 999px; background: #fff; box-shadow: 0 0 0 1px var(--line) inset; white-space: nowrap; }
   @keyframes cc-scroll { from { transform: translateX(0); } to { transform: translateX(calc(-50% - 5px)); } }
   @media (prefers-reduced-motion: reduce) { .track { animation: none; flex-wrap: wrap; width: auto; } .track li:nth-child(n+31) { display: none; } }
-  .self { margin: 16px 4px 0; font: 500 15px/1.6 "Noto Sans TC", sans-serif; color: var(--muted); }
-  .self button { font: inherit; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
-  .self button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 
   @media (max-width: 1000px) {
     .wrap { padding: 0 24px; }
-    .card { padding: 32px 28px 28px; }
-    .card h1 { font-size: 30px; }
-    .card p { font-size: 16px; }
+    .top { grid-template-columns: 1fr 240px; }
+    .hero-img { width: 240px; }
+    h1 { font-size: 30px; }
+    .doors { gap: 14px; }
+    .dh { grid-template-columns: 1fr 96px; } .door .ill { width: 96px; }
+    .learn .links { margin-left: 0; }
+    .learn { flex-wrap: wrap; }
   }
-  @media (max-width: 680px) {
-    .entry { padding: 16px 0 20px; }
+  @media (max-width: 760px) {
+    .entry { padding: 20px 0 26px; }
     .wrap { padding: 0 16px; }
-    .card { padding: 22px 18px 20px; border-radius: 16px; }
-    .k { font-size: 10px; gap: 8px; } .k i { font-size: 12px; padding: 5px 8px; }
-    .card h1 { font-size: 23px; line-height: 1.4; margin: 14px 0 10px; }
-    .card p { font-size: 15px; line-height: 1.7; }
-    .row { margin-top: 18px; gap: 10px; }
-    .cta { font-size: 15px; padding: 13px 18px; }
-    .proof { margin-top: 20px; padding-top: 16px; gap: 4px 16px; }
-    .proof .n, .proof .c { font-size: 13.5px; }
-    .self { font-size: 14px; margin-top: 12px; }
-    .track li { font-size: 13px; padding: 8px 12px; }
+    .top { grid-template-columns: 1fr 92px; gap: 10px; }
+    .hero-img { width: 92px; margin: 0; }
+    .k { font-size: 10.5px; letter-spacing: .12em; }
+    h1 { font-size: 22px; line-height: 1.4; margin: 8px 0 0; }
+    .lead { display: none; }
+    .doors { grid-template-columns: 1fr; gap: 12px; margin-top: 14px; }
+    .door { padding: 18px 16px 16px; border-radius: 14px; }
+    .dh { grid-template-columns: 1fr 76px; gap: 8px; } .door .ill { width: 76px; margin-top: 0; }
+    .tag b { font-size: 14px; padding: 6px 10px; } .tag span { font-size: 12.5px; }
+    .door h2 { font-size: 19px; margin: 8px 0 4px; }
+    .door p { font-size: 14px; line-height: 1.6; }
+    .long { display: none; } .short { display: inline; }
+    .row { margin-top: 12px; gap: 8px; }
+    .cta { font-size: 14.5px; padding: 12px 16px; }
+    .who { padding-top: 12px; }
+    .who small { font-size: 12px; margin-bottom: 6px; }
+    .chip { font-size: 13px; padding: 8px 10px; }
+    .learn { padding: 10px 12px; gap: 10px; }
+    .learn img { width: 44px; }
+    .learn .t { font-size: 14px; }
+    .learn .links a { font-size: 14px; }
+    .proof .n, .proof .c { font-size: 12.5px; }
+    .track li { font-size: 12.5px; padding: 7px 11px; }
     .track { animation-duration: 45s; }
   }
 </style>
@@ -80,40 +135,104 @@
 <body>
 <main class="entry" id="entry">
   <div class="wrap">
-    <article class="card">
-      <div class="k">FOR TEAMS <i>企業內訓・工作坊</i></div>
-      <h1>新產品沒新意、不懂顧客要什麼、開會想不出點子？</h1>
-      <p>我們到公司帶<b>設計思考、創意思考、未來思考工作坊</b>，半天到兩天、每場 30 人以內，用你們手上的真題目，做到能拿去試的方案。適合企業團隊，也帶學校與公部門。</p>
-      <div class="row">
-        <a class="cta main" href="https://www.designthinking.com.tw/contactus" target="_top" data-entry="b2b" data-target="contactus">聊聊你們的題目 →</a>
-        <a class="cta sub" href="https://www.designthinking.com.tw/enterprise" target="_top" data-entry="b2b" data-target="enterprise">看工作坊怎麼帶</a>
+    <header class="top">
+      <div>
+        <div class="k">設計思考・創意思考・未來思考</div>
+        <h1>幫團隊找工作坊，還是想自己學？</h1>
+        <p class="lead">我們到企業、學校、公部門帶<b>工作坊</b>，15 年超過三百場；也把同一套方法做成給個人的<b>線上課程</b>。選一扇門，直接看你要的資訊。</p>
       </div>
-      <div class="proof">
-        <span class="n">15 年・超過三百場工作坊</span>
-        <span class="c">合作過超過 100 個企業、政府與學校單位</span>
+      <img class="hero-img" src="img/home_hero.webp" width="960" height="603" alt="三個人圍著白板貼便利貼討論">
+    </header>
+
+    <div class="doors">
+      <!-- 門 1：帶團隊（主推，放前面） -->
+      <section class="door team" aria-labelledby="d1">
+        <div class="dh">
+          <div>
+            <div class="tag"><b>帶團隊</b><span>企業・學校・公部門・醫院・基金會</span></div>
+            <h2 id="d1">幫團隊辦一場工作坊</h2>
+            <p><span class="long">新產品沒新意、不懂顧客要什麼、開會想不出點子？我們到你們單位帶<b>設計思考、創意思考、未來思考</b>的<b>工作坊、共識營、創意團建、創新黑客松</b>，半天到兩天，用你們的真題目，做出能拿去試的方案。</span><span class="short">到你們單位帶工作坊、共識營、創意團建、創新黑客松，半天到兩天，用真題目做出能試的方案。</span></p>
+          </div>
+          <img class="ill" src="img/door_team.webp" width="520" height="484" alt="" loading="eager">
+        </div>
+        <div class="row">
+          <a class="cta main" href="https://www.designthinking.com.tw/contactus" target="_top" data-door="b2b" data-target="contactus">聊聊你們的題目 →</a>
+          <a class="cta sub" href="https://www.designthinking.com.tw/enterprise" target="_top" data-door="b2b" data-target="enterprise">看工作坊怎麼帶</a>
+        </div>
+        <div class="who">
+          <small>你是哪一種單位？直接看對應的介紹</small>
+          <div class="chips">
+            <a class="chip" href="https://www.designthinking.com.tw/workshops" target="_top" data-door="b2b" data-target="workshops">企業：工作坊題目庫 <i>→</i></a>
+            <a class="chip" href="https://www.designthinking.com.tw/schools-public-sector" target="_top" data-door="b2b" data-target="schools">學校・教師研習 <i>→</i></a>
+            <a class="chip" href="https://www.designthinking.com.tw/schools-public-sector" target="_top" data-door="b2b" data-target="public">公部門・計畫 <i>→</i></a>
+            <a class="chip" href="https://designthinking-powwow.github.io/chacha/healthcare.html" target="_blank" rel="noopener" data-door="b2b" data-target="healthcare">醫院・診所 <i>→</i></a>
+            <a class="chip" href="https://www.designthinking.com.tw/contactus" target="_top" data-door="b2b" data-target="npo">基金會・NPO 活動 <i>→</i></a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 門 2：給自己（一樣大、一樣清楚） -->
+      <section class="door self" aria-labelledby="d2">
+        <div class="dh">
+          <div>
+            <div class="tag"><b>給自己</b><span>線上課程與免費資源</span></div>
+            <h2 id="d2">自己學，想清楚下一步</h2>
+            <p><span class="long">對工作或人生方向卡住？先免費做「認識自己 20 題」、聽 Podcast，準備好了再上線上課程<b>《別急著找答案！善用設計思考，打造你自己的人生藍圖》</b>，在 PressPlay 照自己的節奏上。</span><span class="short">對工作或人生方向卡住？先免費試，再上線上課程《別急著找答案！善用設計思考，打造你自己的人生藍圖》。</span></p>
+          </div>
+          <img class="ill" src="img/door_self.webp" width="520" height="602" alt="" loading="eager">
+        </div>
+        <div class="row">
+          <a class="cta main" id="selfMain" href="https://www.designthinking.com.tw/personal" target="_top" data-door="b2c" data-target="personal">看個人學習頁 →</a>
+          <a class="cta sub" href="https://www.designthinking.com.tw/online-courses" target="_top" data-door="b2c" data-target="online-courses">直接看線上課程</a>
+        </div>
+        <div class="who">
+          <small>先免費試試看</small>
+          <div class="chips">
+            <a class="chip" href="https://lin.ee/ZqJ9P7N" target="_blank" rel="noopener" data-door="b2c" data-target="line20">認識自己 20 題（LINE）<i>→</i></a>
+            <button class="chip" type="button" data-door="b2c" data-target="ep00">課程介紹影片 5 分鐘 <i>▶</i></button>
+            <a class="chip" href="https://chachacreative101.substack.com/subscribe?utm_source=website&amp;utm_medium=home-door" target="_blank" rel="noopener" data-door="b2c" data-target="newsletter">《未來思考週報》<i>→</i></a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 還不確定 -->
+    <nav class="learn" aria-label="先了解設計思考">
+      <img src="img/door_learn.webp" width="520" height="406" alt="">
+      <div class="t"><span>還不確定？</span>先看看設計思考是什麼</div>
+      <div class="links">
+        <a href="https://www.designthinking.com.tw/designthinking" target="_top" data-door="learn" data-target="designthinking">設計思考是什麼 →</a>
+        <a href="https://www.designthinking.com.tw/blog" target="_top" data-door="learn" data-target="blog">知識文章 →</a>
+        <a href="https://learn.designthinking.com.tw/" target="_blank" rel="noopener" data-door="learn" data-target="learn">名詞與方法 →</a>
       </div>
-      <div class="marquee" aria-label="合作單位：Google、LINE Taiwan、羅氏藥廠、楊森藥廠、南山人壽、國泰世華銀行、中國信託、新光人壽、台灣人壽、遠傳電信、新思科技、美律實業、iKala、宜睿智慧、織山工作室、第一銀行、合作金庫、土地銀行、精誠資訊、Pinkoi、文化部、教育部、交通部、台灣設計研究院、工研院、台灣大學、政治大學、淡江大學、輔仁大學、明志科大、學學實驗教育機構、兒福聯盟">
-        <ul class="track" aria-hidden="true"><li>Google</li><li>LINE Taiwan</li><li>羅氏藥廠</li><li>楊森藥廠</li><li>南山人壽</li><li>國泰世華銀行</li><li>中國信託</li><li>新光人壽</li><li>台灣人壽</li><li>遠傳電信</li><li>新思科技</li><li>美律實業</li><li>iKala</li><li>宜睿智慧</li><li>織山工作室</li><li>第一銀行</li><li>合作金庫</li><li>土地銀行</li><li>精誠資訊</li><li>Pinkoi</li><li>文化部</li><li>教育部</li><li>交通部</li><li>台灣設計研究院</li><li>工研院</li><li>台灣大學</li><li>政治大學</li><li>淡江大學</li><li>輔仁大學</li><li>明志科大</li><li>學學實驗教育機構</li><li>兒福聯盟</li><li>Google</li><li>LINE Taiwan</li><li>羅氏藥廠</li><li>楊森藥廠</li><li>南山人壽</li><li>國泰世華銀行</li><li>中國信託</li><li>新光人壽</li><li>台灣人壽</li><li>遠傳電信</li><li>新思科技</li><li>美律實業</li><li>iKala</li><li>宜睿智慧</li><li>織山工作室</li><li>第一銀行</li><li>合作金庫</li><li>土地銀行</li><li>精誠資訊</li><li>Pinkoi</li><li>文化部</li><li>教育部</li><li>交通部</li><li>台灣設計研究院</li><li>工研院</li><li>台灣大學</li><li>政治大學</li><li>淡江大學</li><li>輔仁大學</li><li>明志科大</li><li>學學實驗教育機構</li><li>兒福聯盟</li></ul>
-      </div>
-    </article>
-    <p class="self">想自己學設計思考、整理人生方向？<button type="button" data-entry="b2c">看線上課程介紹（5 分鐘）</button></p>
+    </nav>
+
+    <div class="proof">
+      <span class="n">15 年・超過三百場工作坊</span>
+      <span class="c">合作過超過 100 個企業、政府與學校單位</span>
+    </div>
+    <div class="marquee" aria-label="合作單位：Google、LINE Taiwan、羅氏藥廠、楊森藥廠、南山人壽、國泰世華銀行、中國信託、新光人壽、台灣人壽、遠傳電信、新思科技、美律實業、苗林實業、iKala、宜睿智慧、織山工作室、第一銀行、合作金庫、土地銀行、精誠資訊、Pinkoi、文化部、教育部、交通部、台灣設計研究院、工研院、台灣大學、政治大學、淡江大學、輔仁大學、明志科技大學、學學實驗教育機構、兒福聯盟">
+      <ul class="track" aria-hidden="true"><li>Google</li><li>LINE Taiwan</li><li>羅氏藥廠</li><li>楊森藥廠</li><li>南山人壽</li><li>國泰世華銀行</li><li>中國信託</li><li>新光人壽</li><li>台灣人壽</li><li>遠傳電信</li><li>新思科技</li><li>美律實業</li><li>苗林實業</li><li>iKala</li><li>宜睿智慧</li><li>織山工作室</li><li>第一銀行</li><li>合作金庫</li><li>土地銀行</li><li>精誠資訊</li><li>Pinkoi</li><li>文化部</li><li>教育部</li><li>交通部</li><li>台灣設計研究院</li><li>工研院</li><li>台灣大學</li><li>政治大學</li><li>淡江大學</li><li>輔仁大學</li><li>明志科技大學</li><li>學學實驗教育機構</li><li>兒福聯盟</li><li>Google</li><li>LINE Taiwan</li><li>羅氏藥廠</li><li>楊森藥廠</li><li>南山人壽</li><li>國泰世華銀行</li><li>中國信託</li><li>新光人壽</li><li>台灣人壽</li><li>遠傳電信</li><li>新思科技</li><li>美律實業</li><li>苗林實業</li><li>iKala</li><li>宜睿智慧</li><li>織山工作室</li><li>第一銀行</li><li>合作金庫</li><li>土地銀行</li><li>精誠資訊</li><li>Pinkoi</li><li>文化部</li><li>教育部</li><li>交通部</li><li>台灣設計研究院</li><li>工研院</li><li>台灣大學</li><li>政治大學</li><li>淡江大學</li><li>輔仁大學</li><li>明志科技大學</li><li>學學實驗教育機構</li><li>兒福聯盟</li></ul>
+    </div>
   </div>
 </main>
 <script>
 (function () {
-  var EP00_URL = "https://youtu.be/UnSkHuQmk7o";   // 官網找不到個人區時，另開 YouTube
-  var inFrame = window.parent !== window;
-  var q = new URLSearchParams(location.search);
+  // ★ Kolable 的 /personal 頁建好後改成 true（之前「看個人學習頁」先連 /online-courses）
+  var PERSONAL_LIVE = new URLSearchParams(location.search).get("personal") === "1" || true;
+  var EP00_URL = "https://youtu.be/UnSkHuQmk7o";
+  if (!PERSONAL_LIVE) {
+    var m = document.getElementById("selfMain");
+    m.href = "https://www.designthinking.com.tw/online-courses"; m.setAttribute("data-target", "online-courses");
+    m.textContent = "看線上課程介紹 →";
+  }
 
-  // 送給官網（GTM 轉成 dataLayer 事件）；直接打開這個檔時什麼都不送
+  var inFrame = window.parent !== window;
   function tell(msg) { if (inFrame) { try { parent.postMessage(msg, "*"); } catch (e) {} } }
   function track(name, p) { tell({ ccHome: name, p: p || {} }); }
+  var COPY = "v4";
+  track("home_entry_view", { b2b_copy: COPY, b2c_copy: "door" });
 
-  // 11/14 改版：不再做 A/B，企業卡文案記為 v3、個人入口記為 line（一行小字）
-  var shown = { b2b: "v3", b2c: "line" };
-  track("home_entry_view", { b2b_copy: shown.b2b, b2c_copy: shown.b2c });
-
-  // 官網有沒有 GTM 轉達、有沒有個人區：GTM 收到 hello 會回 ccHomeReady（1＝有個人區，0＝沒有）
   var relayReady = false, personalReady = false;
   window.addEventListener("message", function (e) {
     if (e.source !== parent || !/(^|\.)designthinking\.com\.tw$/.test(e.origin.replace(/^https?:\/\//, ""))) return;
@@ -123,27 +242,27 @@
   setTimeout(function () { tell({ ccHome: "hello" }); }, 1500);
   setTimeout(function () { tell({ ccHome: "hello" }); }, 4000);
 
-  var cards = document.querySelectorAll("[data-entry]");
-  for (var i = 0; i < cards.length; i++) {
-    cards[i].addEventListener("click", function (ev) {
-      var kind = this.getAttribute("data-entry");
-      if (kind === "b2b") {
-        // 企業卡：直接換頁的話，嵌入框會先被關掉，點擊事件送不到官網。
-        // 有 GTM 轉達時，改由官網先記事件再換頁；沒有轉達時照連結原頁開啟。
-        var tg = this.getAttribute("data-target") || "";
-        if (relayReady) { ev.preventDefault(); tell({ ccHome: "home_entry_b2b", p: { copy: shown.b2b, target: tg }, go: this.href }); }
-        else track("home_entry_b2b", { copy: shown.b2b, target: tg });
+  // GTM tag 57 只會替 /workshops、/contactus 代為換頁；其他連結一律讓瀏覽器自己換頁（不攔），避免按了沒反應。
+  var RELAY_GO = /^https:\/\/www\.designthinking\.com\.tw\/(workshops|contactus)$/;
+  var els = document.querySelectorAll("[data-door]");
+  for (var i = 0; i < els.length; i++) {
+    els[i].addEventListener("click", function (ev) {
+      var door = this.getAttribute("data-door"), tg = this.getAttribute("data-target") || "";
+      var name = door === "b2c" ? "home_entry_b2c" : "home_entry_b2b";
+      var p = { copy: COPY, target: tg };
+      if (tg === "ep00") {
+        ev.preventDefault(); track(name, p);
+        if (personalReady) tell({ ccHome: "play_personal" }); else window.open(EP00_URL, "_blank", "noopener");
         return;
       }
-      track("home_entry_b2c", { copy: shown.b2c });
-      ev.preventDefault();
-      if (personalReady) tell({ ccHome: "play_personal" });   // 官網捲到個人區並播放
-      else window.open(EP00_URL, "_blank", "noopener");
+      if (relayReady && name === "home_entry_b2b" && this.target === "_top" && RELAY_GO.test(this.href)) {
+        ev.preventDefault(); tell({ ccHome: name, p: p, go: this.href }); return;
+      }
+      track(name, p);
     });
   }
 })();
 </script>
-<!-- 把內容高度傳給官網（GTM「內嵌區塊自動高度」tag 31 會把嵌入框調成剛好的高度；沒收到時照嵌入碼的固定高度） -->
 <script>
 (function () {
   if (window.parent === window) return;

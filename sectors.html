@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, indexifembedded">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>醫院與基金會</title>
+<!--
+  ★ 11/21 查查同意：醫院、基金會各在 /schools-public-sector 加一段。不寫客戶名、案例細節、價格。
+  按鈕：醫院 → chacha/healthcare.html（醫院與診所的完整說明）＋ /contactus；基金會 → /contactus（表單有「基金會・協會・NPO」身分）
+  Kolable 嵌入碼（放在 /schools-public-sector 的 hackathon.html 區塊上面）：
+  <iframe src="https://designthinking-powwow.github.io/DTADS/sectors.html" width="100%" height="760" style="border:0;" frameborder="0" scrolling="no" title="醫院・基金會"></iframe>
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@800&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#14213D; --muted:#414B66; --sky:#EEF2FF; --line:#D5DCF0; --green:#007F52; --green-d:#00663F; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { background:#fff; color:var(--ink); }
+  body { font-family:"Inter","Noto Sans TC","PingFang TC",sans-serif; overflow:hidden; }
+  .s { padding:48px 0; }
+  .w { max-width:1120px; margin:0 auto; padding:0 48px; }
+  .k { font:800 12.5px/1 Inter,sans-serif; letter-spacing:.16em; color:var(--green); }
+  h2 { font:900 30px/1.35 "Noto Sans TC",sans-serif; margin:10px 0 18px; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  article { border-radius:18px; padding:24px 24px 22px; background:var(--sky); display:flex; flex-direction:column; }
+  h3 { font:900 21px/1.4 "Noto Sans TC",sans-serif; }
+  .lead { font:500 15.5px/1.75 "Noto Sans TC",sans-serif; color:var(--muted); margin-top:6px; }
+  ul { list-style:none; margin:14px 0 0; display:grid; gap:8px; }
+  li { font:700 15px/1.55 "Noto Sans TC",sans-serif; padding-left:20px; position:relative; }
+  li::before { content:""; position:absolute; left:2px; top:.55em; width:9px; height:9px; border-radius:50%; background:var(--green); }
+  li span { display:block; font-weight:500; font-size:14px; color:var(--muted); }
+  .note { font:500 14px/1.7 "Noto Sans TC",sans-serif; color:var(--muted); margin-top:14px; }
+  .row { margin-top:auto; padding-top:18px; display:flex; flex-wrap:wrap; gap:10px; }
+  a.btn { display:inline-flex; font:700 15.5px/1 "Noto Sans TC",sans-serif; padding:13px 20px; border-radius:999px; text-decoration:none; transition:background .2s, transform .2s; white-space:nowrap; }
+  a.btn:hover { transform:translateY(-2px); }
+  .main { background:var(--green); color:#fff; } .main:hover { background:var(--green-d); }
+  .sub { box-shadow:0 0 0 2px var(--ink) inset; color:var(--ink); }
+  a:focus-visible { outline:3px solid var(--ink); outline-offset:3px; }
+  @media (max-width: 860px) {
+    .s { padding:32px 0; } .w { padding:0 16px; }
+    h2 { font-size:22px; } .two { grid-template-columns:1fr; gap:12px; }
+    article { padding:18px 16px; } h3 { font-size:18px; } .lead { font-size:14.5px; }
+    a.btn { font-size:14.5px; padding:12px 16px; }
+  }
+</style>
+</head>
+<body>
+<main class="s" id="s">
+  <div class="w">
+    <div class="k">HOSPITALS・NPO</div>
+    <h2>醫院、基金會也可以這樣合作</h2>
+    <div class="two">
+      <article aria-labelledby="h1">
+        <h3 id="h1">醫院・診所</h3>
+        <p class="lead">醫護同仁每天都在解決問題，只是很少有時間停下來一起看。我們用設計思考帶跨單位的同仁，從病人與家屬的經驗出發，找出可以先改的地方。</p>
+        <ul>
+          <li>醫護同仁研習<span>設計思考、創意思考，半天到一天</span></li>
+          <li>病人與家屬體驗<span>候診、衛教、出院準備，走一遍他們的路</span></li>
+          <li>跨單位流程<span>交接卡住的地方，讓不同職類一起畫出來</span></li>
+          <li>院內創新提案、競賽<span>1–2 天從題目做到原型與提案</span></li>
+        </ul>
+        <p class="note">教學部、醫學教育課程也可以合作；可以開立發票或收據，配合院內核銷流程。</p>
+        <div class="row">
+          <a class="btn main" href="https://designthinking-powwow.github.io/chacha/healthcare.html" target="_blank" rel="noopener">看醫院與診所怎麼合作 →</a>
+          <a class="btn sub" href="https://www.designthinking.com.tw/contactus" target="_top">聊聊你們的需求</a>
+        </div>
+      </article>
+      <article aria-labelledby="h2b">
+        <h3 id="h2b">基金會・協會・NPO</h3>
+        <p class="lead">人手少、事情多，培訓和活動常常同一批人在扛。我們可以帶一場工作坊，也可以把整場活動從規劃到執行一起做。</p>
+        <ul>
+          <li>同仁或志工培訓<span>讓新進夥伴更快理解服務對象</span></li>
+          <li>活動、營隊整場規劃與執行<span>從流程設計、帶領到現場</span></li>
+          <li>更懂服務對象的需求<span>訪談、觀察，找出真正卡住的地方</span></li>
+          <li>募款、倡議想要新點子<span>用創意思考發想，做成可以測試的提案</span></li>
+          <li>組織方向、策略共識<span>年度共識營、董事會與同仁一起對焦</span></li>
+        </ul>
+        <p class="note">經費可以是年度培訓預算、政府補助或企業贊助，表單上留一句，我們回信時一起規劃。</p>
+        <div class="row">
+          <a class="btn main" href="https://www.designthinking.com.tw/contactus" target="_top">聊聊你們的需求 →</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</main>
+<script>
+(function () {
+  if (window.parent === window) return;
+  var last = 0;
+  function measure() {
+    var h = Math.ceil(document.getElementById("s").getBoundingClientRect().height);
+    if (!(h > 80) || Math.abs(h - last) < 2) return;
+    last = h; parent.postMessage({ dtadsHeight: h }, "*");
+  }
+  window.addEventListener("load", measure); window.addEventListener("resize", measure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  setTimeout(measure, 800); setTimeout(measure, 2500);
+})();
+</script>
+</body>
+</html>
