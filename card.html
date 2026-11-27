@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>文章中段導流卡</title>
 <!--
+  ★ 11/27 動線修正：新增 card=hospital／gov／npo（主連結 /contactus?who=…，次連結 /hospitals、/government、/ngo）。b2b、course 不變。退回：上傳 ~/查查創意/07_開發部/上傳_20261127_動線修正/線上原版備份/DTADS/card.html。
   11/26 新增（查查同意「導流卡跟著讀者走、中段多放一張」，11/27 起的新文章）。
   這是獨立新檔，不動 DTADS/index.html（現有文末卡、第一格內容卡完全不受影響）。
   用法：card.html?card=b2b（企業內訓）／card=course（線上課）＆topic=…&post=文章代稱&nocourse=1
@@ -106,9 +107,22 @@
     course: { id: "K-cmid", group: "course", label: "線上課《別急著找答案！善用設計思考，打造你自己的人生藍圖》",
       q: "讀到這裡，你也有一件想做、卻不知道先從哪裡開始的事？",
       t: "這門線上課不給標準答案，陪你一步一步，整理出自己的方向。不確定適不適合，先看 5 分鐘的免費介紹。",
-      a: "看看課程內容", u: PRESSPLAY_URL, a2: "先免費看介紹", u2: EP00_URL }
+      a: "看看課程內容", u: PRESSPLAY_URL, a2: "先免費看介紹", u2: EP00_URL },
+    // 11/27 動線修正：醫院／公部門／基金會文章用 card=hospital|gov|npo
+    hospital: { id: "K-hosp-mid", group: "biz", label: "醫院與診所｜設計思考工作坊",
+      q: "醫院也卡在類似的地方？",
+      t: "我們到院內帶設計思考工作坊，醫師、護理、藥劑、行政同仁同一組，從病人走過的流程找出可以先改的一步。可以排週末。",
+      a: "聊聊醫院的需求", u: CONTACT_URL + "?who=hospital", a2: "看醫院工作坊介紹", u2: "https://www.designthinking.com.tw/hospitals" },
+    gov: { id: "K-gov-mid", group: "biz", label: "政府與公部門｜設計思考工作坊",
+      q: "機關或計畫也想從民眾的經驗出發？",
+      t: "我們帶計畫裡的業者工作坊，也可以為機關同仁規劃研習，從一項想改善的服務開始。可以配合採購與核銷。",
+      a: "聊聊機關或計畫的需求", u: CONTACT_URL + "?who=gov", a2: "看公部門工作坊介紹", u2: "https://www.designthinking.com.tw/government" },
+    npo: { id: "K-npo-mid", group: "biz", label: "基金會與 NGO｜設計思考工作坊",
+      q: "想讓同仁和志工更懂服務對象？",
+      t: "我們帶同仁與志工的設計思考工作坊，從服務對象的經驗開始討論，也能替募款、倡議找新點子。",
+      a: "聊聊基金會的需求", u: CONTACT_URL + "?who=npo", a2: "看基金會與 NGO 工作坊介紹", u2: "https://www.designthinking.com.tw/ngo" }
   };
-  var kind = params.get("card") === "course" ? "course" : "b2b";
+  var kind = Object.prototype.hasOwnProperty.call(CARDS, params.get("card") || "") ? params.get("card") : "b2b";
   if (kind === "course" && params.get("nocourse") === "1") kind = "b2b";   // DYL 文章不放課程
   var c = CARDS[kind];
   var post = params.get("post") || "";

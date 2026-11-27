@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DT POW WOW 文章輪播廣告</title>
 <!--
+  ★ 11/27 動線修正：新增 &sector=hospital／gov／npo（醫院、公部門、基金會文章的中段卡 K-hosp/K-gov/K-npo 與文末卡 M-hosp/M-gov/M-npo；連 /contactus?who=… 與 /hospitals、/government、/ngo）。沒帶 sector 的文章不變。退回：上傳 ~/查查創意/07_開發部/上傳_20261127_動線修正/線上原版備份/DTADS/index.html。
   ★ 11/21 配色方案 C（全淺色頁首：淡藍 #EEF2FF、海軍藍字 #14213D、珊瑚 #D91E45、綠 #007F52）。退回：上傳 線上原版備份/DTADS/index.html。
   ★ 11/20 課程全名：線上課一律寫《別急著找答案！善用設計思考，打造你自己的人生藍圖》（查查 11/20）；Podcast《別急著找答案｜跟 Cha Cha 一起思考》不動。退回：上傳 備份_線上原版/index.html。
   ★ 11/20 POST_OVERRIDE：7 篇自然搜尋熱門文章依讀者類型指定 topic／main／card（網址沒寫才補；topic=general 視為沒寫）。退回：上傳 備份_線上原版/index.html。
@@ -1149,6 +1150,17 @@
       t: "我們到公司帶設計思考、創意思考工作坊，半天、一天或兩天，每場 30 人以內，用你們正在處理的題目來練。把題目告訴我們，2 個工作天內回信。",
       a: "聊聊你們的題目", u: CONTACT_URL }
   };
+  // 11/27 動線修正（查查同意）：醫院／公部門／基金會文章用 &sector=hospital|gov|npo，中段與文末改放對應單位卡（主連結＝帶 who 的表單，次連結＝專屬頁）。
+  // 沒有 sector 參數的文章（企業篇等）完全不受影響。
+  var SECTOR = {
+    hospital: { mid: { id: "K-hosp", group: "biz", line: "#007F52", label: "醫院與診所｜設計思考工作坊", q: "醫院也卡在類似的地方？", t: "我們到院內帶設計思考工作坊，醫師、護理、藥劑、行政同仁同一組，從病人走過的流程找出可以先改的一步。可以排週末。", a: "聊聊醫院的需求", u: "https://www.designthinking.com.tw/contactus?who=hospital", a2: "看醫院工作坊介紹", u2: "https://www.designthinking.com.tw/hospitals", topics: {} },
+      main: { id: "M-hosp", group: "biz", line: "#007F52", label: "醫院與診所｜設計思考工作坊", q: "院內也想從病人的經驗開始改？", t: "我們到院內帶工作坊，用你們正在處理的題目來練：病人體驗、跨單位交接、醫護研習都可以。告訴我們單位和人數，2 個工作天內回信。", a: "聊聊醫院的需求", u: "https://www.designthinking.com.tw/contactus?who=hospital", a2: "看醫院工作坊介紹", u2: "https://www.designthinking.com.tw/hospitals" } },
+    gov: { mid: { id: "K-gov", group: "biz", line: "#007F52", label: "政府與公部門｜設計思考工作坊", q: "機關或計畫也想從民眾的經驗出發？", t: "我們帶計畫裡的業者工作坊，也可以為機關同仁規劃研習，從一項想改善的服務開始。可以配合採購與核銷。", a: "聊聊機關或計畫的需求", u: "https://www.designthinking.com.tw/contactus?who=gov", a2: "看公部門工作坊介紹", u2: "https://www.designthinking.com.tw/government", topics: {} },
+      main: { id: "M-gov", group: "biz", line: "#007F52", label: "政府與公部門｜設計思考工作坊", q: "計畫或機關研習要找講師？", t: "設計思考工作坊從你們手上的真實題目開始，同仁不需要設計背景。告訴我們計畫或機關、對象和時間，2 個工作天內回信。", a: "聊聊機關或計畫的需求", u: "https://www.designthinking.com.tw/contactus?who=gov", a2: "看公部門工作坊介紹", u2: "https://www.designthinking.com.tw/government" } },
+    npo: { mid: { id: "K-npo", group: "biz", line: "#007F52", label: "基金會與 NGO｜設計思考工作坊", q: "想讓同仁和志工更懂服務對象？", t: "我們帶同仁與志工的設計思考工作坊，從服務對象的經驗開始討論，也能替募款、倡議找新點子。", a: "聊聊基金會的需求", u: "https://www.designthinking.com.tw/contactus?who=npo", a2: "看基金會與 NGO 工作坊介紹", u2: "https://www.designthinking.com.tw/ngo", topics: {} },
+      main: { id: "M-npo", group: "biz", line: "#007F52", label: "基金會與 NGO｜設計思考工作坊", q: "基金會的題目，也可以用工作坊一起想", t: "同仁與志工研習、年度共識營都可以談，活動或營隊裡的共創環節也能一起規劃。告訴我們單位、對象和人數，2 個工作天內回信。", a: "聊聊基金會的需求", u: "https://www.designthinking.com.tw/contactus?who=npo", a2: "看基金會與 NGO 工作坊介紹", u2: "https://www.designthinking.com.tw/ngo" } }
+  };
+  function sectorHere() { return SECTOR[params.get("sector") || ""] || null; }
   var BIZ_MID = ["dt", "ai", "general"];   // 11/14 查查「轉企業內訓」：這三類文章中段只放企業內訓卡；career／edu 維持課程卡（只剩 K-cmany）
   var TOPIC_MAIN = { career: "course", dt: "biz", ai: "biz", edu: "course", general: "course" };
   // 舊文章（沒有 &main=）：主管／團隊類文章的 topic 也是 career，用文章代稱（&post=）查這張表改成企業內訓（或反過來）
@@ -1204,6 +1216,7 @@
   }
   function mainFor() {
     if (!launched()) return null;                      // 12:00 前文末維持原本的廣告
+    if (sectorHere()) return sectorHere().main;         // 11/27 單位文章
     var k = TOPIC_MAIN[articleTopic()];
     var pm = params.get("main") || POST_MAIN[params.get("post") || ""];   // 新文章：build.py 給 &main=；舊文章：查 POST_MAIN
     if (pm && MAIN[pm]) k = pm;
@@ -1223,6 +1236,7 @@
   }
   function weekNo() { return Math.floor((Math.floor((nowMs() + 8 * 3600e3) / 864e5) + 3) / 7); }   // 台北時間，每週一 00:00 換
   function pickCard() {
+    if (sectorHere()) return sectorHere().mid;          // 11/27 單位文章
     var forced = params.get("card");
     if (forced) { var f = CARDS.concat(RESERVE).filter(function (c) { return c.id === forced; })[0]; if (f) return f; }
     var topic = articleTopic(), main = mainFor(), avoid = main ? main.group : "";
