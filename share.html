@@ -19,9 +19,9 @@ body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,san
 .card{border:1px solid var(--line);border-radius:16px;padding:22px 20px;background:var(--soft);max-width:720px;margin:0 auto}
 h2{font-size:20px;line-height:1.4;font-weight:700;text-wrap:balance}
 p.lead{font-size:16px;color:var(--sub);margin-top:6px;line-height:1.6}
-.row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
 @media(min-width:620px){.row{grid-template-columns:repeat(6,1fr)}}
-.btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:76px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:15px;font-weight:700;text-decoration:none;cursor:pointer;font-family:inherit}
+.btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:76px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:14px;font-weight:700;text-decoration:none;cursor:pointer;font-family:inherit}
 .btn:hover{border-color:var(--ink)}
 .btn svg{width:28px;height:28px}
 .btn.more{display:none}
@@ -41,6 +41,8 @@ p.lead{font-size:16px;color:var(--sub);margin-top:6px;line-height:1.6}
       <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#000"/><path fill="none" stroke="#fff" stroke-width="1.6" d="M15.6 11.3c-.4-2-1.8-3-3.7-3-2 0-3.3 1.2-3.6 2.8M15.6 11.3c1.9.7 2.6 2.4 2.1 4-.6 2-2.7 3.2-5.6 3.2-3.8 0-6.1-2.6-6.1-6.5S8.3 5.5 12.1 5.5c2.6 0 4.5 1.1 5.4 3.2M15.6 11.3c-2.5-.5-5.5-.2-5.5 1.8 0 1.2 1.1 1.9 2.4 1.8 1.9-.1 3.1-1.4 3.1-3.6z"/></svg>Threads</a>
     <a class="btn" id="li" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#0A66C2"/><path fill="#fff" d="M7.2 9.6h2.2V17H7.2zM8.3 6.2a1.3 1.3 0 110 2.6 1.3 1.3 0 010-2.6zM10.8 9.6h2.1v1c.3-.6 1-1.2 2.2-1.2 2.3 0 2.7 1.5 2.7 3.5V17h-2.2v-3.6c0-.9 0-2-1.2-2s-1.4.9-1.4 1.9V17h-2.2z"/></svg>LinkedIn</a>
+    <a class="btn" id="mail" target="_top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.8"><rect x="3.5" y="6" width="17" height="12" rx="2"/><path d="M4 7l8 6 8-6"/></svg>Email</a>
     <button class="btn" id="copy" type="button">
       <svg viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.8"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M5 15V6a1 1 0 011-1h9"/></svg>複製連結</button>
     <button class="btn more" id="more" type="button">
@@ -60,6 +62,7 @@ p.lead{font-size:16px;color:var(--sub);margin-top:6px;line-height:1.6}
   document.getElementById('fb').href='https://www.facebook.com/sharer/sharer.php?u='+enc(tag('facebook'));
   document.getElementById('threads').href='https://www.threads.net/intent/post?text='+enc(txt('threads'));
   document.getElementById('li').href='https://www.linkedin.com/sharing/share-offsite/?url='+enc(tag('linkedin'));
+  document.getElementById('mail').href='mailto:?subject='+enc(title||'推薦一篇文章')+'&body='+enc(tag('email'));
   var toast=document.getElementById('toast');
   function say(s){toast.textContent=s;setTimeout(function(){toast.textContent=''},2500)}
   document.getElementById('copy').onclick=function(){
