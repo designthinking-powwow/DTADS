@@ -24,7 +24,9 @@ p.lead{font-size:16px;color:var(--sub);margin-top:6px;line-height:1.6}
 .btn{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:62px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:12px;font-weight:700;text-decoration:none;cursor:pointer;font-family:inherit;white-space:nowrap;overflow:hidden}
 .btn:hover{border-color:var(--ink)}
 .btn svg{width:24px;height:24px;flex:none}
-@media(max-width:380px){.btn{font-size:10px;height:56px}.btn svg{width:22px;height:22px}}
+.btn span{overflow:hidden;text-overflow:clip;max-width:100%}
+@media(max-width:400px){.btn{font-size:10px;height:56px}.btn svg{width:22px;height:22px}}
+@media(max-width:340px){.btn span{display:none}.btn{height:48px}}
 .btn.more{display:none}
 .toast{font-size:14px;color:var(--blue);margin-top:10px;min-height:20px;text-align:center}
 </style>
@@ -35,19 +37,19 @@ p.lead{font-size:16px;color:var(--sub);margin-top:6px;line-height:1.6}
   <p class="lead">傳給主管、同事，或分享到你的社群。</p>
   <div class="row">
     <a class="btn" id="line" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#06C755"/><path fill="#fff" d="M12 5.5c-4.1 0-7.4 2.6-7.4 5.9 0 2.9 2.6 5.4 6.2 5.8.2.1.6.2.7.4.1.2 0 .6 0 .8l-.1.7c0 .2-.2.8.7.4.9-.4 4.9-2.9 6.7-4.9 1.2-1.3 1.8-2.6 1.8-4.1 0-3.4-3.3-6-7.4-6z"/></svg>LINE</a>
+      <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#06C755"/><path fill="#fff" d="M12 5.5c-4.1 0-7.4 2.6-7.4 5.9 0 2.9 2.6 5.4 6.2 5.8.2.1.6.2.7.4.1.2 0 .6 0 .8l-.1.7c0 .2-.2.8.7.4.9-.4 4.9-2.9 6.7-4.9 1.2-1.3 1.8-2.6 1.8-4.1 0-3.4-3.3-6-7.4-6z"/></svg><span>LINE</span></a>
     <a class="btn" id="fb" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#1877F2"/><path fill="#fff" d="M13.3 19v-6h2l.3-2.4h-2.3V9.1c0-.7.2-1.1 1.2-1.1h1.2V5.9c-.2 0-.9-.1-1.8-.1-1.8 0-3 1.1-3 3.1v1.8h-2V13h2v6h2.4z"/></svg>Facebook</a>
+      <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#1877F2"/><path fill="#fff" d="M13.3 19v-6h2l.3-2.4h-2.3V9.1c0-.7.2-1.1 1.2-1.1h1.2V5.9c-.2 0-.9-.1-1.8-.1-1.8 0-3 1.1-3 3.1v1.8h-2V13h2v6h2.4z"/></svg><span>Facebook</span></a>
     <a class="btn" id="threads" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#000"/><path fill="none" stroke="#fff" stroke-width="1.6" d="M15.6 11.3c-.4-2-1.8-3-3.7-3-2 0-3.3 1.2-3.6 2.8M15.6 11.3c1.9.7 2.6 2.4 2.1 4-.6 2-2.7 3.2-5.6 3.2-3.8 0-6.1-2.6-6.1-6.5S8.3 5.5 12.1 5.5c2.6 0 4.5 1.1 5.4 3.2M15.6 11.3c-2.5-.5-5.5-.2-5.5 1.8 0 1.2 1.1 1.9 2.4 1.8 1.9-.1 3.1-1.4 3.1-3.6z"/></svg>Threads</a>
+      <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#000"/><path fill="none" stroke="#fff" stroke-width="1.6" d="M15.6 11.3c-.4-2-1.8-3-3.7-3-2 0-3.3 1.2-3.6 2.8M15.6 11.3c1.9.7 2.6 2.4 2.1 4-.6 2-2.7 3.2-5.6 3.2-3.8 0-6.1-2.6-6.1-6.5S8.3 5.5 12.1 5.5c2.6 0 4.5 1.1 5.4 3.2M15.6 11.3c-2.5-.5-5.5-.2-5.5 1.8 0 1.2 1.1 1.9 2.4 1.8 1.9-.1 3.1-1.4 3.1-3.6z"/></svg><span>Threads</span></a>
     <a class="btn" id="li" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#0A66C2"/><path fill="#fff" d="M7.2 9.6h2.2V17H7.2zM8.3 6.2a1.3 1.3 0 110 2.6 1.3 1.3 0 010-2.6zM10.8 9.6h2.1v1c.3-.6 1-1.2 2.2-1.2 2.3 0 2.7 1.5 2.7 3.5V17h-2.2v-3.6c0-.9 0-2-1.2-2s-1.4.9-1.4 1.9V17h-2.2z"/></svg>LinkedIn</a>
+      <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#0A66C2"/><path fill="#fff" d="M7.2 9.6h2.2V17H7.2zM8.3 6.2a1.3 1.3 0 110 2.6 1.3 1.3 0 010-2.6zM10.8 9.6h2.1v1c.3-.6 1-1.2 2.2-1.2 2.3 0 2.7 1.5 2.7 3.5V17h-2.2v-3.6c0-.9 0-2-1.2-2s-1.4.9-1.4 1.9V17h-2.2z"/></svg><span>LinkedIn</span></a>
     <a class="btn" id="mail" target="_top">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.8"><rect x="3.5" y="6" width="17" height="12" rx="2"/><path d="M4 7l8 6 8-6"/></svg>Email</a>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.8"><rect x="3.5" y="6" width="17" height="12" rx="2"/><path d="M4 7l8 6 8-6"/></svg><span>Email</span></a>
     <button class="btn" id="copy" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.8"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M5 15V6a1 1 0 011-1h9"/></svg>複製連結</button>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.8"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M5 15V6a1 1 0 011-1h9"/></svg><span>複製連結</span></button>
     <button class="btn more" id="more" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.8"><circle cx="6" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/></svg>更多</button>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#1d1d1f" stroke-width="1.8"><circle cx="6" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/></svg><span>更多</span></button>
   </div>
   <div class="toast" id="toast" aria-live="polite"></div>
 </div>
